@@ -36,10 +36,96 @@ En Villa Automation SAC no solo desarrollamos soluciones avanzadas en automatiza
 <li>Tarjetas compatibles para prototipado rápido.</li>
   <li>Cursos Arduino.</li>
 </ul>
-
 <p>
 <img src="assets/tienda0.jpg" alt="tienda">
 <p>
+  <!-- ====== BOTONES DE COMPRA ====== -->
+<div class="producto">
+  <img src="curso7.jpg" alt="Curso Arduino" width="300">
+  <h3>Curso Arduino</h3>
+  <p>Curso de programación básico y avanzado. <br> Precio: <strong>S/ 200.00</strong></p>
+  <button onclick="agregarAlCarrito('Curso Arduino', 200)">🛒 Agregar a la cesta</button>
+</div>
+
+<!-- ====== CESTA DE COMPRAS ====== -->
+<div id="carrito" style="margin-top:30px; background:#f5f5f5; padding:15px; border-radius:10px;">
+  <h3>🧾 Cesta de Compras</h3>
+  <ul id="lista-carrito"></ul>
+  <p><strong>Total: S/ <span id="total">0</span></strong></p>
+  <button onclick="vaciarCarrito()">Vaciar Cesta</button>
+  <button onclick="mostrarFormulario()">Finalizar Compra</button>
+</div>
+
+<!-- ====== FORMULARIO DE ENVÍO DEL VOUCHER ====== -->
+<div id="formulario" style="display:none; margin-top:30px;">
+  <h3>📤 Enviar Comprobante Bancario</h3>
+  <p>Por favor, adjunta tu comprobante y envíalo a nuestro correo.</p>
+
+  <form id="formCompra">
+    <input type="text" id="nombre" placeholder="Tu nombre" required><br><br>
+    <input type="email" id="email" placeholder="Tu correo" required><br><br>
+    <input type="file" id="voucher" accept=".jpg,.png,.pdf" required><br><br>
+    <button type="submit">Enviar Voucher</button>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  // Inicializa EmailJS (reemplaza con tu USER_ID)
+  emailjs.init("TU_USER_ID_DE_EMAILJS");
+
+  let carrito = [];
+  let total = 0;
+
+  function agregarAlCarrito(nombre, precio) {
+    carrito.push({ nombre, precio });
+    total += precio;
+    actualizarCarrito();
+  }
+
+  function actualizarCarrito() {
+    const lista = document.getElementById("lista-carrito");
+    lista.innerHTML = "";
+    carrito.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = `${item.nombre} - S/ ${item.precio}`;
+      lista.appendChild(li);
+    });
+    document.getElementById("total").textContent = total;
+  }
+
+  function vaciarCarrito() {
+    carrito = [];
+    total = 0;
+    actualizarCarrito();
+  }
+
+  function mostrarFormulario() {
+    document.getElementById("formulario").style.display = "block";
+  }
+
+  // Enviar email con EmailJS
+  document.getElementById("formCompra").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const templateParams = {
+      nombre: document.getElementById("nombre").value,
+      email: document.getElementById("email").value,
+      total: total,
+      productos: carrito.map(item => item.nombre).join(", ")
+    };
+
+    emailjs.send("TU_SERVICE_ID", "TU_TEMPLATE_ID", templateParams)
+      .then(function() {
+        alert("✅ Comprobante enviado con éxito. ¡Gracias por tu compra!");
+        vaciarCarrito();
+        document.getElementById("formulario").style.display = "none";
+      }, function(error) {
+        alert("❌ Error al enviar el comprobante: " + JSON.stringify(error));
+      });
+  });
+</script>
+
 <p>
 <h1>Sensores y Módulos Electrónicos </h1>
 </p>
@@ -151,6 +237,7 @@ allowfullscreen></iframe>
 </body>
 
 </html>
+
 
 
 
