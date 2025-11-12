@@ -5,9 +5,9 @@
 <title>Tienda Villa Automation</title>
 <style>
   body {
-    background-color: #0a1a2a;
+    background-color: #031833;
     color: #ffffff;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
     text-align: center;
     margin: 0;
     padding: 0;
@@ -15,19 +15,33 @@
 
   h2, h3 {
     color: #00bfff;
+    text-shadow: 0 0 5px #00bfff;
+  }
+
+  .productos-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
   }
 
   .producto {
-    background-color: #102840;
-    border-radius: 10px;
+    background-color: #0a2942;
+    border-radius: 12px;
     padding: 15px;
-    margin: 20px auto;
-    width: 300px;
-    box-shadow: 0 0 10px #00bfff;
+    width: 260px;
+    box-shadow: 0 0 12px #00bfff;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .producto:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #00e0ff;
   }
 
   .producto img {
-    width: 250px;
+    width: 240px;
     border-radius: 10px;
   }
 
@@ -40,28 +54,29 @@
     cursor: pointer;
     font-size: 14px;
     margin-top: 10px;
+    transition: background 0.3s;
   }
 
   button:hover {
-    background-color: #008ccc;
+    background-color: #0095cc;
   }
 
   #carrito {
-    background-color: #06121f;
-    border-radius: 10px;
+    background-color: #041d33;
+    border-radius: 12px;
     width: 80%;
-    margin: 30px auto;
-    padding: 15px;
-    box-shadow: 0 0 15px #00bfff;
+    margin: 40px auto;
+    padding: 20px;
+    box-shadow: 0 0 20px #00bfff;
   }
 
   #formulario {
-    background-color: #0f1f30;
-    padding: 20px;
-    border-radius: 10px;
+    background-color: #062642;
+    padding: 25px;
+    border-radius: 12px;
     width: 80%;
     margin: 30px auto;
-    box-shadow: 0 0 15px #00bfff;
+    box-shadow: 0 0 20px #00bfff;
   }
 
   input, textarea {
@@ -70,99 +85,127 @@
     margin: 8px;
     border-radius: 5px;
     border: none;
+    outline: none;
+  }
+
+  input:focus, textarea:focus {
+    box-shadow: 0 0 5px #00bfff;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  iframe {
+    border-radius: 10px;
+    margin: 10px 0;
+  }
+
+  .back-btn {
+    display: inline-block;
+    color: #00bfff;
+    margin-top: 15px;
+    text-decoration: none;
+  }
+
+  .back-btn:hover {
+    text-decoration: underline;
   }
 </style>
 </head>
 <body>
 
 <h2>🛒 Tienda Tecnológica - Villa Automation SAC</h2>
-  
+
 <!-- ====== PRODUCTOS ====== -->
+<div class="productos-container">
+  <div class="producto">
+    <img src="assets/tienda0.jpg" alt="Curso Arduino">
+    <h3>Curso Arduino</h3>
+    <p>Programación básica y avanzada<br><strong>S/ 250.00</strong></p>
+    <button onclick="agregarAlCarrito('Curso Arduino', 250)">Agregar a la cesta</button>
+  </div>
+
+  <div class="producto">
+    <img src="assets/arduino.jpg" alt="Arduino UNO">
+    <h3>Arduino UNO R3</h3>
+    <p>Microcontrolador <br><strong>S/ 35.00</strong></p>
+    <button onclick="agregarAlCarrito('Arduino UNO R3', 35)">Agregar a la cesta</button>
+  </div>
+
+  <div class="producto">
+    <img src="assets/bluto.jpg" alt="Bluetooth H05">
+    <h3>Módulo Bluetooth H05</h3>
+    <p>Comunicación inalámbrica<br><strong>S/ 25.00</strong></p>
+    <button onclick="agregarAlCarrito('Bluetooth H05', 25)">Agregar a la cesta</button>
+  </div>
+
+  <div class="producto">
+    <img src="assets/dht22.jpg" alt="sensor dht22">
+    <h3>Sensor DHT22</h3>
+    <p>Temperatura y Humedad<br><strong>S/ 20.00</strong></p>
+    <button onclick="agregarAlCarrito('Sensor DHT22', 20)">Agregar a la cesta</button>
+  </div>
+
+  <div class="producto">
+    <img src="assets/rele.jpg" alt="rele">
+    <h3>Módulo Relé 5V</h3>
+    <p>Control de cargas<br><strong>S/ 10.00</strong></p>
+    <button onclick="agregarAlCarrito('Módulo Relé 5V', 10)">Agregar a la cesta</button>
+  </div>
+
+  <div class="producto">
+    <img src="assets/bomba.jpg" alt="bomba 12v">
+    <h3>Bomba 12V</h3>
+    <p>Bomba de agua DC<br><strong>S/ 60.00</strong></p>
+    <button onclick="agregarAlCarrito('Bomba 12V', 60)">Agregar a la cesta</button>
+  </div>
+
+  <div class="producto"> 
+    <img src="assets/l289n.jpg" alt="driver"> 
+    <h3>L289N</h3> 
+    <p>controlador de motor<br><strong>S/ 25.00</strong></p>
+    <button onclick="agregarAlCarrito('driver', 25)">Agregar a la cesta</button>
+  </div> 
   
-<div class="producto">
-  <img src="assets/tienda0.jpg" alt="Curso Arduino">
-  <h3>Curso Arduino</h3>
-  <p>Programación básica y avanzada<br><strong>S/ 250.00</strong></p>
-  <button onclick="agregarAlCarrito('Curso Arduino', 200)">Agregar a la cesta</button>
-</div>
-
   <div class="producto">
-  <img src="assets/arduino.jpg" alt="Arduino UNO">
-  <h3>Arduino UNO R3</h3>
-  <p>Microcontrolador <br><strong>S/ 35.00</strong></p>
-  <button onclick="agregarAlCarrito('Arduino UNO R3', 35)">Agregar a la cesta</button>
-</div>
-
-   <div class="producto">
-  <img src="assets/bluto.jpg" alt="sensor">
-  <h3>modulo H05</h3>
-  <p>Bluetooth <br><strong>S/ 25.00</strong></p>
-  <button onclick="agregarAlCarrito('Bluetooth', 25)">Agregar a la cesta</button>
-</div>
+    <img src="assets/ultrasonido.jpg" alt="ultrasonido"> 
+    <h3>HC-SR04</h3>
+    <p>Sensor ultrasonido<br><strong>S/ 15.00</strong></p>
+    <button onclick="agregarAlCarrito('ultrasonido', 15)">Agregar a la cesta</button> 
+  </div> 
   
-<div class="producto">
-  <img src="assets/dht22.jpg" alt="sensor">
-  <h3>sensor dht22</h3>
-  <p>sensor temperatura y Humedad<br><strong>S/ 20.00</strong></p>
-  <button onclick="agregarAlCarrito('sensor dht22', 20)">Agregar a la cesta</button>
-</div>
-
-<div class="producto">
-  <img src="assets/rele.jpg" alt="rele">
-  <h3>modulo 5v</h3>
-  <p>Modulo rele<br><strong>S/ 10.00</strong></p>
-  <button onclick="agregarAlCarrito('rele', 10)">Agregar a la cesta</button>
-</div>
-
-  <div class="producto">
-  <img src="assets/bomba.jpg" alt="bomba">
-  <h3>bomba 12v</h3>
-  <p>Bomba de agua 12V<br><strong>S/ 60.00</strong></p>
-  <button onclick="agregarAlCarrito('bomba', 60)">Agregar a la cesta</button>
-</div>
-
-  <div class="producto">
-  <img src="assets/l289n.jpg" alt="driver">
-  <h3>L289N</h3>
-  <p>controlador de motor<br><strong>S/ 25.00</strong></p>
-  <button onclick="agregarAlCarrito('driver', 25)">Agregar a la cesta</button>
-</div>
-
-  <div class="producto">
-  <img src="assets/ultrasonido.jpg" alt="ultrasonido">
-  <h3>HC-SR04</h3>
-  <p>Sensor ultrasonido<br><strong>S/ 15.00</strong></p>
-  <button onclick="agregarAlCarrito('ultrasonido', 15)">Agregar a la cesta</button>
-</div>
-
-  <div class="producto">
-  <img src="assets/cargador12.jpg" alt="cargador">
-  <h3>transformador 12V</h3>
-  <p>cargador 12V arduino<br><strong>S/ 20.00</strong></p>
-  <button onclick="agregarAlCarrito('cargador', 20)">Agregar a la cesta</button>
-</div>
-
-  <div class="producto">
-  <img src="assets/chasis.jpg" alt="chasis">
-  <h3>chasis acrilico</h3>
-  <p>chasis robot<br><strong>S/ 60.00</strong></p>
-  <button onclick="agregarAlCarrito('chasis', 60)">Agregar a la cesta</button>
-</div>
-
-  <div class="producto">
-  <img src="assets/motor1.jpg" alt="motor">
-  <h3>motor Dc</h3>
-  <p>Motor Dc 5V a 12 V<br><strong>S/ 15.00</strong></p>
-  <button onclick="agregarAlCarrito('motor', 15)">Agregar a la cesta</button>
-</div>
-
-  <div class="producto">
-  <img src="assets/motorpaso.jpg" alt="motorp">
-  <h3>motorpaso</h3>
-  <p>motor paso a paso 17N<br><strong>S/ 50.00</strong></p>
-  <button onclick="agregarAlCarrito('mootorp', 0)">Agregar a la cesta</button>
-</div>
+  <div class="producto"> 
+    <img src="assets/cargador12.jpg" alt="cargador"> 
+    <h3>transformador 12V</h3> 
+    <p>cargador 12V arduino<br><strong>S/ 20.00</strong></p>
+    <button onclick="agregarAlCarrito('cargador', 20)">Agregar a la cesta</button> 
+  </div> 
   
+  <div class="producto"> 
+    <img src="assets/chasis.jpg" alt="chasis">
+    <h3>chasis acrilico</h3> 
+    <p>chasis robot<br><strong>S/ 60.00</strong></p>
+    <button onclick="agregarAlCarrito('chasis', 60)">Agregar a la cesta</button> 
+  </div> 
+  
+  <div class="producto">
+    <img src="assets/motor1.jpg" alt="motor"> 
+    <h3>motor Dc</h3> 
+    <p>Motor Dc 5V a 12 V<br><strong>S/ 15.00</strong></p>
+    <button onclick="agregarAlCarrito('motor', 15)">Agregar a la cesta</button> 
+  </div>
+  
+  <div class="producto"> 
+    <img src="assets/motorpaso.jpg" alt="motorp">
+    <h3>motorpaso</h3> 
+    <p>motor paso a paso 17N<br><strong>S/ 50.00</strong></p> 
+    <button onclick="agregarAlCarrito('mootorp', 0)">Agregar a la cesta</button>
+  </div>
+  
+</div>
+
 <!-- ====== CARRITO ====== -->
 <div id="carrito">
   <h3>🧾 Cesta de Compras</h3>
@@ -175,7 +218,7 @@
 <!-- ====== FORMULARIO ====== -->
 <div id="formulario" style="display:none;">
   <h3>📤 Enviar Comprobante Bancario</h3>
-  <p>BCP Soles: 22007129222035 / CCI:  00222010712922203527 / Yape: 965281663</p>
+  <p><strong>BCP Soles:</strong> 22007129222035 / <strong>CCI:</strong> 00222010712922203527 / <strong>Yape:</strong> 965281663</p>
   <p>Adjunta tu comprobante y completa los datos para enviar tu compra.</p>
 
   <form id="formCompra">
@@ -183,11 +226,10 @@
     <input type="email" id="email" placeholder="Tu correo" required><br>
     <input type="file" id="voucher" accept=".jpg,.png,.pdf" required><br>
     <textarea id="mensaje" placeholder="Mensaje adicional (opcional)"></textarea><br>
-
     <button type="submit">Enviar Voucher a Correo</button>
   </form>
 
-  <p>O también puedes enviar tu comprobante directamente por WhatsApp:</p>
+  <p>O también puedes enviar tu comprobante por WhatsApp:</p>
   <a href="https://wa.me/51965281663?text=Hola,%20deseo%20enviar%20mi%20voucher%20de%20compra%20de%20Villa%20Automation." target="_blank">
     <button>📱 Enviar por WhatsApp</button>
   </a>
@@ -196,7 +238,7 @@
 <!-- ====== EMAILJS ====== -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-  emailjs.init("TU_USER_ID_DE_EMAILJS");
+  emailjs.init("TU_USER_ID_DE_EMAILJS"); // Reemplaza con tu ID de EmailJS
 
   let carrito = [];
   let total = 0;
@@ -215,7 +257,7 @@
       li.textContent = `${item.nombre} - S/ ${item.precio}`;
       lista.appendChild(li);
     });
-    document.getElementById("total").textContent = total;
+    document.getElementById("total").textContent = total.toFixed(2);
   }
 
   function vaciarCarrito() {
@@ -226,25 +268,22 @@
 
   function mostrarFormulario() {
     document.getElementById("formulario").style.display = "block";
+    window.scrollTo(0, document.body.scrollHeight);
   }
 
-  // Enviar correo
   document.getElementById("formCompra").addEventListener("submit", function(e) {
     e.preventDefault();
-
-    const serviceID = "default_service";
-    const templateID = "template_villa_automation";
 
     const params = {
       nombre: document.getElementById("nombre").value,
       email: document.getElementById("email").value,
       mensaje: document.getElementById("mensaje").value,
       productos: carrito.map(item => item.nombre).join(", "),
-      total: total,
+      total: total.toFixed(2),
       destinatario: "villautomationeirl@gmail.com"
     };
 
-    emailjs.send(serviceID, templateID, params)
+    emailjs.send("default_service", "template_villa_automation", params)
       .then(() => {
         alert("✅ Comprobante enviado con éxito a Villa Automation EIRL");
         vaciarCarrito();
@@ -255,32 +294,19 @@
   });
 </script>
 
-<p>
-  <h3>VIDEOS DE GUIAS Y TUTORIALES</h3>
-<iframe width="100%" height="315"
-src="https://www.youtube.com/embed/SRqYrBgz2C0"
-title="YouTube video player" frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe>
-   <p>
-     <p>
-<iframe width="100%" height="315"
-src="https://www.youtube.com/embed/fQwpj0aLJ1Q"
-title="YouTube video player" frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe>
-   <p>
-   <p>
-    Presupuesto dependera la cantida de sensores y modulos y instalaciónes
-  <ul>
-<li>Basico: 20.0 S/</li>
-<li>avanzado: 500.0 S/</li>
-</ul> 
-  
-<a href="index.html" class="back-btn">? Volver a la página principal</a>
-</div>
-</body>
+<!-- ====== VIDEOS ====== -->
+<h3>🎥 VIDEOS DE GUÍAS Y TUTORIALES</h3>
+<iframe width="90%" height="315" src="https://www.youtube.com/embed/SRqYrBgz2C0" allowfullscreen></iframe>
+<iframe width="90%" height="315" src="https://www.youtube.com/embed/fQwpj0aLJ1Q" allowfullscreen></iframe>
 
+<p>Presupuesto dependerá de la cantidad de sensores, módulos e instalaciones:</p>
+<ul>
+  <li>Básico: S/ 20.00</li>
+  <li>Avanzado: S/ 500.00</li>
+</ul>
+
+<a href="index.html" class="back-btn">← Volver a la página principal</a>
+</body>
 </html>
 
 
