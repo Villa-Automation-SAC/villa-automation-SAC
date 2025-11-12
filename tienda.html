@@ -1,54 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<title>Tienda de tecnología — Villa Automation</title>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda Villa Automation</title>
 <style>
-body { font-family: Arial; background:#081b2d; color:white; padding:20px; margin:0; }
-img { width:100%; border-radius:12px; margin-bottom:15px; }
-.container { max-width:800px; margin:auto; }
-a { color:lightgreen; text-decoration:none; }
-.back-btn { margin-top:20px; display:inline-block; }
+  body {
+    background-color: #0a1a2a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  h2, h3 {
+    color: #00bfff;
+  }
+
+  .producto {
+    background-color: #102840;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px auto;
+    width: 300px;
+    box-shadow: 0 0 10px #00bfff;
+  }
+
+  .producto img {
+    width: 250px;
+    border-radius: 10px;
+  }
+
+  button {
+    background-color: #00bfff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  button:hover {
+    background-color: #008ccc;
+  }
+
+  #carrito {
+    background-color: #06121f;
+    border-radius: 10px;
+    width: 80%;
+    margin: 30px auto;
+    padding: 15px;
+    box-shadow: 0 0 15px #00bfff;
+  }
+
+  #formulario {
+    background-color: #0f1f30;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    margin: 30px auto;
+    box-shadow: 0 0 15px #00bfff;
+  }
+
+  input, textarea {
+    width: 80%;
+    padding: 10px;
+    margin: 8px;
+    border-radius: 5px;
+    border: none;
+  }
 </style>
 </head>
 <body>
-<div class="container">
-<h1>Tienda de productos tecnológicos y Robótica</h1>
-<p>
-  En este espacio te mostramos la los diferentes productos que tenemos para tí.
-</p>
 
-<!-- Imagen referenciada -->
-<img src="assets/tienda2.jpg" alt="tienda">
-
-<p>
-En Villa Automation SAC no solo desarrollamos soluciones avanzadas en automatización, robótica y sistemas agrícolas; 
-  también ofrecemos una línea completa de productos tecnológicos para estudiantes, emprendedores, técnicos y empresas que 
-  buscan implementar sus propios proyectos electrónicos.Nuestro objetivo es brindar componentes de alta calidad, totalmente compatibles con plataformas 
-  como Arduino, Raspberry Pi, ESP32, PLCs y sistemas industriales, asegurando confiabilidad y soporte técnico local.
-</p>
-  <h1>Placas de Desarrollo</h1>
-<ul>
-<li>Arduino UNO, MEGA, Nano y Leonardo.</li>
-<li>ESP32 y ESP8266 WiFi/Bluetooth.</li>
-<li>Raspberry Pi y Compute Modules.</li>
-<li>Tarjetas compatibles para prototipado rápido.</li>
-  <li>Cursos Arduino.</li>
-</ul>
-<p>
-<img src="assets/tienda0.jpg" alt="tienda">
-<p>
-  <!-- ====== BOTONES DE COMPRA ====== -->
+<h2>🛒 Tienda Tecnológica - Villa Automation SAC</h2>
+ <img src="assets/tienda.jpg" alt="Curso Arduino">
+<!-- ====== PRODUCTOS ====== -->
+  
 <div class="producto">
-  <img src="curso7.jpg" alt="Curso Arduino" width="300">
+  <img src="assets/tienda2.jpg" alt="Curso Arduino">
   <h3>Curso Arduino</h3>
-  <p>Curso de programación básico y avanzado. <br> Precio: <strong>S/ 200.00</strong></p>
-  <button onclick="agregarAlCarrito('Curso Arduino', 200)">🛒 Agregar a la cesta</button>
+  <p>Programación básica y avanzada<br><strong>S/ 200.00</strong></p>
+  <button onclick="agregarAlCarrito('Curso Arduino', 200)">Agregar a la cesta</button>
 </div>
 
-<!-- ====== CESTA DE COMPRAS ====== -->
-<div id="carrito" style="margin-top:30px; background:#f5f5f5; padding:15px; border-radius:10px;">
+<div class="producto">
+  <img src="assets/tienda3.jpg" alt="Arduino UNO">
+  <h3>Arduino UNO R3</h3>
+  <p>Microcontrolador ATmega328P<br><strong>S/ 85.00</strong></p>
+  <button onclick="agregarAlCarrito('Arduino UNO R3', 85)">Agregar a la cesta</button>
+</div>
+
+<div class="producto">
+  <img src="assets/tienda4.jpg" alt="Sensor DHT22">
+  <h3>Sensor DHT22</h3>
+  <p>Temperatura y Humedad<br><strong>S/ 35.00</strong></p>
+  <button onclick="agregarAlCarrito('Sensor DHT22', 35)">Agregar a la cesta</button>
+</div>
+
+<!-- ====== CARRITO ====== -->
+<div id="carrito">
   <h3>🧾 Cesta de Compras</h3>
   <ul id="lista-carrito"></ul>
   <p><strong>Total: S/ <span id="total">0</span></strong></p>
@@ -56,22 +109,29 @@ En Villa Automation SAC no solo desarrollamos soluciones avanzadas en automatiza
   <button onclick="mostrarFormulario()">Finalizar Compra</button>
 </div>
 
-<!-- ====== FORMULARIO DE ENVÍO DEL VOUCHER ====== -->
-<div id="formulario" style="display:none; margin-top:30px;">
+<!-- ====== FORMULARIO ====== -->
+<div id="formulario" style="display:none;">
   <h3>📤 Enviar Comprobante Bancario</h3>
-  <p>Por favor, adjunta tu comprobante y envíalo a nuestro correo.</p>
+  <p>Adjunta tu comprobante y completa los datos para enviar tu compra.</p>
 
   <form id="formCompra">
-    <input type="text" id="nombre" placeholder="Tu nombre" required><br><br>
-    <input type="email" id="email" placeholder="Tu correo" required><br><br>
-    <input type="file" id="voucher" accept=".jpg,.png,.pdf" required><br><br>
-    <button type="submit">Enviar Voucher</button>
+    <input type="text" id="nombre" placeholder="Tu nombre" required><br>
+    <input type="email" id="email" placeholder="Tu correo" required><br>
+    <input type="file" id="voucher" accept=".jpg,.png,.pdf" required><br>
+    <textarea id="mensaje" placeholder="Mensaje adicional (opcional)"></textarea><br>
+
+    <button type="submit">Enviar Voucher a Correo</button>
   </form>
+
+  <p>O también puedes enviar tu comprobante directamente por WhatsApp:</p>
+  <a href="https://wa.me/51965281663?text=Hola,%20deseo%20enviar%20mi%20voucher%20de%20compra%20de%20Villa%20Automation." target="_blank">
+    <button>📱 Enviar por WhatsApp</button>
+  </a>
 </div>
 
+<!-- ====== EMAILJS ====== -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-  // Inicializa EmailJS (reemplaza con tu USER_ID)
   emailjs.init("TU_USER_ID_DE_EMAILJS");
 
   let carrito = [];
@@ -104,114 +164,35 @@ En Villa Automation SAC no solo desarrollamos soluciones avanzadas en automatiza
     document.getElementById("formulario").style.display = "block";
   }
 
-  // Enviar email con EmailJS
+  // Enviar correo
   document.getElementById("formCompra").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const templateParams = {
+    const serviceID = "default_service";
+    const templateID = "template_villa_automation";
+
+    const params = {
       nombre: document.getElementById("nombre").value,
       email: document.getElementById("email").value,
+      mensaje: document.getElementById("mensaje").value,
+      productos: carrito.map(item => item.nombre).join(", "),
       total: total,
-      productos: carrito.map(item => item.nombre).join(", ")
+      destinatario: "villautomationeirl@gmail.com"
     };
 
-    emailjs.send("TU_SERVICE_ID", "TU_TEMPLATE_ID", templateParams)
-      .then(function() {
-        alert("✅ Comprobante enviado con éxito. ¡Gracias por tu compra!");
+    emailjs.send(serviceID, templateID, params)
+      .then(() => {
+        alert("✅ Comprobante enviado con éxito a Villa Automation EIRL");
         vaciarCarrito();
         document.getElementById("formulario").style.display = "none";
-      }, function(error) {
-        alert("❌ Error al enviar el comprobante: " + JSON.stringify(error));
+      }, (err) => {
+        alert("❌ Error al enviar: " + JSON.stringify(err));
       });
   });
 </script>
 
 <p>
-<h1>Sensores y Módulos Electrónicos </h1>
-</p>
-<ul>
-<li>Sensores ambientales: DHT11/DHT22, MQ135 (CO₂), MH-Z19.</li>
-<li>ESP32 y ESP8266 WiFi/Bluetooth.</li>
-<li>Sensores de humedad de suelo y humedad relativa.</li>
-<li>Sensores de temperatura (DS18B20, NTC, termopares).</li>
-  <li>Sensores ultrasónicos HC-SR04 y radares de microondas 5.8 GHz.</li>
-   <li>Sensores de metales, vibración, inclinación, gas y radiación.</li>
-   <li>Módulos IMU: MPU6050, MPU9250, giroscopios y acelerómetros.</li>
-</ul>
-  <p>
-<img src="assets/tienda3.jpg" alt="tienda"> 
-</p>
-<p>
-<h1>Actuadores y Sistemas de Control </h1>
-</p>
-<ul>
-<li>Servomotores SG90, MG996R, motores DC, drivers y bombas.</li>
-<li>Relés automáticos, contactores, SSR y controladores de carga.</li>
-<li>Módulos PWM, drivers L298N, TB6612, puente H.</li>
-</ul>
- </p>
- <p>
-<img src="assets/tienda4.jpg" alt="tienda"> 
-</p>
-  <p>
-<h1>Pantallas y Comunicación </h1>
-</p>
-<ul>
-<li>LCD 16x2, pantallas TFT, OLED, Nextion.</li>
-<li>Módulos Bluetooth HC-05/HC-06.</li>
-<li>Módulos WiFi, LoRa y GPS.</li>
-</ul>
- </p>
-   <p>
-<img src="assets/tienda5.jpg" alt="tienda"> 
-</p>
-  <p>
-<h1>Almacenamiento y Electrónica Complementaria </h1>
-</p>
-<ul>
-<li>Módulos SD para registro de datos.</li>
-<li>Fuentes, cables, protoboards, resistencias y kits completos.</li>
-<li>Baterías, cargadores y conversores DC-DC.</li>
-</ul>
- </p>
-  <h1>¿Por qué elegir los productos de Villa Automation SAC? </h1>  
-  <ul>
-<li>Stock permanente en Ayacucho – Perú.</li>
-<li>Garantía local y verificación de funcionamiento.</li>
-<li>Asesoría técnica gratuita para tus proyectos Arduino y sistemas de automatización.</li>
-<li>Envíos a nivel nacional mediante Olva, Shalom y Marvisur.</li>
-<li>Descuentos especiales para instituciones, colegios y universidades.</li>
-    </ul>
-   <p>
-<img src="assets/tienda5.jpg" alt="tienda"> 
-</p>
-   <p>
-<img src="assets/tienda6.jpg" alt="tienda"> 
-</p>
-   <p>
-     <h1>Apoyo para proyectos y prototipos </h1>
-Además de la venta, brindamos soporte a proyectos de:
- <ul>
-<li>Automatización agrícola</li>
-<li>Robótica educativa e industrial</li>
-<li>Control de motores y mecatrónica</li>
-<li>IoT e innovación tecnológica</li>
-<li>Desarrollo de dispositivos y startups</li>
-   </ul>
-</p>
-<p>
-<img src="assets/tienda7.jpg" alt="tienda"> 
-</p>
-  <p>
-<img src="assets/tienda8.jpg" alt="tienda"> 
-</p>
-  <p>
-<img src="assets/tienda9.jpg" alt="tienda"> 
-</p>
-  </ul>
-
-otros videos en you tube similares:
-<p>
+  <h3>VIDEOS DE GUIAS Y TUTORIALES</h3>
 <iframe width="100%" height="315"
 src="https://www.youtube.com/embed/SRqYrBgz2C0"
 title="YouTube video player" frameborder="0"
@@ -237,6 +218,7 @@ allowfullscreen></iframe>
 </body>
 
 </html>
+
 
 
 
