@@ -337,80 +337,56 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
 </div>
 
 <!-- ======================= CERTIFICADO AUTOGENERADO ======================= -->
-<div class="certificate-box" id="certificateBox">
+<!-- ================== CERTIFICADO OCULTO ================== -->
+<div class="certificate-box" id="certificateBox" style="display:none;">
     <h3>🎉 ¡Felicitaciones!</h3>
     <p>Has completado todos los módulos del curso.</p>
 
-    <input type="text" id="userName" placeholder="Escribe tu nombre para generar el certificado" />
+    <input type="text" id="userName" placeholder="Escribe tu nombre" />
 
     <button onclick="generateCertificatePDF()" class="certificate-btn">
         Generar Certificado PDF
     </button>
 
-    <!-- CANVAS OCULTO PARA CREAR EL PDF -->
-    <canvas id="certCanvas" width="1000" height="700" style="display:none;"></canvas>
+    <!-- Canvas para el certificado -->
+    <canvas id="certCanvas" width="1200" height="850" style="display:none;"></canvas>
 </div>
 
 <!-- ======================= ESTILOS ======================= -->
 <style>
-.module-card {
-    background: #1b1f3b;
-    margin: 12px 0;
-    padding: 18px;
-    border-radius: 14px;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-    border-left: 6px solid #5b7bff;
-}
-.module-card:hover { transform: scale(1.01); }
-
-.video-box {
-    display: none;
-    margin-top: 12px;
-}
-.finish-btn {
-    margin-top: 12px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 10px;
-    background:#5b7bff;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-}
 .certificate-box {
-    display:none;
-    margin-top: 30px;
-    text-align: center;
-    background:#14213d;
-    padding: 25px;
-    border-radius: 20px;
+    text-align:center;
+    background:#111827;
+    padding:30px;
+    border-radius:20px;
+    margin-top:25px;
+    border:1px solid #3b4cca;
     color:white;
-}
-.certificate-btn {
-    padding: 12px 25px;
-    background:#00d1b2;
-    color:white;
-    font-size:16px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    margin-top:12px;
 }
 #userName {
-    padding: 10px;
-    width: 80%;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
     border:none;
-    margin-top: 10px;
-    font-size:16px;
+    width:80%;
+    margin-top:12px;
+    font-size:18px;
+}
+.certificate-btn {
+    background:#3b4cca;
+    padding:12px 20px;
+    border-radius:10px;
+    color:white;
+    font-size:18px;
+    border:none;
+    margin-top:15px;
+    cursor:pointer;
 }
 </style>
 
+
 <!-- ======================= SCRIPT ======================= -->
 <script>
-// progreso guardado en localStorage
+// ================== PROGRESO ==================
 let completed = JSON.parse(localStorage.getItem("progress_course")) || {1:false,2:false,3:false};
 
 function showVideo(num) {
@@ -426,58 +402,71 @@ function completeModule(num) {
 }
 
 function checkCertificate() {
-   if (completed[1] && completed[2] && completed[3]) {
-       document.getElementById("certificateBox").style.display = "block";
-   }
+    if (completed[1] && completed[2] && completed[3]) {
+        document.getElementById("certificateBox").style.display = "block";
+    }
 }
 checkCertificate();
 
-// ======================= GENERAR CERTIFICADO PDF ======================= //
+
+// ================== GENERADOR DE CERTIFICADO ==================
+
 function generateCertificatePDF() {
     let name = document.getElementById("userName").value.trim();
-    if (name === "") return alert("Por favor escribe tu nombre.");
+    if (name === "") return alert("Escribe tu nombre para generar el certificado.");
 
     let canvas = document.getElementById("certCanvas");
     let ctx = canvas.getContext("2d");
 
-    // Fondo elegante
-    ctx.fillStyle = "#f4f4f4";
+    // Fondo degradado elegante
+    let gradient = ctx.createLinearGradient(0, 0, 1200, 850);
+    gradient.addColorStop(0, "#f5f7fa");
+    gradient.addColorStop(1, "#c3cfe2");
+    ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Marco
     ctx.strokeStyle = "#1b1f3b";
-    ctx.lineWidth = 10;
-    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+    ctx.lineWidth = 12;
+    ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
 
-    // Título
-    ctx.font = "40px serif";
-    ctx.fillStyle = "#1b1f3b";
-    ctx.textAlign = "center";
-    ctx.fillText("CERTIFICADO DE FINALIZACIÓN", 500, 120);
+    // Cargar logo
+    let logo = new Image();
+    logo.src = "img/logo.png";   // <-- coloca tu logo en /img/logo.png
 
-    // Nombre del alumno
-    ctx.font = "50px serif";
-    ctx.fillText(name, 500, 260);
+    logo.onload = function () {
 
-    // Texto
-    ctx.font = "28px serif";
-    ctx.fillText("Ha completado satisfactoriamente el curso:", 500, 330);
+        // Logo arriba
+        ctx.drawImage(logo, 500, 60, 200, 200);
 
-    ctx.font = "32px serif";
-    ctx.fillText("Sistema de Control para Cohetes Educativos", 500, 380);
+        // Título
+        ctx.font = "48px serif";
+        ctx.fillStyle = "#1b1f3b";
+        ctx.textAlign = "center";
+        ctx.fillText("CERTIFICADO DE FINALIZACIÓN", 600, 320);
 
-    ctx.font = "20px serif";
-    ctx.fillText("Emitido automáticamente por la plataforma", 500, 460);
+        // Nombre
+        ctx.font = "60px serif";
+        ctx.fillStyle = "#111827";
+        ctx.fillText(name, 600, 420);
 
-    // Fecha
-    let date = new Date().toLocaleDateString();
-    ctx.fillText("Fecha: " + date, 500, 500);
+        // Texto del curso
+        ctx.font = "30px serif";
+        ctx.fillText("Ha completado satisfactoriamente el curso:", 600, 480);
 
-    // Descargar
-    let link = document.createElement("a");
-    link.download = "Certificado_"+name+".pdf";
-    link.href = canvas.toDataURL("application/pdf");
-    link.click();
+        ctx.font = "34px serif";
+        ctx.fillText("Sistema de Control para Cohetes Educativos", 600, 530);
+
+        // Fecha
+        ctx.font = "22px serif";
+        ctx.fillText("Emitido el: " + new Date().toLocaleDateString(), 600, 620);
+
+        // Descargar PDF
+        let link = document.createElement("a");
+        link.download = "Certificado_" + name + ".pdf";
+        link.href = canvas.toDataURL("application/pdf");
+        link.click();
+    };
 }
 </script>
 
