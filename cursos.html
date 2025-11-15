@@ -303,7 +303,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
 </style>
 
 
-<div class="course-container">
+
 
     
 <h2 class="course-title">Curso gratuito online con certificación automática</h2>
@@ -432,8 +432,11 @@ let completed = JSON.parse(localStorage.getItem("progress_course")) || {
     3: false
 };
 
+// Seleccionar solo los módulos dentro del curso gratuito
+const courseContainer = document.querySelector(".course-container");
+const modules = courseContainer.querySelectorAll(".module-card");
+
 function lockModules() {
-    const modules = document.querySelectorAll(".module-card");
 
     // Tomo 1
     modules[0].classList.add("module-unlocked");
@@ -454,7 +457,7 @@ function lockModules() {
         modules[2].classList.add("module-locked");
     }
 
-    // marcar completados
+    // marcar completados en rojo
     for (let i = 0; i < 3; i++) {
         if (completed[i + 1]) {
             modules[i].classList.add("module-completed");
@@ -463,7 +466,8 @@ function lockModules() {
 }
 
 function showVideo(num) {
-    let module = document.querySelectorAll(".module-card")[num - 1];
+
+    let module = modules[num - 1];
 
     if (module.classList.contains("module-locked")) {
         alert("🔒 Este tomo está bloqueado. Completa el tomo anterior primero.");
@@ -498,6 +502,7 @@ lockModules();
 checkCertificate();
 </script>
 
+<div class="course-container">
 
     <h2>Cursos Especializados en vivo y con Certificación</h2>
     <!-- CURSO 1 -->
