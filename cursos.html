@@ -11,6 +11,7 @@ img { width:100%; border-radius:12px; margin-bottom:15px; }
 a { color:lightgreen; text-decoration:none; }
 .back-btn { margin-top:20px; display:inline-block; }
 </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -314,7 +315,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     <div class="module-title">📘 Tomo 1 — Fundamentos</div>
     <div class="video-box" id="video1">
         <iframe src="https://www.youtube.com/embed/XXXXXXXX" allowfullscreen></iframe>
-        <button onclick="completeModule(1)" class="finish-btn">Marcar como completado</button>
+        <button onclick="completeModule(event,1)" class="finish-btn">Marcar como completado</button>
     </div>
 </div>
 
@@ -323,7 +324,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     <div class="module-title">📘 Tomo 2 — Implementación del Sistema</div>
     <div class="video-box" id="video2">
         <iframe src="https://www.youtube.com/embed/YYYYYYYY" allowfullscreen></iframe>
-        <button onclick="completeModule(2)" class="finish-btn">Marcar como completado</button>
+        <button onclick="completeModule(event,2)" class="finish-btn">Marcar como completado</button>
     </div>
 </div>
 
@@ -332,29 +333,32 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     <div class="module-title">📘 Tomo 3 — Pruebas y Simulaciones</div>
     <div class="video-box" id="video3">
         <iframe src="https://www.youtube.com/embed/ZZZZZZZZ" allowfullscreen></iframe>
-        <button onclick="completeModule(3)" class="finish-btn">Marcar como completado</button>
+        <button onclick="completeModule(event,3)" class="finish-btn">Marcar como completado</button>
     </div>
 </div>
 
 <!-- ======================= CERTIFICADO AUTOGENERADO ======================= -->
 <div class="certificate-box" id="certificateBox">
     <h3>🎉 ¡Felicitaciones!</h3>
-    <p>Has completado todos los módulos del curso.</p>
+    <p>Has completado los 3 tomos del curso.</p>
 
     <input type="text" id="userName" placeholder="Escribe tu nombre para generar el certificado" />
 
     <button onclick="generateCertificatePDF()" class="certificate-btn">
         Generar Certificado PDF
     </button>
-
-    <!-- CANVAS OCULTO PARA CREAR EL PDF -->
-    <canvas id="certCanvas" width="1000" height="700" style="display:none;"></canvas>
 </div>
 
 <!-- ======================= ESTILOS ======================= -->
 <style>
+.course-title{
+    color:white;
+    text-align:center;
+    margin-bottom:20px;
+}
+
 .module-card {
-    background: #1b1f3b;
+    background: #0f1c2e;
     margin: 12px 0;
     padding: 18px;
     border-radius: 14px;
@@ -363,7 +367,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     transition: 0.3s;
     border-left: 6px solid #5b7bff;
 }
-.module-card:hover { transform: scale(1.01); }
+.module-card:hover { transform: scale(1.02); }
 
 .video-box {
     display: none;
@@ -379,6 +383,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     font-weight:bold;
     cursor:pointer;
 }
+
 .certificate-box {
     display:none;
     margin-top: 30px;
@@ -388,6 +393,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     border-radius: 20px;
     color:white;
 }
+
 .certificate-btn {
     padding: 12px 25px;
     background:#00d1b2;
@@ -398,6 +404,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     cursor:pointer;
     margin-top:12px;
 }
+
 #userName {
     padding: 10px;
     width: 80%;
@@ -410,7 +417,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
 
 <!-- ======================= SCRIPT ======================= -->
 <script>
-// progreso guardado en localStorage
+// guardar progreso en navegador
 let completed = JSON.parse(localStorage.getItem("progress_course")) || {1:false,2:false,3:false};
 
 function showVideo(num) {
@@ -418,7 +425,9 @@ function showVideo(num) {
     box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
-function completeModule(num) {
+// evita que el clic en botón abra/cierre el video
+function completeModule(event, num) {
+    event.stopPropagation();
     completed[num] = true;
     localStorage.setItem("progress_course", JSON.stringify(completed));
     alert("✔ Tomo " + num + " completado");
@@ -432,54 +441,54 @@ function checkCertificate() {
 }
 checkCertificate();
 
-// ======================= GENERAR CERTIFICADO PDF ======================= //
-function generateCertificatePDF() {
+// ======================= PDF REAL ======================= //
+async function generateCertificatePDF() {
+    const { jsPDF } = window.jspdf;
+
     let name = document.getElementById("userName").value.trim();
     if (name === "") return alert("Por favor escribe tu nombre.");
 
-    let canvas = document.getElementById("certCanvas");
-    let ctx = canvas.getContext("2d");
+    const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "px",
+        format: [1000, 700]
+    });
 
-    // Fondo elegante
-    ctx.fillStyle = "#f4f4f4";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Fondo
+    pdf.setFillColor(240,240,240);
+    pdf.rect(0,0,1000,700,"F");
 
     // Marco
-    ctx.strokeStyle = "#1b1f3b";
-    ctx.lineWidth = 10;
-    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+    pdf.setDrawColor(27,31,59);
+    pdf.setLineWidth(6);
+    pdf.rect(20,20,960,660);
 
     // Título
-    ctx.font = "40px serif";
-    ctx.fillStyle = "#1b1f3b";
-    ctx.textAlign = "center";
-    ctx.fillText("CERTIFICADO DE FINALIZACIÓN", 500, 120);
+    pdf.setFontSize(40);
+    pdf.setTextColor(27,31,59);
+    pdf.text("CERTIFICADO DE FINALIZACIÓN", 500, 120, {align:"center"});
 
-    // Nombre del alumno
-    ctx.font = "50px serif";
-    ctx.fillText(name, 500, 260);
+    // Nombre
+    pdf.setFontSize(50);
+    pdf.text(name, 500, 260, {align:"center"});
 
-    // Texto
-    ctx.font = "28px serif";
-    ctx.fillText("Ha completado satisfactoriamente el curso:", 500, 330);
+    // Texto central
+    pdf.setFontSize(28);
+    pdf.text("Ha completado satisfactoriamente el curso:", 500, 320, {align:"center"});
 
-    ctx.font = "32px serif";
-    ctx.fillText("Sistema de Control para Cohetes Educativos", 500, 380);
-
-    ctx.font = "20px serif";
-    ctx.fillText("Emitido automáticamente por la plataforma", 500, 460);
+    pdf.setFontSize(32);
+    pdf.text("Sistema de Control para Cohetes Educativos", 500, 370, {align:"center"});
 
     // Fecha
     let date = new Date().toLocaleDateString();
-    ctx.fillText("Fecha: " + date, 500, 500);
+    pdf.setFontSize(22);
+    pdf.text("Fecha de emisión: " + date, 500, 470, {align:"center"});
 
     // Descargar
-    let link = document.createElement("a");
-    link.download = "Certificado_"+name+".pdf";
-    link.href = canvas.toDataURL("application/pdf");
-    link.click();
+    pdf.save("Certificado_" + name + ".pdf");
 }
 </script>
+
 
     
     <h2>Cursos Especializados en vivo y con Certificación</h2>
