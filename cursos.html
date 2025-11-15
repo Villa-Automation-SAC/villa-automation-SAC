@@ -73,7 +73,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
       <br />
       📧 <a href="mailto:villa.automation.eirl@gmail.com" class="text-amber-600 underline">villa.automation.eirl@gmail.com</a>
       <br />
-      📱 WhatsApp: <strong>+51 965281663</strong>
+      📱 WhatsApp: <strong>+51965281663</strong>
     </p>
   </div>
 
@@ -227,32 +227,183 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     <h2>Cursos Especializados</h2>
 
     <!-- CURSO 1 -->
+    <!-- ======================= SECCIÓN DEL CURSO ======================= -->
+
+<style>
+.course-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    color: white;
+    font-family: "Poppins";
+}
+
+.course-title {
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.module-card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(60,100,255,0.25);
+    transition: .3s;
+}
+
+.module-card:hover {
+    box-shadow: 0 0 25px rgba(60,100,255,0.45);
+}
+
+.module-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.video-box {
+    display: none;
+    margin-top: 15px;
+}
+
+.video-box iframe {
+    width: 100%;
+    height: 250px;
+    border-radius: 10px;
+}
+
+/* Certificado */
+.certificate-box {
+    text-align: center;
+    margin-top: 40px;
+    padding: 25px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 0 20px rgba(60,100,255,0.35);
+    display: none;
+}
+
+.certificate-btn {
+    display: inline-block;
+    background: #5b7bff;
+    padding: 14px 25px;
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 0 20px rgba(60,100,255,0.65);
+    transition: .3s;
+}
+
+.certificate-btn:hover {
+    background: #7c92ff;
+}
+</style>
+
+
+<div class="course-container">
+
+    <h2 class="course-title">Contenido del Curso</h2>
+
+    <!-- TOMO 1 -->
+    <div class="module-card" onclick="showVideo(1)">
+        <div class="module-title">📘 Tomo 1 — Fundamentos</div>
+        <div class="video-box" id="video1">
+            <iframe src="https://www.youtube.com/embed/XXXXXXXX" allowfullscreen></iframe>
+            <button onclick="completeModule(1)" style="margin-top:12px;padding:10px 15px;border:none;border-radius:10px;background:#5b7bff;color:white;font-weight:bold;">Marcar como completado</button>
+        </div>
+    </div>
+
+    <!-- TOMO 2 -->
+    <div class="module-card" onclick="showVideo(2)">
+        <div class="module-title">📘 Tomo 2 — Implementación del Sistema</div>
+        <div class="video-box" id="video2">
+            <iframe src="https://www.youtube.com/embed/YYYYYYYY" allowfullscreen></iframe>
+            <button onclick="completeModule(2)" style="margin-top:12px;padding:10px 15px;border:none;border-radius:10px;background:#5b7bff;color:white;font-weight:bold;">Marcar como completado</button>
+        </div>
+    </div>
+
+    <!-- TOMO 3 -->
+    <div class="module-card" onclick="showVideo(3)">
+        <div class="module-title">📘 Tomo 3 — Pruebas y Simulaciones</div>
+        <div class="video-box" id="video3">
+            <iframe src="https://www.youtube.com/embed/ZZZZZZZZ" allowfullscreen></iframe>
+            <button onclick="completeModule(3)" style="margin-top:12px;padding:10px 15px;border:none;border-radius:10px;background:#5b7bff;color:white;font-weight:bold;">Marcar como completado</button>
+        </div>
+    </div>
+
+    <!-- CERTIFICADO -->
+    <div class="certificate-box" id="certificateBox">
+        <h3>🎉 ¡Felicitaciones!</h3>
+        <p>Has completado todos los módulos del curso.</p>
+        <a class="certificate-btn" href="LINK-DE-DESCARGA-DE-CERTIFICADO.pdf" target="_blank">
+            Descargar Certificado PDF
+        </a>
+    </div>
+
+</div>
+
+<!-- ======================= SCRIPT DEL CURSO ======================= -->
+
+<script>
+let completed = JSON.parse(localStorage.getItem("progress_course")) || {
+    1: false,
+    2: false,
+    3: false
+};
+
+function showVideo(num) {
+    let box = document.getElementById("video" + num);
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function completeModule(num) {
+    completed[num] = true;
+    localStorage.setItem("progress_course", JSON.stringify(completed));
+    alert("✔ Tomo " + num + " completado");
+    checkCertificate();
+}
+
+function checkCertificate() {
+    if (completed[1] && completed[2] && completed[3]) {
+        document.getElementById("certificateBox").style.display = "block";
+    }
+}
+
+// Mostrar certificado si ya lo terminó
+checkCertificate();
+</script>
+
     <div class="course-card">
-        <div class="course-title">Sistema de Control para Cohetes Educativos</div>
+        <div class="course-title">Sistema de Control para Cohetes Educativos e investigación</div>
         <div class="course-description">
             Aprende a implementar guiado, navegación y control en vehículos tipo sounding rocket.
         </div>
-        <div class="price-tag">S/ 89</div>
+        <div class="price-tag">S/ 200</div>
         <a class="buy-btn" onclick="selectCourse('Sistema de Control para Cohetes Educativos')">Comprar Curso</a>
     </div>
 
     <!-- CURSO 2 -->
     <div class="course-card">
-        <div class="course-title">Control PID, LQR y Simulación 3D para Drones</div>
+        <div class="course-title">Control PID, MPC, SMC para robots colaborativos</div>
         <div class="course-description">
             Domina controladores modernos y simula drones en entornos 3D interactivos.
         </div>
-        <div class="price-tag">S/ 120</div>
+        <div class="price-tag">S/ 200</div>
         <a class="buy-btn" onclick="selectCourse('Control PID, LQR y Simulación 3D para Drones')">Comprar Curso</a>
     </div>
 
     <!-- CURSO 3 -->
     <div class="course-card">
-        <div class="course-title">Simulación Orbital CR3BP, NRHO y CAPSTONE</div>
+        <div class="course-title">Modelameinto y Simulación avanzada de motores de Propulsión</div>
         <div class="course-description">
-            Aprende a simular trayectorias espaciales como las órbitas NRHO utilizadas por la NASA.
+            Aprende a desarrollar motores de propuslion para vehiculos no tripulados y naves espaciales
         </div>
-        <div class="price-tag">S/ 150</div>
+        <div class="price-tag">S/ 250</div>
         <a class="buy-btn" onclick="selectCourse('Simulación Orbital CR3BP, NRHO y CAPSTONE')">Comprar Curso</a>
     </div>
 
@@ -262,6 +413,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
         <h3 class="voucher-title">Enviar Comprobante de Pago</h3>
 
         <p class="voucher-text">
+            Pagos al:BCP Soles :22007129222035 / yape:965281663 /
             Verifica tus cursos seleccionados y envía tu comprobante por WhatsApp.
         </p>
 
@@ -342,7 +494,7 @@ function sendToWhatsApp() {
         "*Total:* S/ " + total + "%0A%0A" +
         "Adjunto mi comprobante (imagen o PDF).";
 
-    let phone = "519XXXXXXXX"; // ← Cambiar
+    let phone = "51965281663"; // ← Cambiar
 
     window.open("https://wa.me/" + phone + "?text=" + message, "_blank");
 }
