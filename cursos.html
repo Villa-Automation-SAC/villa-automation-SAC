@@ -80,98 +80,249 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
   <p class="text-center text-gray-700 mt-6 italic">
     “Aprende, crea y transforma el futuro con Villa Automation SAC.”
 <!-- ===== FORMULARIO DE ENVÍO DE COMPROBANTE ===== -->
-<div class="voucher-card">
-
-    <h3 class="voucher-title">Enviar Comprobante de Pago</h3>
-
-    <p class="voucher-text">
-        Completa tus datos y te enviaremos directamente al WhatsApp para adjuntar tu comprobante (imagen o PDF).
-    </p>
-
-    <div class="voucher-form">
-        <label>Nombre completo</label>
-        <input type="text" id="name" placeholder="Escribe tu nombre...">
-
-        <label>Curso adquirido</label>
-        <select id="course">
-            <option value="" disabled selected>Selecciona un curso...</option>
-            <option value="Sistema de Control para Cohetes">Sistema de Control para Cohetes</option>
-            <option value="Control PID, LQR y Drones">Control PID, LQR y Drones</option>
-            <option value="Simulación Orbital CR3BP y NRHO">Simulación Orbital CR3BP y NRHO</option>
-        </select>
-
-        <a onclick="sendToWhatsApp()" class="voucher-btn">Enviar por WhatsApp</a>
-    </div>
-
-</div>
-
+<!-- ======== SECCIÓN ULTRA PREMIUM ======== -->
 <style>
-/* === TARJETA PREMIUM PARA COMPROBANTE === */
-.voucher-card {
-    max-width: 550px;
-    margin: 60px auto 0;
-    padding: 35px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.18);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    color: white;
-    text-align: center;
-}
+    /* Fondo estilo galaxia */
+    .premium-bg {
+        padding: 80px 20px;
+        background: radial-gradient(circle at top, #1a2740, #0b0f1a 70%);
+        color: white;
+        font-family: "Segoe UI", sans-serif;
+        position: relative;
+        overflow: hidden;
+    }
 
-.voucher-title {
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 15px;
-    text-shadow: 0 0 15px rgba(255,255,255,0.25);
-}
+    /* Estrellas animadas */
+    .premium-bg::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: url('https://i.imgur.com/2RkYnSO.png');
+        opacity: 0.20;
+        animation: stars 60s linear infinite;
+    }
 
-.voucher-text {
-    color: #d4dcff;
-    font-size: 15px;
-    margin-bottom: 25px;
-}
+    @keyframes stars {
+        from { transform: translateY(0); }
+        to   { transform: translateY(-300px); }
+    }
 
-/* Inputs premium */
-.voucher-form input,
-.voucher-form select {
-    width: 100%;
-    padding: 14px;
-    margin-bottom: 18px;
-    border-radius: 12px;
-    border: none;
-    background: rgba(255,255,255,0.12);
-    color: white;
-    font-size: 15px;
-}
+    /* Título principal */
+    .premium-title {
+        text-align: center;
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 50px;
+        letter-spacing: 1px;
+        text-shadow: 0 0 18px rgba(255,255,255,0.25);
+        position: relative;
+        z-index: 2;
+    }
 
-.voucher-form input:focus,
-.voucher-form select:focus {
-    outline: 2px solid #3b7bff;
-}
+    /* Grid de cursos */
+    .course-grid {
+        max-width: 1200px;
+        margin: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 35px;
+        position: relative;
+        z-index: 2;
+    }
 
-/* Botón futurista */
-.voucher-btn {
-    display: block;
-    padding: 14px 0;
-    background: linear-gradient(135deg, #25D366, #128C7E);
-    border-radius: 12px;
-    color: white;
-    font-weight: 700;
-    text-decoration: none;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(0, 255, 100, 0.35);
-    transition: 0.3s;
-}
+    /* Tarjetas premium */
+    .course-card {
+        background: rgba(255,255,255,0.08);
+        border-radius: 18px;
+        padding: 30px;
+        border: 1px solid rgba(255,255,255,0.18);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+        transition: 0.35s ease;
+        transform: translateY(0);
+    }
 
-.voucher-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 30px rgba(0, 255, 100, 0.55);
-}
+    .course-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.5);
+    }
+
+    /* Título del curso */
+    .course-card h3 {
+        font-size: 22px;
+        margin-bottom: 12px;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    .course-card p {
+        font-size: 15px;
+        color: #d4dcff;
+        margin-bottom: 18px;
+        line-height: 1.55;
+    }
+
+    .course-price {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #ffffff;
+    }
+
+    /* Botones futuristas */
+    .buy-btn {
+        display: block;
+        text-align: center;
+        padding: 14px 0;
+        background: linear-gradient(135deg, #3b7bff, #1d4ed8);
+        border-radius: 12px;
+        text-decoration: none;
+        color: white;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        transition: 0.3s;
+        box-shadow: 0 6px 20px rgba(40,90,255,0.35);
+    }
+
+    .buy-btn:hover {
+        background: linear-gradient(135deg, #5b8dff, #2d5ef0);
+        box-shadow: 0 10px 25px rgba(40,90,255,0.55);
+        transform: scale(1.03);
+    }
+
+    /* === TARJETA PREMIUM PARA COMPROBANTE === */
+    .voucher-card {
+        max-width: 550px;
+        margin: 70px auto 0;
+        padding: 35px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.18);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+        color: white;
+        text-align: center;
+    }
+
+    .voucher-title {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 15px;
+        text-shadow: 0 0 15px rgba(255,255,255,0.25);
+    }
+
+    .voucher-text {
+        color: #d4dcff;
+        font-size: 15px;
+        margin-bottom: 25px;
+    }
+
+    /* Inputs premium */
+    .voucher-form input,
+    .voucher-form select {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 18px;
+        border-radius: 12px;
+        border: none;
+        background: rgba(255,255,255,0.12);
+        color: white;
+        font-size: 15px;
+    }
+
+    .voucher-form input:focus,
+    .voucher-form select:focus {
+        outline: 2px solid #3b7bff;
+    }
+
+    /* Botón WhatsApp */
+    .voucher-btn {
+        display: block;
+        padding: 14px 0;
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        border-radius: 12px;
+        color: white;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(0, 255, 100, 0.35);
+        transition: 0.3s;
+    }
+
+    .voucher-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 30px rgba(0, 255, 100, 0.55);
+    }
 </style>
 
+<section class="premium-bg">
+    <h2 class="premium-title">Cursos Profesionales</h2>
+
+    <div class="course-grid">
+
+        <!-- === CURSO 1 === -->
+        <div class="course-card">
+            <h3>Sistema de Control para Cohetes Educativos</h3>
+            <p>Control de roll, pitch y yaw con IMU, filtros avanzados y simulación en Python.</p>
+            <div class="course-price">S/ 89 · USD 25</div>
+            <a class="buy-btn" onclick="selectCourse('Sistema de Control para Cohetes Educativos')">Comprar Curso</a>
+        </div>
+
+        <!-- === CURSO 2 === -->
+        <div class="course-card">
+            <h3>Control PID, LQR y Simulación 3D para Drones</h3>
+            <p>Fundamentos de control, simulación 3D avanzada y telemetría en tiempo real.</p>
+            <div class="course-price">S/ 120 · USD 32</div>
+            <a class="buy-btn" onclick="selectCourse('Control PID, LQR y Simulación 3D para Drones')">Comprar Curso</a>
+        </div>
+
+        <!-- === CURSO 3 === -->
+        <div class="course-card">
+            <h3>Simulación Orbital CR3BP, NRHO y CAPSTONE</h3>
+            <p>Genera órbitas halo, NRHO y simula trayectorias Tierra–Luna con modelos avanzados.</p>
+            <div class="course-price">S/ 150 · USD 40</div>
+            <a class="buy-btn" onclick="selectCourse('Simulación Orbital CR3BP, NRHO y CAPSTONE')">Comprar Curso</a>
+        </div>
+
+    </div>
+
+    <!-- === FORMULARIO ULTRA PREMIUM === -->
+    <div class="voucher-card">
+
+        <h3 class="voucher-title">Enviar Comprobante de Pago</h3>
+
+        <p class="voucher-text">
+            Completa tus datos y te enviaremos directamente a WhatsApp para adjuntar tu comprobante (imagen o PDF).
+        </p>
+
+        <div class="voucher-form">
+            <label>Nombre completo</label>
+            <input type="text" id="name" placeholder="Escribe tu nombre...">
+
+            <label>Curso adquirido</label>
+            <select id="course">
+                <option value="" disabled selected>Selecciona un curso...</option>
+                <option value="Sistema de Control para Cohetes Educativos">Sistema de Control para Cohetes Educativos</option>
+                <option value="Control PID, LQR y Simulación 3D para Drones">Control PID, LQR y Simulación 3D para Drones</option>
+                <option value="Simulación Orbital CR3BP, NRHO y CAPSTONE">Simulación Orbital CR3BP, NRHO y CAPSTONE</option>
+            </select>
+
+            <a onclick="sendToWhatsApp()" class="voucher-btn">Enviar por WhatsApp</a>
+        </div>
+
+    </div>
+
+</section>
+
 <script>
+/* Preselecciona automáticamente el curso */
+function selectCourse(courseName) {
+    document.getElementById('course').value = courseName;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+/* Enviar a WhatsApp */
 function sendToWhatsApp() {
     let name = document.getElementById("name").value;
     let course = document.getElementById("course").value;
@@ -187,11 +338,9 @@ function sendToWhatsApp() {
         "*Curso:* " + course + "%0A%0A" +
         "Adjunto mi comprobante (imagen o PDF).";
 
-    // TU NÚMERO AQUÍ (formato internacional sin +)
-    let phone = "51987654321";
+    let phone = "519XXXXXXXX";  /* ← COLOCA AQUÍ TU NÚMERO */
 
     let url = "https://wa.me/" + phone + "?text=" + message;
-
     window.open(url, "_blank");
 }
 </script>
