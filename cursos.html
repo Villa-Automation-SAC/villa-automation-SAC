@@ -433,40 +433,76 @@ let completed = JSON.parse(localStorage.getItem("progress_course")) || {
 };
 
 function lockModules() {
-    const module1 = document.querySelector(".module-card:nth-child(1)");
-    const module2 = document.querySelector(".module-card:nth-child(2)");
-    const module3 = document.querySelector(".module-card:nth-child(3)");
+    const modules = document.querySelectorAll(".module-card");
 
-    // Tomo 1 siempre desbloqueado
-    module1.classList.add("module-unlocked");
+    // Tomo 1
+    modules[0].classList.add("module-unlocked");
 
-    // Tomo 2 bloqueado hasta completar Tomo 1
+    // Tomo 2
     if (completed[1]) {
-        module2.classList.add("module-unlocked");
-        module2.classList.remove("module-locked");
+        modules[1].classList.add("module-unlocked");
+        modules[1].classList.remove("module-locked");
     } else {
-        module2.classList.add("module-locked");
+        modules[1].classList.add("module-locked");
     }
 
-    // Tomo 3 bloqueado hasta completar Tomo 2
+    // Tomo 3
     if (completed[2]) {
-        module3.classList.add("module-unlocked");
-        module3.classList.remove("module-locked");
+        modules[2].classList.add("module-unlocked");
+        modules[2].classList.remove("module-locked");
     } else {
-        module3.classList.add("module-locked");
+        modules[2].classList.add("module-locked");
     }
 
-    // marcar módulos completados en rojo
-    for (let i = 1; i <= 3; i++) {
-        if (completed[i]) {
-            document.querySelector(".module-card:nth-child(" + i + ")")
-                .classList.add("module-completed");
+    // marcar completados
+    for (let i = 0; i < 3; i++) {
+        if (completed[i + 1]) {
+            modules[i].classList.add("module-completed");
         }
     }
 }
 
 function showVideo(num) {
-    let module = document.querySelector(".module-card:nth-child(" + num + ")");
+    let module = document.querySelectorAll(".module-card")[num - 1];
+
+    if (module.classList.contains("module-locked")) {
+        alert("🔒 Este tomo está bloqueado. Completa el tomo anterior primero.");
+        return;
+    }
+
+    let box = document.getElementById("video" + num);
+    box.style.display = (box.style.display === "block") ? "none" : "block";
+}
+
+function completeModule(event, num) {
+    event.stopPropagation();
+    completed[num] = true;
+    localStorage.setItem("progress_course", JSON.stringify(completed));
+
+    alert("✔ Tomo " + num + " completado");
+
+    lockModules();
+    checkCertificate();
+}
+
+function checkCertificate() {
+    if (completed[1] && completed[2] && completed[3]) {
+        document.getElementById("certificateBox").style.display = "block";
+    } else {
+        document.getElementById("certificateBox").style.display = "none";
+    }
+}
+
+// iniciar sistema
+lockModules();
+checkCertificate();
+</script>
+
+
+
+function showVideo(num) {
+    let module = document.querySelectorAll(".module-card")[num - 1];
+
 
     // si está bloqueado → no abrir
     if (module.classList.contains("module-locked")) {
