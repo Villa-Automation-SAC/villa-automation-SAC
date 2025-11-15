@@ -386,8 +386,11 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
 
 <!-- ======================= SCRIPT ======================= -->
 <script>
-// ================== PROGRESO ==================
-let completed = JSON.parse(localStorage.getItem("progress_course")) || {1:false,2:false,3:false};
+let completed = JSON.parse(localStorage.getItem("progress_course")) || {
+    1: false,
+    2: false,
+    3: false
+};
 
 function showVideo(num) {
     let box = document.getElementById("video" + num);
@@ -402,11 +405,22 @@ function completeModule(num) {
 }
 
 function checkCertificate() {
-    if (completed[1] && completed[2] && completed[3]) {
-        document.getElementById("certificateBox").style.display = "block";
+    const cert = document.getElementById("certificateBox");
+
+    // SI NO terminó los 3 → ocultar a la fuerza
+    if (!(completed[1] && completed[2] && completed[3])) {
+        cert.style.display = "none";
+        return;
     }
+
+    // SI terminó los 3 → mostrar
+    cert.style.display = "block";
 }
+
+// Ejecutar al cargar la página
 checkCertificate();
+</script>
+
 
 
 // ================== GENERADOR DE CERTIFICADO ==================
