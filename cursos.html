@@ -519,6 +519,14 @@ completed[3] = false;
     <!-- Librerías necesarias para generar el PDF (van SIEMPRE después de tu script) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+function generarCodigoVerificacion() {
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "VA-2025-";
+    for (let i = 0; i < 8; i++) {
+        code += letras.charAt(Math.floor(Math.random() * letras.length));
+    }
+    return code;
+}
 
     <script>
 async function generateCertificatePDF() {
@@ -532,40 +540,59 @@ async function generateCertificatePDF() {
     }
 
     let certHTML = `
-        <div id="certificateDesign" 
-             style="
-                width: 900px; 
-                height: 600px; 
-                padding: 40px;
-                text-align:center;
-                border: 6px solid #004aad;
-                border-radius: 20px;
-                background: linear-gradient(135deg, #0f1c2e, #1b2b4b);
-                color:white;
-                font-family: Arial;
-            ">
-            
-            <h1 style="font-size:42px; margin-bottom:0;">VILLA AUTOMATION SAC</h1>
-            <p style="font-size:18px; margin-top:5px;">Academia de Automatización y Robótica</p>
+<div id="certificateDesign" 
+     style="
+        width: 900px; 
+        height: 600px; 
+        padding: 40px;
+        text-align:center;
+        border: 6px solid #004aad;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #0f1c2e, #1b2b4b);
+        color:white;
+        font-family: Arial;
+">
 
-            <hr style="border:1px solid #fff; width:70%; margin:25px auto;">
+    <!-- LOGO -->
+    <img src="https://villa-automation-sac.github.io/villa-automation/assets/logo5.jpeg" 
+         style="width:140px; margin-bottom:10px;">
 
-            <h2 style="font-size:38px;">CERTIFICADO DE FINALIZACIÓN</h2>
-            <p style="font-size:20px;">Se certifica que</p>
+    <h1 style="font-size:42px; margin-bottom:0;">VILLA AUTOMATION SAC</h1>
+    <p style="font-size:18px; margin-top:5px;">Academia de Automatización y Robótica</p>
 
-            <h2 style="font-size:40px; margin:20px 0;">${name}</h2>
+    <hr style="border:1px solid #fff; width:70%; margin:25px auto;">
 
-            <p style="font-size:18px; width:80%; margin:auto;">
-                Ha completado satisfactoriamente el curso gratuito online:
-            </p>
+    <h2 style="font-size:38px;">CERTIFICADO DE FINALIZACIÓN</h2>
+    <p style="font-size:20px;">Se certifica que</p>
 
-            <h3 style="font-size:26px; margin-top:20px;">
-                “Fundamentos, Implementación y Pruebas de Sistemas de Automatización”
-            </h3>
+    <h2 style="font-size:40px; margin:20px 0;">${name}</h2>
 
-            <p style="margin-top:40px;">Ayacucho - Perú</p>
-        </div>
-    `;
+    <p style="font-size:18px; width:80%; margin:auto;">
+        Ha completado satisfactoriamente el curso gratuito online:
+    </p>
+
+    <h3 style="font-size:26px; margin-top:20px;">
+        “Fundamentos, Implementación y Pruebas de Sistemas de Automatización”
+    </h3>
+
+    <p style="margin-top:40px;">Ayacucho - Perú</p>
+
+    <!-- BLOQUE DE VERIFICACIÓN -->
+    <div style="margin-top:45px;">
+        <p style="font-size:18px; margin-bottom:5px;">Código de verificación:</p>
+        <p style="font-size:22px; font-weight:bold;">${codigoUnico}</p>
+
+        <p style="margin-top:15px; font-size:16px;">Validar certificado en:</p>
+        <p style="font-size:16px;">
+            <a href="${linkVerificacion}" target="_blank" style="color:#4db8ff;">
+                ${linkVerificacion}
+            </a>
+        </p>
+    </div>
+
+</div>
+`;
+
 
     let container = document.createElement("div");
     container.innerHTML = certHTML;
