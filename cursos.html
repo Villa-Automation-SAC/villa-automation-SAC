@@ -543,61 +543,113 @@ const linkVerificacion =
     "https://villa-automation-sac.github.io/villa-automation/verificar.html?codigo=" 
     + codigoUnico;
 
-   let certHTML = `
+    
+  let certHTML = `
 <div id="certificateDesign" 
      style="
         width: 900px; 
         height: 600px; 
-        padding: 25px;
+        padding: 40px;
+        position: relative;
         text-align:center;
-        border: 6px solid #004aad;
-        border-radius: 20px;
-        background: linear-gradient(135deg, #0f1c2e, #1b2b4b);
-        color:white;
-        font-family: Arial;
+        background: #fdfcf7;
+        color:#222;
+        font-family: 'Georgia', serif;
+        border: 14px double #0a3d62;
+        box-shadow: 0 0 15px rgba(0,0,0,0.25);
 ">
 
+    <!-- CINTAS LATERALES -->
+    <div style="
+        position:absolute;
+        top:0;
+        left:0;
+        width:60px;
+        height:100%;
+        background: linear-gradient(#004aad, #012a63);
+        clip-path: polygon(0 0, 100% 0, 70% 100%, 0% 100%);
+    "></div>
+    <div style="
+        position:absolute;
+        top:0;
+        right:0;
+        width:60px;
+        height:100%;
+        background: linear-gradient(#004aad, #012a63);
+        clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
+    "></div>
+
     <!-- LOGO -->
-    <img src="https://villa-automation-sac.github.io/villa-automation/assets/logo5.jpeg" 
-         style="width:120px; margin-bottom:5px;">
+    <img src="https://villa-automation-sac.github.io/villa-automation/assets/logo5.jpeg"
+         style="width:120px; margin-bottom:10px; margin-top:10px;">
 
-    <h1 style="font-size:36px; margin-bottom:0;">VILLA AUTOMATION SAC</h1>
-    <p style="font-size:16px; margin-top:5px;">Academia de Automatización y Robótica</p>
+    <h1 style="font-size:34px; margin-bottom:0; letter-spacing:1px;">
+        <b>VILLA AUTOMATION SAC</b>
+    </h1>
 
-    <hr style="border:1px solid #fff; width:65%; margin:20px auto;">
-
-    <h2 style="font-size:32px;">CERTIFICADO DE FINALIZACIÓN</h2>
-    <p style="font-size:18px;">Se certifica que</p>
-
-    <h2 style="font-size:34px; margin:10px 0;">${name}</h2>
-
-    <p style="font-size:17px; width:80%; margin:10px auto;">
-        Ha completado satisfactoriamente el curso gratuito online:
+    <p style="font-size:16px; margin-top:5px; font-style:italic;">
+        Academia de Automatización y Robótica
     </p>
 
-    <h3 style="font-size:22px; margin-top:10px;">
+    <hr style="border:0; height:1px; background:#0a3d62; width:70%; margin:20px auto;">
+
+    <h2 style="font-size:30px; color:#0a3d62; margin:10px 0;">
+        <b>CERTIFICADO DE FINALIZACIÓN</b>
+    </h2>
+
+    <p style="font-size:18px;">Se certifica que</p>
+
+    <h2 style="font-size:32px; margin:10px 0;">${name}</h2>
+
+    <p style="font-size:17px; width:80%; margin:0 auto;">
+        Ha completado satisfactoriamente el curso online:
+    </p>
+
+    <h3 style="font-size:22px; margin-top:10px; color:#333;">
         “Fundamentos, Implementación y Pruebas de Sistemas de Automatización”
     </h3>
 
-    <p style="margin-top:20px; font-size:16px;">Ayacucho - Perú</p>
+    <p style="margin-top:15px; font-size:15px; font-style:italic;">Ayacucho - Perú</p>
 
-    <!-- BLOQUE DE VERIFICACIÓN CENTRADO Y MÁS ARRIBA -->
+    <!-- SELLO -->
+    <div style="
+        position:absolute;
+        bottom:40px;
+        right:40px;
+        width:120px;
+        height:120px;
+        border:5px double #0a3d62;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:12px;
+        text-align:center;
+        color:#0a3d62;
+        font-weight:bold;
+        padding:10px;
+        transform:rotate(-10deg);
+    ">
+        CERTIFICADO OFICIAL<br>VILLA AUTOMATION
+    </div>
+
+    <!-- BLOQUE DE VERIFICACIÓN -->
     <div style="
         margin-top:20px;
-        padding:10px;
-        border:1px solid #4db8ff;
+        padding:12px;
+        border:2px dashed #0a3d62;
         border-radius:10px;
-        width:70%;
+        width:65%;
         margin-left:auto;
         margin-right:auto;
-        background:rgba(255,255,255,0.08);
+        background:#eef5ff;
     ">
-        <p style="font-size:16px; margin-bottom:5px;">Código de verificación:</p>
-        <p style="font-size:20px; font-weight:bold;">${codigoUnico}</p>
+        <p style="font-size:15px; margin-bottom:5px;">Código de verificación:</p>
+        <p style="font-size:20px; font-weight:bold; color:#0a3d62;">${codigoUnico}</p>
 
-        <p style="margin-top:10px; font-size:14px;">Validar certificado en:</p>
+        <p style="margin-top:5px; font-size:14px;">Validar certificado en:</p>
         <p style="font-size:14px;">
-            <a href="${linkVerificacion}" target="_blank" style="color:#4db8ff;">
+            <a href="${linkVerificacion}" target="_blank" style="color:#004aad;">
                 ${linkVerificacion}
             </a>
         </p>
@@ -605,6 +657,7 @@ const linkVerificacion =
 
 </div>
 `;
+
 
 
 
