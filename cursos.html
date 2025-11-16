@@ -436,6 +436,9 @@ document.addEventListener("DOMContentLoaded", function () {
         2: false,
         3: false
     };
+    // 🔥 Forzar que NO se muestre certificado si el usuario recarga
+completed[3] = false;
+
 
     // Seleccionar solo los módulos del curso gratuito
     const courseContainer = document.querySelector(".course-container");
