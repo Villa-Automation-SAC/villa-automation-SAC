@@ -425,77 +425,6 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
 
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    let completed = JSON.parse(localStorage.getItem("progress_course")) || {
-        1: false,
-        2: false,
-        3: false
-    };
-
-    const courseContainer = document.querySelector(".course-container");
-    const modules = courseContainer.querySelectorAll(".module-card");
-
-    function lockModules() {
-        modules[0].classList.add("module-unlocked");
-
-        if (completed[1]) {
-            modules[1].classList.add("module-unlocked");
-            modules[1].classList.remove("module-locked");
-        } else modules[1].classList.add("module-locked");
-
-        if (completed[2]) {
-            modules[2].classList.add("module-unlocked");
-            modules[2].classList.remove("module-locked");
-        } else modules[2].classList.add("module-locked");
-
-        for (let i = 0; i < 3; i++) {
-            if (completed[i + 1]) {
-                modules[i].classList.add("module-completed");
-            }
-        }
-    }
-
-    window.showVideo = function (num) {
-        let module = modules[num - 1];
-
-        if (module.classList.contains("module-locked")) {
-            alert("🔒 Este tomo está bloqueado. Completa el anterior.");
-            return;
-        }
-
-        let box = document.getElementById("video" + num);
-        box.style.display = box.style.display === "block" ? "none" : "block";
-    }
-
-    window.completeModule = function (event, num) {
-        event.stopPropagation();
-        completed[num] = true;
-        localStorage.setItem("progress_course", JSON.stringify(completed));
-
-        alert("✔ Tomo " + num + " completado");
-
-        lockModules();
-        checkCertificate();
-    }
-
-    function checkCertificate() {
-        const certBox = document.getElementById("certificateBox");
-        if (completed[1] && completed[2] && completed[3]) {
-            certBox.style.display = "block";
-        } else {
-            certBox.style.display = "none";
-        }
-    }
-
-    lockModules();
-    checkCertificate();
-});
-
-
-/* ============================
-   GENERADOR AUTOMÁTICO DE PDF
-   ============================ */
 async function generateCertificatePDF() {
     const { jsPDF } = window.jspdf;
 
@@ -506,7 +435,7 @@ async function generateCertificatePDF() {
         return;
     }
 
-    // Estilo de certificado
+    // Diseño del certificado (NO afecta tu página)
     let certHTML = `
         <div id="certificateDesign" 
              style="
@@ -541,9 +470,6 @@ async function generateCertificatePDF() {
             </h3>
 
             <p style="margin-top:40px;">Ayacucho - Perú</p>
-
-            <img src="https://villa-automation-sac.github.io/villa-automation/assets/logo.png"
-                 style="width:120px; margin-top:20px;">
         </div>
     `;
 
@@ -557,8 +483,8 @@ async function generateCertificatePDF() {
     const imgData = canvas.toDataURL("image/png");
 
     let pdf = new jsPDF("landscape", "px", [900, 600]);
-
     pdf.addImage(imgData, "PNG", 0, 0, 900, 600);
+
     pdf.save(`Certificado_${name}.pdf`);
 
     container.remove();
@@ -693,7 +619,6 @@ function sendToWhatsApp() {
 
 </script>
 
-    <!-- Librerías necesarias -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
