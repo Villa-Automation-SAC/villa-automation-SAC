@@ -543,12 +543,12 @@ const linkVerificacion =
     "https://villa-automation-sac.github.io/villa-automation/verificar.html?codigo=" 
     + codigoUnico;
 
-    let certHTML = `
+   let certHTML = `
 <div id="certificateDesign" 
      style="
         width: 900px; 
         height: 600px; 
-        padding: 40px;
+        padding: 25px;
         text-align:center;
         border: 6px solid #004aad;
         border-radius: 20px;
@@ -559,35 +559,44 @@ const linkVerificacion =
 
     <!-- LOGO -->
     <img src="https://villa-automation-sac.github.io/villa-automation/assets/logo5.jpeg" 
-         style="width:140px; margin-bottom:10px;">
+         style="width:120px; margin-bottom:5px;">
 
-    <h1 style="font-size:42px; margin-bottom:0;">VILLA AUTOMATION SAC</h1>
-    <p style="font-size:18px; margin-top:5px;">Academia de Automatización y Robótica</p>
+    <h1 style="font-size:36px; margin-bottom:0;">VILLA AUTOMATION SAC</h1>
+    <p style="font-size:16px; margin-top:5px;">Academia de Automatización y Robótica</p>
 
-    <hr style="border:1px solid #fff; width:70%; margin:25px auto;">
+    <hr style="border:1px solid #fff; width:65%; margin:20px auto;">
 
-    <h2 style="font-size:38px;">CERTIFICADO DE FINALIZACIÓN</h2>
-    <p style="font-size:20px;">Se certifica que</p>
+    <h2 style="font-size:32px;">CERTIFICADO DE FINALIZACIÓN</h2>
+    <p style="font-size:18px;">Se certifica que</p>
 
-    <h2 style="font-size:40px; margin:20px 0;">${name}</h2>
+    <h2 style="font-size:34px; margin:10px 0;">${name}</h2>
 
-    <p style="font-size:18px; width:80%; margin:auto;">
+    <p style="font-size:17px; width:80%; margin:10px auto;">
         Ha completado satisfactoriamente el curso gratuito online:
     </p>
 
-    <h3 style="font-size:26px; margin-top:20px;">
+    <h3 style="font-size:22px; margin-top:10px;">
         “Fundamentos, Implementación y Pruebas de Sistemas de Automatización”
     </h3>
 
-    <p style="margin-top:40px;">Ayacucho - Perú</p>
+    <p style="margin-top:20px; font-size:16px;">Ayacucho - Perú</p>
 
-    <!-- BLOQUE DE VERIFICACIÓN -->
-    <div style="margin-top:45px;">
-        <p style="font-size:18px; margin-bottom:5px;">Código de verificación:</p>
-        <p style="font-size:22px; font-weight:bold;">${codigoUnico}</p>
+    <!-- BLOQUE DE VERIFICACIÓN CENTRADO Y MÁS ARRIBA -->
+    <div style="
+        margin-top:20px;
+        padding:10px;
+        border:1px solid #4db8ff;
+        border-radius:10px;
+        width:70%;
+        margin-left:auto;
+        margin-right:auto;
+        background:rgba(255,255,255,0.08);
+    ">
+        <p style="font-size:16px; margin-bottom:5px;">Código de verificación:</p>
+        <p style="font-size:20px; font-weight:bold;">${codigoUnico}</p>
 
-        <p style="margin-top:15px; font-size:16px;">Validar certificado en:</p>
-        <p style="font-size:16px;">
+        <p style="margin-top:10px; font-size:14px;">Validar certificado en:</p>
+        <p style="font-size:14px;">
             <a href="${linkVerificacion}" target="_blank" style="color:#4db8ff;">
                 ${linkVerificacion}
             </a>
@@ -596,6 +605,7 @@ const linkVerificacion =
 
 </div>
 `;
+
 
 
     let container = document.createElement("div");
