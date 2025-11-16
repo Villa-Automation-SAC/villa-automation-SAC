@@ -538,6 +538,10 @@ async function generateCertificatePDF() {
         alert("❗ Ingresa un nombre válido");
         return;
     }
+const codigoUnico = generarCodigoVerificacion();
+const linkVerificacion =
+    "https://villa-automation-sac.github.io/villa-automation/verificar.html?codigo=" 
+    + codigoUnico;
 
     let certHTML = `
 <div id="certificateDesign" 
