@@ -493,14 +493,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function checkCertificate() {
-        const certBox = document.getElementById("certificateBox");
+    const certBox = document.getElementById("certificateBox");
 
-        if (completed[1] && completed[2] && completed[3]) {
-            certBox.style.display = "block";
-        } else {
-            certBox.style.display = "none";
-        }
+    // Evita mostrar si el progreso no está completo
+    const finished = completed[1] && completed[2] && completed[3];
+
+    if (finished === true) {
+        certBox.style.display = "block";
+    } else {
+        certBox.style.display = "none";
     }
+}
+
 
     // Inicializar sistema
     lockModules();
