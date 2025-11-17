@@ -311,3 +311,43 @@ header, .logo {
     position: relative;
     z-index: 1;
 }
+/* Modo móvil/tablet: ocultar menú */
+.menu-spacex ul {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  background: #08111d;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.menu-spacex ul.open {
+  display: flex;
+}
+
+/* Submenús */
+.submenu ul {
+  display: none;
+  padding-left: 15px;
+}
+
+.submenu ul.open {
+  display: block;
+}
+
+/* Botón hamburguesa visible en móvil */
+.menu-btn {
+  font-size: 28px;
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .menu-btn {
+    display: block;
+  }
+  
+  .menu-spacex ul {
+    display: none;
+  }
+}
