@@ -536,16 +536,24 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
 
 <script>
 function toggleMenu() {
-  document.getElementById("menuList").classList.toggle("active");
+  const menu = document.querySelector('.menu-spacex');
+  menu.classList.toggle('active');
 }
 
-// Abrir/cerrar submenús en móvil
+// SOLO un submenú abierto a la vez
 function toggleSubmenu(element) {
-  if (window.innerWidth <= 900) {
-    element.parentElement.classList.toggle("open");
-  }
+  const item = element.parentElement;
+
+  // Cerrar todos
+  document.querySelectorAll('.submenu').forEach(sub => {
+    if (sub !== item) sub.classList.remove('open');
+  });
+
+  // Abrir el actual
+  item.classList.toggle('open');
 }
 </script>
+
 
 </body>
 </html>
