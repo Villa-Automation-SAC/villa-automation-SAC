@@ -177,31 +177,3 @@ nav a:hover {
     text-shadow: 0px 4px 10px rgba(0,0,0,0.7);
 }
 
-/* BOTÓN TIPO SPONSOR PERO MÁS LLAMATIVO */
-.btn-donation {
-    background: linear-gradient(45deg, #ff80c0, #ff4081);
-    padding: 10px 18px;
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 10px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 12px rgba(255,0,90,0.4);
-    transition: transform 0.25s, box-shadow 0.25s;
-}
-
-.btn-donation:hover {
-    transform: scale(1.08);
-    box-shadow: 0 6px 16px rgba(255,0,120,0.6);
-}
-
-/* ICONO DE REGALO / ROSITA */
-.donation-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-}
-
