@@ -177,49 +177,117 @@ nav a:hover {
     text-shadow: 0px 4px 10px rgba(0,0,0,0.7);
 }
 
+
+/* ---- ESTILO GENERAL SPACEX ---- */
 .menu-spacex {
-  display: flex;
-  justify-content: center;
-  padding: 10px 0;
-  font-family: 'Inter', sans-serif;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }
 
 .menu-spacex ul {
+  margin: 0;
+  padding: 14px 25px;
   list-style: none;
   display: flex;
+  justify-content: center;
   gap: 35px;
 }
 
-.menu-spacex a {
-  text-decoration: none;
+.menu-spacex > ul > li > a {
   color: white;
-  font-weight: 400;
+  text-decoration: none;
+  text-transform: uppercase;
   font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
 
-.menu-spacex .submenu {
+.menu-spacex ul li {
   position: relative;
 }
 
+/* ---- SUBMENÚS ---- */
 .menu-spacex .submenu ul {
   display: none;
   position: absolute;
-  top: 28px;
-  left: 0;
-  background: rgba(0,0,0,0.9);
-  padding: 12px 0;
-  border-radius: 4px;
-  width: 220px;
+  background: rgba(10, 10, 10, 0.98);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 15px 0;
+  list-style: none;
+  top: 38px;
+  min-width: 190px;
+}
+
+.menu-spacex .submenu ul li {
+  padding: 10px 20px;
+}
+
+.menu-spacex .submenu ul li a {
+  color: #d0e6ff;
+  text-decoration: none;
+  font-size: 14px;
+  display: block;
 }
 
 .menu-spacex .submenu:hover ul {
   display: block;
 }
 
-.menu-spacex .submenu ul li {
-  padding: 8px 15px;
+/* ---- BOTÓN HAMBURGUESA ---- */
+.menu-btn {
+  display: none;
+  color: white;
+  font-size: 32px;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  cursor: pointer;
 }
 
-.menu-spacex .submenu ul li:hover {
-  background: rgba(255,255,255,0.06);
+/* --------------------------- */
+/*       RESPONSIVE MODE       */
+/* --------------------------- */
+
+@media (max-width: 900px) {
+  .menu-btn {
+    display: block;
+  }
+
+  .menu-spacex ul {
+    flex-direction: column;
+    align-items: start;
+    gap: 15px;
+    padding: 20px;
+    display: none;
+  }
+
+  .menu-spacex ul.active {
+    display: flex;
+  }
+
+  /* Submenús en móvil (colapsables) */
+  .menu-spacex .submenu ul {
+    position: relative;
+    top: 0;
+    padding-left: 20px;
+    border: none;
+    background: none;
+    display: none;
+  }
+
+  /* Mostrar cuando están activos */
+  .submenu.open ul {
+    display: block;
+  }
+
+  .menu-spacex > ul > li > a {
+    font-size: 16px;
+  }
 }
+
