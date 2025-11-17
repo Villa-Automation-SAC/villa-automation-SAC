@@ -227,29 +227,64 @@ nav a:hover {
   position: relative;
 }
 
-/* Para PC: mostrar submenús al pasar mouse */
+/* =============================== */
+/*  MODO ESCRITORIO (PC)           */
+/* =============================== */
 @media (min-width: 900px) {
-  .menu-spacex {
-    display: flex !important;
-    position: static;
-    background: transparent;
-    box-shadow: none;
-    padding: 0;
+
+  .menu-btn {
+    display: none !important; /* Oculta hamburguesa */
   }
 
+  .menu-spacex {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    display: flex !important;
+    gap: 30px;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    align-items: center;
+    z-index: 2000; /* No tapa el banner */
+  }
+
+  .menu-spacex ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+  }
+
+  .menu-spacex li {
+    position: relative;
+  }
+
+  /* Submenús tipo "dropdown" */
   .submenu ul {
     position: absolute;
+    top: 25px;
+    left: 0;
     background: #0a1a2a;
-    padding: 10px;
+    padding: 12px;
     border-radius: 10px;
     display: none;
+    flex-direction: column;
+    min-width: 220px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
   }
 
   .submenu:hover ul {
-    display: block;
+    display: flex;
   }
 
-  .menu-btn {
-    display: none; /* En PC ocultamos hamburguesa */
+  .submenu ul li {
+    padding: 5px 0;
+  }
+
+  .menu-spacex a {
+    color: white !important;
+    text-decoration: none;
+    font-size: 16px;
   }
 }
+
