@@ -183,32 +183,32 @@ nav a:hover {
    MENÚ SUPERIOR FIJO (PC + TABLET + MÓVIL)
    ===================================================== */
 
+/* =====================================================
+   MENÚ SUPERIOR FIJO
+   ===================================================== */
+
 .menu-container {
     width: 100%;
     background: #081b2d;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 90000; /* encima de todo */
+    z-index: 90000;
     padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-/* Botón hamburguesa (solo móvil) */
+/* Botón hamburguesa */
 .menu-btn {
     font-size: 28px;
     cursor: pointer;
     color: white;
-    display: none;
+    display: none; /* Solo aparece en móvil */
 }
 
-/* --- MENÚ PRINCIPAL EN PC --- */
-.menu-spacex {
-    position: relative;
-    z-index: 9999;
-}
+/* ====== MENÚ PC ====== */
 
 .menu-spacex ul {
     list-style: none;
@@ -228,9 +228,7 @@ nav a:hover {
     font-size: 16px;
 }
 
-/* ========================
-   SUBMENÚ EN PC
-   ======================== */
+/* Submenú en PC (hover) */
 .submenu ul {
     position: absolute;
     top: 100%;
@@ -257,15 +255,17 @@ nav a:hover {
 }
 
 /* =====================================================
-   MENÚ RESPONSIVE (TABLET / MÓVIL)
+   MENÚ MÓVIL / TABLET
    ===================================================== */
+
 @media (max-width: 900px) {
 
+    /* Mostrar botón hamburguesa */
     .menu-btn {
         display: block;
     }
 
-    /* Ocultar menú principal */
+    /* Menú oculto por defecto */
     .menu-spacex ul {
         display: none;
         flex-direction: column;
@@ -276,21 +276,22 @@ nav a:hover {
         background: #081b2d;
         padding: 15px;
         z-index: 99999;
+        gap: 12px;
     }
 
-    /* Mostrar cuando se activa */
+    /* Menú visible */
     .menu-spacex ul.show {
         display: flex;
     }
 
-    /* SUBMENÚ en móvil */
+    /* Submenú en móvil (click) */
     .submenu ul {
         display: none;
-        position: relative;
         background: #0d2c45;
+        border-radius: 6px;
         margin-top: 8px;
         padding: 10px 0;
-        border-radius: 6px;
+        position: relative;
         z-index: 999999;
     }
 
@@ -306,48 +307,8 @@ nav a:hover {
     }
 }
 
-/* Asegurar que nada tape el menú */
+/* Para evitar que el logo tape el menú */
 header, .logo {
     position: relative;
     z-index: 1;
-}
-/* Modo móvil/tablet: ocultar menú */
-.menu-spacex ul {
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-  background: #08111d;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-.menu-spacex ul.open {
-  display: flex;
-}
-
-/* Submenús */
-.submenu ul {
-  display: none;
-  padding-left: 15px;
-}
-
-.submenu ul.open {
-  display: block;
-}
-
-/* Botón hamburguesa visible en móvil */
-.menu-btn {
-  font-size: 28px;
-  cursor: pointer;
-  display: none;
-}
-
-@media (max-width: 900px) {
-  .menu-btn {
-    display: block;
-  }
-  
-  .menu-spacex ul {
-    display: none;
-  }
 }
