@@ -20,20 +20,22 @@
   </div>
 
   
- <nav class="menu-spacex">
-  <ul>
+<span class="menu-btn" onclick="toggleMenu()">☰</span>
+
+<nav class="menu-spacex">
+  <ul id="menuList">
+
     <li class="submenu">
-      <a>EMPRESA</a>
+      <a onclick="toggleSubmenu(this)">EMPRESA</a>
       <ul>
         <li><a href="#Nosotros">Quiénes somos</a></li>
-        <li><a href="#equipo">Equipo directivo</a></li>
         <li><a href="#mision">Misión y Visión</a></li>
         <li><a href="#noticias">Noticias</a></li>
       </ul>
     </li>
 
     <li class="submenu">
-      <a>SOLUCIONES</a>
+      <a onclick="toggleSubmenu(this)">SOLUCIONES</a>
       <ul>
         <li><a href="#servicios">Automatización Industrial</a></li>
         <li><a href="#servicios">Robótica Avanzada</a></li>
@@ -43,28 +45,18 @@
     </li>
 
     <li class="submenu">
-      <a>TECNOLOGÍAS</a>
+      <a onclick="toggleSubmenu(this)">PROYECTOS Y TECNOLOGÍAS</a>
       <ul>
         <li><a href="controlador.html">Controladores Inteligentes</a></li>
-        <li><a href="IMG_6881.html">Robots</a></li>
-        <li><a href="drones.html">Drones & UAVs</a></li>
+        <li><a href="IMG_6881.html">Robots colaborativos de defensa</a></li>
+        <li><a href="drones.html">vehiculos no tripulados y drones</a></li>
         <li><a href="aeroespacial.html">Aeroespacial</a></li>
         <li><a href="teledeteccion.html">Teledetección</a></li>
       </ul>
     </li>
 
     <li class="submenu">
-      <a>PROYECTOS</a>
-      <ul>
-        <li><a href="#proyectos">Industriales</a></li>
-        <li><a href="#proyectos">Agrícolas</a></li>
-        <li><a href="#proyectos">Defensa</a></li>
-        <li><a href="#proyectos">Aeroespaciales</a></li>
-      </ul>
-    </li>
-
-    <li class="submenu">
-      <a>RECURSOS</a>
+      <a onclick="toggleSubmenu(this)">RECURSOS</a>
       <ul>
         <li><a href="cursos.html">Cursos</a></li>
         <li><a href="eventos.html">Eventos</a></li>
@@ -73,16 +65,15 @@
     </li>
 
     <li class="submenu">
-      <a>TIENDA</a>
+      <a onclick="toggleSubmenu(this)">TIENDA</a>
       <ul>
         <li><a href="tienda.html">Productos</a></li>
-        <li><a href="trabajo.html">Convocatorias</a></li>
       </ul>
     </li>
 
     <li><a href="#contacto">CONTACTO</a></li>
+    <li><a href="trabajo.html">CONVOCATORIAS</a></li>
   </ul>
-
 </nav>
 
   
@@ -542,6 +533,18 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
 }
 </style>
 
+<script>
+function toggleMenu() {
+  document.getElementById("menuList").classList.toggle("active");
+}
+
+// Abrir/cerrar submenús en móvil
+function toggleSubmenu(element) {
+  if (window.innerWidth <= 900) {
+    element.parentElement.classList.toggle("open");
+  }
+}
+</script>
 
 </body>
 </html>
