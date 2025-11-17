@@ -725,6 +725,18 @@ window.addEventListener("resize", () => {
 });
 </script>
 
+  <script>
+function toggleMenu() {
+  const menu = document.getElementById("menuList");
+  menu.classList.toggle("open"); 
+}
+
+function toggleSubmenu(element) {
+  const submenu = element.nextElementSibling;
+  submenu.classList.toggle("open");
+}
+</script>
+
 
 
 
