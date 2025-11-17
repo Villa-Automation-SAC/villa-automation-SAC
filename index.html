@@ -358,188 +358,30 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
 <!-- ============================= -->
 <!--   FORO Y DEBATES SUSCRIPTORES -->
 <!-- ============================= -->
+      <!-- ============================= -->
+<!--   FORO SUSCRIPTORES (HTML)   -->
 <!-- ============================= -->
-<!--   FORO Y DEBATES SUSCRIPTORES -->
-<!-- ============================= -->
-<script>
 
-// ===============================
-//   CONFIGURACIÓN API
-// ===============================
-const API_URL = "https://script.google.com/macros/s/AKfycbxFjhWTHfGL0Uk51ZGhwxsW9MG-HBkaHZwU0ujP2_BsfchhJ61bQDu3LNQf6h6wSfci4A/exec";
+<section id="foro">
+    <h2>Foro y Debates</h2>
 
+    <!-- Caja Suscripción -->
+    <div id="suscripcion-box">
+        <input id="email-suscriptor" type="email" placeholder="Tu correo">
+        <button onclick="suscribirse()">Suscribirse</button>
+        <p id="mensaje-suscripcion"></p>
+    </div>
 
-// ===============================
-//   VERIFICAR SUSCRIPCIÓN
-// ===============================
-document.addEventListener("DOMContentLoaded", function () {
-    const suscrito = localStorage.getItem("suscriptorEmail");
+    <!-- Caja para publicar debate -->
+    <div style="margin-top:20px;">
+        <textarea id="nuevo-debate" placeholder="Escribe un tema para debatir"></textarea>
+        <button onclick="publicarDebate()">Publicar Debate</button>
+        <p id="alerta-debate"></p>
+    </div>
 
-    if (suscrito) {
-        document.getElementById("suscripcion-box").style.display = "none";
-        document.getElementById("foro").style.display = "block";
-    }
-
-    cargarComentarios(); // cargar lista de debates
-});
-
-
-// ===============================
-//   SUSCRIPCIÓN
-// ===============================
-function suscribirse() {
-    const email = document.getElementById("email-suscriptor").value;
-
-    if (email === "" || !email.includes("@")) {
-        alert("Ingresa un correo válido.");
-        return;
-    }
-
-    localStorage.setItem("suscriptorEmail", email);
-
-    document.getElementById("suscripcion-box").style.display = "none";
-    document.getElementById("foro").style.display = "block";
-
-    document.getElementById("mensaje-suscripcion").innerHTML = "¡Suscripción exitosa!";
-}
-
-
-// ===============================
-//   PUBLICAR DEBATE PRINCIPAL
-// ===============================
-function publicarDebate() {
-    const texto = document.getElementById("nuevo-debate").value;
-    const email = localStorage.getItem("suscriptorEmail");
-
-    if (!email) {
-        alert("Debes suscribirte para comentar.");
-        return;
-    }
-
-    if (texto.trim() === "") {
-        alert("Escribe un tema para publicar.");
-        return;
-    }
-
-    fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({
-            accion: "nuevoComentario",
-            comentario: texto,
-            email: email,
-            nombre: email,
-        }),
-    })
-    .then(res => res.text())
-    .then(() => {
-        document.getElementById("alerta-debate").innerHTML = "¡Debate publicado!";
-        document.getElementById("nuevo-debate").value = "";
-        cargarComentarios();
-    });
-}
-
-
-// ===============================
-//   NUEVO → PUBLICAR COMENTARIO NORMAL
-// ===============================
-function publicarComentario(idDebate) {
-    const nombre = document.getElementById("nombre-" + idDebate).value;
-    const texto = document.getElementById("comentario-" + idDebate).value;
-
-    if (nombre.trim() === "" || texto.trim() === "") {
-        alert("Completa los campos antes de comentar.");
-        return;
-    }
-
-    fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({
-            accion: "nuevoSubComentario",
-            idDebate: idDebate,
-            nombre: nombre,
-            comentario: texto
-        }),
-    })
-    .then(res => res.text())
-    .then(() => {
-        document.getElementById("comentario-" + idDebate).value = "";
-        cargarComentarios();
-    });
-}
-
-
-// ===============================
-//   LEER COMENTARIOS GUARDADOS
-// ===============================
-function cargarComentarios() {
-    fetch(API_URL + "?accion=leer")
-        .then(res => res.json())
-        .then(data => {
-            const cont = document.getElementById("lista-debates");
-            cont.innerHTML = "";
-
-            data.forEach(item => {
-                const div = document.createElement("div");
-                div.classList.add("debate");
-                div.style = "background:#10283f;padding:15px;margin-bottom:10px;border-radius:8px;";
-
-                div.innerHTML = `
-                    <h4>💬 ${item.nombre}</h4>
-                    <p>${item.comentario}</p>
-                    <small style="opacity:0.7">${item.fecha}</small>
-
-                    <!-- CAJA PARA COMENTAR -->
-                    <div style="margin-top:10px;background:#0d1e30;padding:10px;border-radius:6px;">
-                        <input id="nombre-${item.id}" type="text" placeholder="Tu nombre"
-                            style="width:100%;padding:8px;border-radius:5px;margin-bottom:5px;">
-                        <textarea id="comentario-${item.id}" placeholder="Escribe tu comentario"
-                            style="width:100%;padding:8px;border-radius:5px;"></textarea>
-                        
-                        <button onclick="publicarComentario('${item.id}')"
-                            style="margin-top:5px;padding:8px 15px;background:#00bfff;border:none;border-radius:5px;color:white;cursor:pointer;">
-                            Responder
-                        </button>
-                    </div>
-
-                    ${item.estado === "activo" ? `
-                        <button onclick="eliminarComentario('${item.id}')"
-                        style="padding:5px 10px;background:red;color:white;border:none;border-radius:5px;cursor:pointer;margin-top:10px;">
-                            Eliminar Debate
-                        </button>` : ""}
-                `;
-
-                cont.prepend(div);
-            });
-        });
-}
-
-
-// ===============================
-//   ELIMINAR DEBATE (ADMIN)
-// ===============================
-function eliminarComentario(id) {
-    const adminPass = prompt("Contraseña de administrador:");
-
-    if (adminPass !== "VILLA2025") {
-        alert("Contraseña incorrecta.");
-        return;
-    }
-
-    fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({
-            accion: "eliminar",
-            id: id
-        }),
-    })
-    .then(res => res.text())
-    .then(() => {
-        alert("Comentario eliminado.");
-        cargarComentarios();
-    });
-}
-
-</script>
+    <!-- Lista de debates -->
+    <div id="lista-debates" style="margin-top:20px;"></div>
+</section>
 
 
 
@@ -768,6 +610,189 @@ window.addEventListener("resize", () => {
         submenus.forEach(s => s.classList.remove("open"));
     }
 });
+</script>
+
+<!-- ============================= -->
+<!--   FORO Y DEBATES SUSCRIPTORES -->
+<!-- ============================= -->
+<script>
+
+// ===============================
+//   CONFIGURACIÓN API
+// ===============================
+const API_URL = "https://script.google.com/macros/s/AKfycbxFjhWTHfGL0Uk51ZGhwxsW9MG-HBkaHZwU0ujP2_BsfchhJ61bQDu3LNQf6h6wSfci4A/exec";
+
+
+// ===============================
+//   VERIFICAR SUSCRIPCIÓN
+// ===============================
+document.addEventListener("DOMContentLoaded", function () {
+    const suscrito = localStorage.getItem("suscriptorEmail");
+
+    if (suscrito) {
+        document.getElementById("suscripcion-box").style.display = "none";
+        document.getElementById("foro").style.display = "block";
+    }
+
+    cargarComentarios(); // cargar lista de debates
+});
+
+
+// ===============================
+//   SUSCRIPCIÓN
+// ===============================
+function suscribirse() {
+    const email = document.getElementById("email-suscriptor").value;
+
+    if (email === "" || !email.includes("@")) {
+        alert("Ingresa un correo válido.");
+        return;
+    }
+
+    localStorage.setItem("suscriptorEmail", email);
+
+    document.getElementById("suscripcion-box").style.display = "none";
+    document.getElementById("foro").style.display = "block";
+
+    document.getElementById("mensaje-suscripcion").innerHTML = "¡Suscripción exitosa!";
+}
+
+
+// ===============================
+//   PUBLICAR DEBATE PRINCIPAL
+// ===============================
+function publicarDebate() {
+    const texto = document.getElementById("nuevo-debate").value;
+    const email = localStorage.getItem("suscriptorEmail");
+
+    if (!email) {
+        alert("Debes suscribirte para comentar.");
+        return;
+    }
+
+    if (texto.trim() === "") {
+        alert("Escribe un tema para publicar.");
+        return;
+    }
+
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            accion: "nuevoComentario",
+            comentario: texto,
+            email: email,
+            nombre: email,
+        }),
+    })
+    .then(res => res.text())
+    .then(() => {
+        document.getElementById("alerta-debate").innerHTML = "¡Debate publicado!";
+        document.getElementById("nuevo-debate").value = "";
+        cargarComentarios();
+    });
+}
+
+
+// ===============================
+//   NUEVO → PUBLICAR COMENTARIO NORMAL
+// ===============================
+function publicarComentario(idDebate) {
+    const nombre = document.getElementById("nombre-" + idDebate).value;
+    const texto = document.getElementById("comentario-" + idDebate).value;
+
+    if (nombre.trim() === "" || texto.trim() === "") {
+        alert("Completa los campos antes de comentar.");
+        return;
+    }
+
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            accion: "nuevoSubComentario",
+            idDebate: idDebate,
+            nombre: nombre,
+            comentario: texto
+        }),
+    })
+    .then(res => res.text())
+    .then(() => {
+        document.getElementById("comentario-" + idDebate).value = "";
+        cargarComentarios();
+    });
+}
+
+
+// ===============================
+//   LEER COMENTARIOS GUARDADOS
+// ===============================
+function cargarComentarios() {
+    fetch(API_URL + "?accion=leer")
+        .then(res => res.json())
+        .then(data => {
+            const cont = document.getElementById("lista-debates");
+            cont.innerHTML = "";
+
+            data.forEach(item => {
+                const div = document.createElement("div");
+                div.classList.add("debate");
+                div.style = "background:#10283f;padding:15px;margin-bottom:10px;border-radius:8px;";
+
+                div.innerHTML = `
+                    <h4>💬 ${item.nombre}</h4>
+                    <p>${item.comentario}</p>
+                    <small style="opacity:0.7">${item.fecha}</small>
+
+                    <!-- CAJA PARA COMENTAR -->
+                    <div style="margin-top:10px;background:#0d1e30;padding:10px;border-radius:6px;">
+                        <input id="nombre-${item.id}" type="text" placeholder="Tu nombre"
+                            style="width:100%;padding:8px;border-radius:5px;margin-bottom:5px;">
+                        <textarea id="comentario-${item.id}" placeholder="Escribe tu comentario"
+                            style="width:100%;padding:8px;border-radius:5px;"></textarea>
+                        
+                        <button onclick="publicarComentario('${item.id}')"
+                            style="margin-top:5px;padding:8px 15px;background:#00bfff;border:none;border-radius:5px;color:white;cursor:pointer;">
+                            Responder
+                        </button>
+                    </div>
+
+                    ${item.estado === "activo" ? `
+                        <button onclick="eliminarComentario('${item.id}')"
+                        style="padding:5px 10px;background:red;color:white;border:none;border-radius:5px;cursor:pointer;margin-top:10px;">
+                            Eliminar Debate
+                        </button>` : ""}
+                `;
+
+                cont.prepend(div);
+            });
+        });
+}
+
+
+// ===============================
+//   ELIMINAR DEBATE (ADMIN)
+// ===============================
+function eliminarComentario(id) {
+    const adminPass = prompt("Contraseña de administrador:");
+
+    if (adminPass !== "VILLA2025") {
+        alert("Contraseña incorrecta.");
+        return;
+    }
+
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            accion: "eliminar",
+            id: id
+        }),
+    })
+    .then(res => res.text())
+    .then(() => {
+        alert("Comentario eliminado.");
+        cargarComentarios();
+    });
+}
+
 </script>
 
 
