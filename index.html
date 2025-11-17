@@ -358,6 +358,143 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
 <!-- ============================= -->
 <!--   FORO Y DEBATES SUSCRIPTORES -->
 <!-- ============================= -->
+<script>
+
+// ===============================
+//   CONFIGURACIÓN API
+// ===============================
+const API_URL = "https://script.google.com/macros/s/AKfycbxFjhWTHfGL0Uk51ZGhwxsW9MG-HBkaHZwU0ujP2_BsfchhJ61bQDu3LNQf6h6wSfci4A/exec";
+
+
+// ===============================
+//   VERIFICAR SUSCRIPCIÓN
+// ===============================
+document.addEventListener("DOMContentLoaded", function () {
+    const suscrito = localStorage.getItem("suscriptorEmail");
+
+    if (suscrito) {
+        document.getElementById("suscripcion-box").style.display = "none";
+        document.getElementById("foro").style.display = "block";
+    }
+
+    // también cargamos los debates
+    cargarComentarios();
+});
+
+
+// ===============================
+//   SUSCRIPCIÓN
+// ===============================
+function suscribirse() {
+    const email = document.getElementById("email-suscriptor").value;
+
+    if (email === "" || !email.includes("@")) {
+        alert("Ingresa un correo válido.");
+        return;
+    }
+
+    localStorage.setItem("suscriptorEmail", email);
+
+    document.getElementById("suscripcion-box").style.display = "none";
+    document.getElementById("foro").style.display = "block";
+
+    document.getElementById("mensaje-suscripcion").innerHTML = "¡Suscripción exitosa!";
+}
+
+
+// ===============================
+//   PUBLICAR DEBATE → GOOGLE SHEETS
+// ===============================
+function publicarDebate() {
+    const texto = document.getElementById("nuevo-debate").value;
+    const email = localStorage.getItem("suscriptorEmail");
+
+    if (!email) {
+        alert("Debes suscribirte para comentar.");
+        return;
+    }
+
+    if (texto.trim() === "") {
+        alert("Escribe un tema para publicar.");
+        return;
+    }
+
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            accion: "nuevoComentario",
+            comentario: texto,
+            email: email,
+            nombre: email,   // si deseas puedo agregar campo nombre
+        }),
+    })
+    .then(res => res.text())
+    .then(() => {
+        document.getElementById("alerta-debate").innerHTML = "¡Debate publicado!";
+        document.getElementById("nuevo-debate").value = "";
+        cargarComentarios(); // recargar lista
+    });
+}
+
+
+// ===============================
+//   LEER COMENTARIOS GUARDADOS
+// ===============================
+function cargarComentarios() {
+    fetch(API_URL + "?accion=leer")
+        .then(res => res.json())
+        .then(data => {
+            const cont = document.getElementById("lista-debates");
+            cont.innerHTML = "";
+
+            data.forEach(item => {
+                const div = document.createElement("div");
+                div.classList.add("debate");
+                div.style = "background:#10283f;padding:15px;margin-bottom:10px;border-radius:8px;";
+
+                div.innerHTML = `
+                    <h4>💬 ${item.nombre}</h4>
+                    <p>${item.comentario}</p>
+                    <small style="opacity:0.7">${item.fecha}</small>
+                    ${item.estado === "activo" ? `
+                        <button onclick="eliminarComentario('${item.id}')"
+                        style="padding:5px 10px;background:red;color:white;border:none;border-radius:5px;cursor:pointer;margin-top:10px;">
+                            Eliminar
+                        </button>` : ""}
+                `;
+
+                cont.prepend(div);
+            });
+        });
+}
+
+
+// ===============================
+//   ELIMINAR COMENTARIO (ADMIN)
+// ===============================
+function eliminarComentario(id) {
+    const adminPass = prompt("Contraseña de administrador:");
+
+    if (adminPass !== "VILLA2025") {
+        alert("Contraseña incorrecta.");
+        return;
+    }
+
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            accion: "eliminar",
+            id: id
+        }),
+    })
+    .then(res => res.text())
+    .then(() => {
+        alert("Comentario eliminado.");
+        cargarComentarios();
+    });
+}
+
+</script>
 
 
       <!-- ============================= -->
