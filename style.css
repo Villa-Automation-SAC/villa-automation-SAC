@@ -301,3 +301,66 @@ nav a:hover {
         background: #0d2c45;
     }
 }
+/* ===== ARREGLO DEL MENÚ PRINCIPAL ===== */
+
+/* Contenedor del navbar */
+.navbar {
+    position: relative;
+    z-index: 999;
+}
+
+/* Logo siempre por encima */
+.navbar-logo img {
+    position: relative;
+    z-index: 1000;
+}
+
+/* Estilo correcto del dropdown */
+.navbar ul li {
+    position: relative;
+}
+
+.navbar ul li ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #0d1128;   /* Fondo del submenu */
+    padding: 10px 0;
+    min-width: 220px;
+    border-radius: 6px;
+    display: none;
+    z-index: 1500;          /* SUBE EL SUBMENÚ */
+}
+
+/* Sube el hover */
+.navbar ul li:hover > ul {
+    display: block;
+}
+
+/* Items del submenu */
+.navbar ul li ul li {
+    width: 100%;
+    padding: 10px 15px;
+}
+
+.navbar ul li ul li a {
+    color: white;
+    display: block;
+    font-size: 14px;
+}
+
+.navbar ul li ul li a:hover {
+    background: #1e274f;
+}
+
+/* Evita que el dropdown sea tan ancho */
+.navbar ul li ul {
+    width: auto;
+    max-width: 260px;
+}
+
+/* Previene que tape el header */
+header {
+    position: relative;
+    z-index: 900;
+}
