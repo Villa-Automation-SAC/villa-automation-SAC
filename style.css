@@ -270,3 +270,34 @@ nav a:hover {
     }
 
 }
+/* Asegurar que el menú desplegable esté siempre encima de todo */
+.menu-spacex ul {
+    position: absolute;
+    top: 60px;        /* Debajo del botón hamburguesa */
+    left: 0;
+    width: 100%;
+    z-index: 99999 !important;
+    background: #081b2d;
+}
+
+/* Cuando se abre el menú */
+.menu-spacex ul.show {
+    display: flex !important;
+}
+
+/* El contenedor del header no debe tapar el menú */
+.menu-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 99000 !important;
+}
+
+/* SUBMENÚ en móviles */
+@media (max-width: 900px) {
+    .submenu ul {
+        position: relative;
+        z-index: 999999 !important;
+        background: #0d2c45;
+    }
+}
