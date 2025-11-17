@@ -801,43 +801,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnMenu = document.querySelector(".menu-btn");
     const menu = document.querySelector(".menu-spacex ul");
 
-    // SOLO MÓVIL (<900px)
+    // ABRIR / CERRAR MENÚ EN MÓVIL
     btnMenu.addEventListener("click", () => {
         if (window.innerWidth <= 900) {
             menu.classList.toggle("show");
         }
     });
 
-    // Submenús SOLO en móvil
+    // SUBMENÚS EN MÓVIL
     document.querySelectorAll(".submenu > a").forEach(link => {
         link.addEventListener("click", (e) => {
             if (window.innerWidth <= 900) {
                 e.preventDefault();
                 link.parentElement.classList.toggle("open");
             }
-        });
-    });
-
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const menuBtn = document.getElementById("menu-btn"); 
-    const menuList = document.getElementById("menu-list"); 
-
-    if (menuBtn && menuList) {
-        menuBtn.addEventListener("click", () => {
-            menuList.classList.toggle("show");
-        });
-    }
-
-    document.querySelectorAll(".submenu > a").forEach(item => {
-        item.addEventListener("click", function (e) {
-            e.preventDefault();
-            const parent = this.parentElement;
-            parent.classList.toggle("open");
         });
     });
 
