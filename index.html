@@ -539,23 +539,28 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
 
 <script>
 function toggleMenu() {
-    const menu = document.getElementById("menuList");
-    menu.classList.toggle("show");
+    document.getElementById("menuList").classList.toggle("show");
 }
 
 function toggleSubmenu(el) {
     const submenu = el.parentElement;
 
+    // Para tablet/móvil
     if (window.innerWidth <= 900) {
 
-        document.querySelectorAll('.submenu').forEach(s => {
-            if (s !== submenu) s.classList.remove("open");
+        // Cerrar otros submenús
+        document.querySelectorAll(".submenu").forEach(item => {
+            if (item !== submenu) {
+                item.classList.remove("open");
+            }
         });
 
+        // Abrir/cerrar el submenú tocado
         submenu.classList.toggle("open");
     }
 }
 </script>
+
 
 
 
