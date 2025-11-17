@@ -231,12 +231,13 @@ nav a:hover {
 
 /* ----------- VERSION TABLET / MÓVIL ---------- */
 @media (max-width: 900px) {
+
     .menu-btn {
-        display: block; /* Mostrar botón */
+        display: block;
     }
 
     .menu-spacex ul {
-        display: none; /* Esconder menú normal */
+        display: none;
         flex-direction: column;
         background: #081b2d;
         width: 100%;
@@ -245,11 +246,27 @@ nav a:hover {
     }
 
     .menu-spacex ul.show {
-        display: flex; /* Mostrar menú al presionar ☰ */
+        display: flex;
     }
 
+    /* SUBMENÚ EN MÓVIL */
     .submenu ul {
+        display: none;
         position: relative;
         background: #0d2c45;
+        margin-top: 8px;
+        padding: 10px;
+        border-radius: 6px;
     }
+
+    .submenu.open ul {
+        display: block !important;
+    }
+
+    .submenu > a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
 }
