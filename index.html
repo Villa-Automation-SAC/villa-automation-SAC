@@ -796,6 +796,24 @@ function eliminarComentario(id) {
 </script>
 
 
+<script>
+function toggleMenu() {
+  const menu = document.querySelector('.menu-spacex');
+  menu.classList.toggle('open');
+}
+
+function toggleSubmenu(element) {
+  const sub = element.nextElementSibling;
+
+  // Cierra otros submenús
+  document.querySelectorAll('.submenu ul').forEach(x => {
+    if (x !== sub) x.style.display = 'none';
+  });
+
+  // Abre/cierra el submenú actual
+  sub.style.display = (sub.style.display === 'block') ? 'none' : 'block';
+}
+</script>
 
 
 
