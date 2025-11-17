@@ -19,23 +19,51 @@ a { color:lightgreen; text-decoration:none; }
 <div class="container">
 <h1>Cursos y Capacitaciones</h1>
 
-    <!-- ⭐ BOTÓN DE DONACIÓN (ENCIMA DEL SPONSOR) -->
-    <!-- 💗 BOTÓN DE DONACIÓN MEJORADO -->
+<!-- ⭐ BOTÓN DE DONACIÓN ELEGANTE -->
+<style>
+  .boton-donacion-elegante {
+      background: linear-gradient(135deg, #ff4fa3, #ff78c8);
+      color: white;
+      padding: 10px 22px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255, 100, 170, 0.4);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: "Segoe UI", Arial, sans-serif;
+  }
+  .boton-donacion-elegante:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(255, 100, 170, 0.6);
+  }
+  .icono-donacion {
+      width: 22px;
+      height: 22px;
+  }
+</style>
+
 <div style="text-align:right; margin: 10px 20px;">
-  <a href="assets/qr.jpeg" target="_blank" class="btn-donation">
-    <img src="assets/regalo.png" alt="Donar" class="donation-icon">
-    Donación
+  <a href="assets/qr.jpeg" target="_blank" class="boton-donacion-elegante">
+      <img src="assets/regalo.png" class="icono-donacion" alt="">
+      Donaciones Aquí
   </a>
 </div>
 
-    <!-- ❤️ BOTÓN SPONSOR -->
-    <div style="text-align:right; margin: 10px 20px;">
-      <a href="https://github.com/sponsors/Villa-Automation-SAC" target="_blank" 
-         style="background:#ff4081; padding:8px 14px; color:white; 
-                font-size:14px; border-radius:8px; text-decoration:none;">
-        ❤️ Apoya con Sponsor
-      </a>
-    </div>
+<!-- ❤️ BOTÓN SPONSOR -->
+<div style="text-align:right; margin: 10px 20px;">
+  <a href="https://github.com/sponsors/Villa-Automation-SAC" target="_blank" 
+     style="background:#ff4081; padding:8px 14px; color:white; 
+            font-size:14px; border-radius:8px; text-decoration:none;">
+    ❤️ Apoya con Sponsor
+  </a>
+</div>
+
 
 <p>Programas de formación profesional en automatización, robótica, IA y control.</p>
 
