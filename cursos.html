@@ -291,10 +291,26 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     <div class="module-title">📘 Tomo 3 — Pruebas y Simulaciones</div>
     <div class="video-box" id="video3">
         <iframe src="https://www.youtube.com/embed/RwR0ZNQvINY" allowfullscreen></iframe>
-        <button onclick="completeModule(event,3)" class="finish-btn">Marcar como completado</button>
+        <button onclick="completeModule(event,3)" class="finish-btn" disabled style="opacity:0.5; cursor:not-allowed;">Marcar como completado</button>
+
     </div>
 </div>
 
+   <!-- ======================= QUIZ TOMO 3 ======================= -->
+<div class="quiz-box" id="quiz3" style="display:none;">
+    <h3>📝 Evaluación del Tomo 3 — Pruebas y Simulaciones</h3>
+
+    <p>1. ¿Cuál es el objetivo principal de realizar simulaciones en ingeniería?</p>
+    <input type="text" id="q3_1" placeholder="Escribe tu respuesta" class="quiz-input">
+
+    <p>2. ¿Qué herramienta permite verificar el comportamiento antes de construir un prototipo?</p>
+    <input type="text" id="q3_2" placeholder="Escribe tu respuesta" class="quiz-input">
+
+    <button onclick="submitQuiz(3)" class="quiz-btn">Enviar respuestas</button>
+
+    <p id="quiz3Feedback" class="quiz-feedback"></p>
+</div>
+ 
 <!-- ======================= CERTIFICADO AUTOGENERADO ======================= -->
 <div class="certificate-box" id="certificateBox">
     <h3>🎉 ¡Felicitaciones!</h3>
@@ -378,7 +394,73 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
     border-radius:10px;
     cursor:pointer;
     margin-top:12px;
+
+    <style>
+.quiz-box {
+    background: #13243d;
+    padding: 18px;
+    border-radius: 12px;
+    margin-top: 14px;
+    color: white;
+    border-left: 5px solid #00c3ff;
 }
+
+.quiz-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: none;
+}
+
+.quiz-btn {
+    background: #1dd1a1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.quiz-feedback {
+    margin-top: 10px;
+    font-weight: bold;
+}
+}
+<style>
+.quiz-box {
+    background: #13243d;
+    padding: 18px;
+    border-radius: 12px;
+    margin-top: 14px;
+    color: white;
+    border-left: 5px solid #00c3ff;
+}
+
+.quiz-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: none;
+}
+
+.quiz-btn {
+    background: #1dd1a1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.quiz-feedback {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
 </style>
 
 
@@ -430,16 +512,25 @@ completed[3] = false;
     }
 
     window.showVideo = function (num) {
-        let module = modules[num - 1];
+    let module = modules[num - 1];
 
-        if (module.classList.contains("module-locked")) {
-            alert("🔒 Este tomo está bloqueado. Completa el anterior.");
-            return;
-        }
-
-        let box = document.getElementById("video" + num);
-        box.style.display = box.style.display === "block" ? "none" : "block";
+    // Si el módulo está bloqueado
+    if (module.classList.contains("module-locked")) {
+        alert("🔒 Este tomo está bloqueado. Completa el anterior.");
+        return;
     }
+
+    // Mostrar/ocultar video
+    let box = document.getElementById("video" + num);
+    box.style.display = box.style.display === "block" ? "none" : "block";
+
+    // Mostrar quiz del módulo correspondiente
+    let quiz = document.getElementById("quiz" + num);
+    if (quiz) {
+        quiz.style.display = box.style.display === "block" ? "block" : "none";
+    }
+}
+//........
 
     window.completeModule = function (event, num) {
         event.stopPropagation();
@@ -645,6 +736,37 @@ const linkVerificacion =
 
     container.remove();
 }
+
+
+ function submitQuiz(module) {
+    let correct = 0;
+
+    if (module === 3) {
+        let r1 = document.getElementById("q3_1").value.toLowerCase();
+        let r2 = document.getElementById("q3_2").value.toLowerCase();
+
+        if (r1.includes("analizar") || r1.includes("optimizar") || r1.includes("evaluar")) correct++;
+        if (r2.includes("simulación") || r2.includes("software de simulación")) correct++;
+    }
+
+    let feedback = document.getElementById("quiz" + module + "Feedback");
+
+    if (correct === 2) {
+        feedback.innerHTML = "✔️ Respuestas correctas. Puedes marcar el módulo como completado.";
+        feedback.style.color = "#4CAF50";
+
+        // Habilitar botón de completado del módulo
+        const btn = document.querySelector(`#video${module} .finish-btn`);
+        btn.disabled = false;
+        btn.style.opacity = "1";
+        btn.style.cursor = "pointer";
+
+    } else {
+        feedback.innerHTML = "❌ Algunas respuestas son incorrectas. Inténtalo de nuevo.";
+        feedback.style.color = "#ff4444";
+    }
+}
+       
 </script>
 
 
