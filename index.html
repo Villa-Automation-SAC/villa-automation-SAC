@@ -795,38 +795,6 @@ function eliminarComentario(id) {
 
 </script>
 
-
-<script>
-function toggleMenu() {
-  const menu = document.querySelector('.menu-spacex');
-  menu.classList.toggle('open');
-}
-
-function toggleSubmenu(element) {
-  const sub = element.nextElementSibling;
-
-  // Cierra otros submenús
-  document.querySelectorAll('.submenu ul').forEach(x => {
-    if (x !== sub) x.style.display = 'none';
-  });
-
-  // Abre/cierra el submenú actual
-  sub.style.display = (sub.style.display === 'block') ? 'none' : 'block';
-}
-</script>
-
-<script>
-function toggleMenu() {
-    const menu = document.querySelector('.menu-spacex');
-    menu.classList.toggle('open');
-}
-
-function toggleSubmenu(element) {
-    const submenu = element.nextElementSibling;
-    submenu.classList.toggle('open-sub');
-}
-</script>
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -847,33 +815,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 e.preventDefault();
                 link.parentElement.classList.toggle("open");
             }
-        });
-    });
-
-});
-</script>
-
-  <script>
-// ===============================
-// ABRIR / CERRAR MENÚ EN MÓVIL
-// ===============================
-document.addEventListener("DOMContentLoaded", function () {
-
-    const menuBtn = document.getElementById("menu-btn");  // botón 3 líneas
-    const menuList = document.getElementById("menu-list"); // menú <ul>
-
-    if (menuBtn && menuList) {
-        menuBtn.addEventListener("click", () => {
-            menuList.classList.toggle("show");  // abre / cierra menú
-        });
-    }
-
-    // SUBMENÚS EN MÓVIL
-    document.querySelectorAll(".submenu > a").forEach(item => {
-        item.addEventListener("click", function (e) {
-            e.preventDefault();
-            const parent = this.parentElement;
-            parent.classList.toggle("open");
         });
     });
 
