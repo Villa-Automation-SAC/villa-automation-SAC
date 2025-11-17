@@ -297,19 +297,28 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
 </div>
 
    <!-- ======================= QUIZ TOMO 3 ======================= -->
+<!-- ======================= QUIZ TOMO 3 ======================= -->
 <div class="quiz-box" id="quiz3" style="display:none;">
     <h3>📝 Evaluación del Tomo 3 — Pruebas y Simulaciones</h3>
 
-    <p>1. ¿Cuál es el objetivo principal de realizar simulaciones en ingeniería?</p>
-    <input type="text" id="q3_1" placeholder="Escribe tu respuesta" class="quiz-input">
+    <!-- Pregunta 1 -->
+    <p><b>1. ¿Cuál es el objetivo principal de realizar simulaciones en ingeniería?</b></p>
 
-    <p>2. ¿Qué herramienta permite verificar el comportamiento antes de construir un prototipo?</p>
-    <input type="text" id="q3_2" placeholder="Escribe tu respuesta" class="quiz-input">
+    <label><input type="radio" name="q3_1" value="A"> A) Decorar modelos y visualizaciones</label><br>
+    <label><input type="radio" name="q3_1" value="B"> B) Analizar y evaluar el comportamiento antes de construir</label><br>
+    <label><input type="radio" name="q3_1" value="C"> C) Reducir el tiempo de renderizado</label><br><br>
+
+    <!-- Pregunta 2 -->
+    <p><b>2. ¿Qué herramienta permite verificar el comportamiento antes de construir un prototipo?</b></p>
+
+    <label><input type="radio" name="q3_2" value="A"> A) Software de simulación</label><br>
+    <label><input type="radio" name="q3_2" value="B"> B) Cámara de seguridad</label><br>
+    <label><input type="radio" name="q3_2" value="C"> C) Diseño de logotipos</label><br><br>
 
     <button onclick="submitQuiz(3)" class="quiz-btn">Enviar respuestas</button>
-
     <p id="quiz3Feedback" class="quiz-feedback"></p>
 </div>
+
  
 <!-- ======================= CERTIFICADO AUTOGENERADO ======================= -->
 <div class="certificate-box" id="certificateBox">
@@ -742,11 +751,20 @@ const linkVerificacion =
     let correct = 0;
 
     if (module === 3) {
-        let r1 = document.getElementById("q3_1").value.toLowerCase();
-        let r2 = document.getElementById("q3_2").value.toLowerCase();
+        // Obtener respuestas seleccionadas
+        let r1 = document.querySelector('input[name="q3_1"]:checked');
+        let r2 = document.querySelector('input[name="q3_2"]:checked');
 
-        if (r1.includes("analizar") || r1.includes("optimizar") || r1.includes("evaluar")) correct++;
-        if (r2.includes("simulación") || r2.includes("software de simulación")) correct++;
+        // Validar que marcó algo
+        if (!r1 || !r2) {
+            document.getElementById("quiz3Feedback").innerHTML = "⚠️ Debes marcar todas las respuestas.";
+            document.getElementById("quiz3Feedback").style.color = "#ffcc00";
+            return;
+        }
+
+        // Respuestas correctas
+        if (r1.value === "B") correct++;
+        if (r2.value === "A") correct++;
     }
 
     let feedback = document.getElementById("quiz" + module + "Feedback");
@@ -762,10 +780,11 @@ const linkVerificacion =
         btn.style.cursor = "pointer";
 
     } else {
-        feedback.innerHTML = "❌ Algunas respuestas son incorrectas. Inténtalo de nuevo.";
+        feedback.innerHTML = "❌ Respuestas incorrectas. Inténtalo nuevamente.";
         feedback.style.color = "#ff4444";
     }
 }
+
        
 </script>
 
