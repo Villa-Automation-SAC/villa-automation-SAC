@@ -178,116 +178,78 @@ nav a:hover {
 }
 
 
-/* ---- ESTILO GENERAL SPACEX ---- */
+/* ----------------- MENÚ HAMBURGUESA ------------------ */
 .menu-spacex {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
+  position: absolute; /* Evita que tape toda la pantalla */
+  top: 70px;
+  right: 20px;
+  background: #0a1a2a;
+  padding: 10px 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  display: none; /* Oculto por defecto */
+  z-index: 5000; /* Debajo del logo pero arriba del fondo */
 }
 
-.menu-spacex ul {
-  margin: 0;
-  padding: 14px 25px;
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: 35px;
+/* Cuando el menú está activo */
+.menu-spacex.active {
+  display: block;
 }
 
-.menu-spacex > ul > li > a {
-  color: white;
+/* El overlay oscuro que te estaba tapando todo */
+.menu-overlay {
+  display: none !important; /* ELIMINADO */
+}
+
+/* ----------------- SUBMENÚS ------------------ */
+.submenu ul {
+  display: none;
+  padding-left: 15px;
+}
+
+.submenu.open ul {
+  display: block;
+}
+
+/* Links */
+.menu-spacex a {
+  color: #fff;
   text-decoration: none;
-  text-transform: uppercase;
-  font-size: 14px;
-  letter-spacing: 1px;
-  cursor: pointer;
+  padding: 6px 0;
+  display: block;
 }
 
-.menu-spacex ul li {
+/* Botón hamburguesa */
+.menu-btn {
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 6000; /* Más alto que el menú */
   position: relative;
 }
 
-/* ---- SUBMENÚS ---- */
-.menu-spacex .submenu ul {
-  display: none;
-  position: absolute;
-  background: rgba(10, 10, 10, 0.98);
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 15px 0;
-  list-style: none;
-  top: 38px;
-  min-width: 190px;
-}
+/* Para PC: mostrar submenús al pasar mouse */
+@media (min-width: 900px) {
+  .menu-spacex {
+    display: flex !important;
+    position: static;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
 
-.menu-spacex .submenu ul li {
-  padding: 10px 20px;
-}
+  .submenu ul {
+    position: absolute;
+    background: #0a1a2a;
+    padding: 10px;
+    border-radius: 10px;
+    display: none;
+  }
 
-.menu-spacex .submenu ul li a {
-  color: #d0e6ff;
-  text-decoration: none;
-  font-size: 14px;
-  display: block;
-}
+  .submenu:hover ul {
+    display: block;
+  }
 
-.menu-spacex .submenu:hover ul {
-  display: block;
-}
-
-/* ---- BOTÓN HAMBURGUESA ---- */
-.menu-btn {
-  display: none;
-  color: white;
-  font-size: 32px;
-  position: absolute;
-  right: 20px;
-  top: 10px;
-  cursor: pointer;
-}
-
-/* --------------------------- */
-/*       RESPONSIVE MODE       */
-/* --------------------------- */
-
-@media (max-width: 900px) {
   .menu-btn {
-    display: block;
-  }
-
-  .menu-spacex ul {
-    flex-direction: column;
-    align-items: start;
-    gap: 15px;
-    padding: 20px;
-    display: none;
-  }
-
-  .menu-spacex ul.active {
-    display: flex;
-  }
-
-  /* Submenús en móvil (colapsables) */
-  .menu-spacex .submenu ul {
-    position: relative;
-    top: 0;
-    padding-left: 20px;
-    border: none;
-    background: none;
-    display: none;
-  }
-
-  /* Mostrar cuando están activos */
-  .submenu.open ul {
-    display: block;
-  }
-
-  .menu-spacex > ul > li > a {
-    font-size: 16px;
+    display: none; /* En PC ocultamos hamburguesa */
   }
 }
-
