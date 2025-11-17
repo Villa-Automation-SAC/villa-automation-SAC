@@ -359,67 +359,17 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
 <!--   FORO Y DEBATES SUSCRIPTORES -->
 <!-- ============================= -->
 
-<section id="foro-container" style="padding:40px; background:#0d2034; color:white; margin-top:40px; border-radius:10px;">
-    <h2 style="margin-bottom:10px;">💬 Foro y Debates para Suscriptores</h2>
-    <p>Participa en debates, comparte ideas y recibe notificaciones cuando haya novedades.</p>
-
-    <!-- 📧 FORMULARIO DE SUSCRIPCIÓN -->
-    <div id="suscripcion-box" style="margin-top:20px;">
-        <h3>Suscríbete para acceder al foro</h3>
-        <input type="email" id="email-suscriptor"
-            placeholder="Ingresa tu correo"
-            style="padding:10px;width:260px;border-radius:5px;border:none;">
-        <button onclick="suscribirse()"
-            style="padding:10px 20px;border:none;border-radius:5px;background:#00aaff;color:white;cursor:pointer;">
-            Suscribirme
-        </button>
-        <p id="mensaje-suscripcion" style="color:lightgreen;"></p>
-    </div>
-
-    <!-- 💬 FORO (Oculto hasta que se suscriban) -->
-    <div id="foro" style="display:none; margin-top:30px;">
-
-        <h3>Debates Recientes</h3>
-
-        <!-- Lista de debates -->
-        <div id="lista-debates" style="margin-bottom:20px;">
-
-            <div class="debate"
-                style="background:#10283f;padding:15px;margin-bottom:10px;border-radius:8px;">
-                <h4>🤖 ¿Qué mejoras implementarías en nuestros robots colaborativos?</h4>
-                <p>Comparte tus ideas y sugerencias.</p>
-            </div>
-
-            <div class="debate"
-                style="background:#10283f;padding:15px;margin-bottom:10px;border-radius:8px;">
-                <h4>🔧 Automatización industrial en el Perú: retos y oportunidades</h4>
-                <p>Únete a la conversación.</p>
-            </div>
-
-        </div>
-
-        <!-- Crear nuevo debate -->
-        <h3>Crear nuevo debate</h3>
-        <textarea id="nuevo-debate"
-            rows="4"
-            placeholder="Escribe tu tema..."
-            style="width:100%;padding:10px;border-radius:8px;border:none;"></textarea>
-        <button onclick="publicarDebate()"
-            style="display:block;margin-top:10px;padding:10px 20px;border:none;border-radius:5px;background:#00aaff;color:white;cursor:pointer;">
-            Publicar debate
-        </button>
-
-        <p id="alerta-debate" style="color:lightgreen;"></p>
-
-    </div>
-</section>
-
-<!-- ============================= -->
-<!--            JAVASCRIPT         -->
-<!-- ============================= -->
-
 <script>
-// Verificar si ya está suscrito
+
+// ===============================
+//   CONFIGURACIÓN API
+// ===============================
+const API_URL = "https://script.google.com/macros/s/AKfycbxFjhWTHfGL0Uk51ZGhwxsW9MG-HBkaHZwU0ujP2_BsfchhJ61bQDu3LNQf6h6wSfci4A/exec";
+
+
+// ===============================
+//   VERIFICAR SUSCRIPCIÓN
+// ===============================
 document.addEventListener("DOMContentLoaded", function () {
     const suscrito = localStorage.getItem("suscriptorEmail");
 
@@ -427,9 +377,15 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("suscripcion-box").style.display = "none";
         document.getElementById("foro").style.display = "block";
     }
+
+    // también cargamos los debates
+    cargarComentarios();
 });
 
-// Función de suscripción
+
+// ===============================
+//   SUSCRIPCIÓN
+// ===============================
 function suscribirse() {
     const email = document.getElementById("email-suscriptor").value;
 
@@ -438,36 +394,109 @@ function suscribirse() {
         return;
     }
 
-    // Guardar en localStorage
     localStorage.setItem("suscriptorEmail", email);
 
-    // Mostrar foro
     document.getElementById("suscripcion-box").style.display = "none";
     document.getElementById("foro").style.display = "block";
 
     document.getElementById("mensaje-suscripcion").innerHTML = "¡Suscripción exitosa!";
 }
 
-// Publicar nuevo debate
+
+// ===============================
+//   PUBLICAR DEBATE → GOOGLE SHEETS
+// ===============================
 function publicarDebate() {
     const texto = document.getElementById("nuevo-debate").value;
+    const email = localStorage.getItem("suscriptorEmail");
+
+    if (!email) {
+        alert("Debes suscribirte para comentar.");
+        return;
+    }
 
     if (texto.trim() === "") {
         alert("Escribe un tema para publicar.");
         return;
     }
 
-    const nuevo = document.createElement("div");
-    nuevo.classList.add("debate");
-    nuevo.style = "background:#10283f;padding:15px;margin-bottom:10px;border-radius:8px;";
-    nuevo.innerHTML = `<h4>🆕 Nuevo debate</h4><p>${texto}</p>`;
-
-    document.getElementById("lista-debates").prepend(nuevo);
-
-    document.getElementById("nuevo-debate").value = "";
-    document.getElementById("alerta-debate").innerHTML = "¡Debate publicado!";
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            accion: "nuevoComentario",
+            comentario: texto,
+            email: email,
+            nombre: email,   // si deseas puedo agregar campo nombre
+        }),
+    })
+    .then(res => res.text())
+    .then(() => {
+        document.getElementById("alerta-debate").innerHTML = "¡Debate publicado!";
+        document.getElementById("nuevo-debate").value = "";
+        cargarComentarios(); // recargar lista
+    });
 }
+
+
+// ===============================
+//   LEER COMENTARIOS GUARDADOS
+// ===============================
+function cargarComentarios() {
+    fetch(API_URL + "?accion=leer")
+        .then(res => res.json())
+        .then(data => {
+            const cont = document.getElementById("lista-debates");
+            cont.innerHTML = "";
+
+            data.forEach(item => {
+                const div = document.createElement("div");
+                div.classList.add("debate");
+                div.style = "background:#10283f;padding:15px;margin-bottom:10px;border-radius:8px;";
+
+                div.innerHTML = `
+                    <h4>💬 ${item.nombre}</h4>
+                    <p>${item.comentario}</p>
+                    <small style="opacity:0.7">${item.fecha}</small>
+                    ${item.estado === "activo" ? `
+                        <button onclick="eliminarComentario('${item.id}')"
+                        style="padding:5px 10px;background:red;color:white;border:none;border-radius:5px;cursor:pointer;margin-top:10px;">
+                            Eliminar
+                        </button>` : ""}
+                `;
+
+                cont.prepend(div);
+            });
+        });
+}
+
+
+// ===============================
+//   ELIMINAR COMENTARIO (ADMIN)
+// ===============================
+function eliminarComentario(id) {
+    const adminPass = prompt("Contraseña de administrador:");
+
+    if (adminPass !== "VILLA2025") {
+        alert("Contraseña incorrecta.");
+        return;
+    }
+
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            accion: "eliminar",
+            id: id
+        }),
+    })
+    .then(res => res.text())
+    .then(() => {
+        alert("Comentario eliminado.");
+        cargarComentarios();
+    });
+}
+
 </script>
+
 
       <!-- ============================= -->
 <!--            CONTACTO       -->
