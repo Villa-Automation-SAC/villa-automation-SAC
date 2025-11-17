@@ -658,28 +658,45 @@ function publicarDebate() {
 
 
 <script>
+/* ============================
+   ABRIR / CERRAR MENÚ PRINCIPAL
+   ============================ */
 function toggleMenu() {
-    document.getElementById("menuList").classList.toggle("show");
+    const menu = document.getElementById("menuList");
+    menu.classList.toggle("show");
 }
 
-function toggleSubmenu(el) {
-    const submenu = el.parentElement;
+/* ===================================
+   ABRIR / CERRAR SUBMENÚS EN MÓVIL
+   =================================== */
+function toggleSubmenu(element) {
+    const li = element.parentElement;
 
-    // Para tablet/móvil
-    if (window.innerWidth <= 900) {
+    // En PC no usamos click, solo hover
+    if (window.innerWidth > 900) return;
 
-        // Cerrar otros submenús
-        document.querySelectorAll(".submenu").forEach(item => {
-            if (item !== submenu) {
-                item.classList.remove("open");
-            }
-        });
+    // Abrir/cerrar
+    li.classList.toggle("open");
+}
 
-        // Abrir/cerrar el submenú tocado
-        submenu.classList.toggle("open");
+/* ===================================
+   CERRAR SUBMENÚS CUANDO CAMBIA DE PC <-> MÓVIL
+   =================================== */
+window.addEventListener("resize", () => {
+    const menu = document.getElementById("menuList");
+    const submenus = document.querySelectorAll(".submenu");
+
+    if (window.innerWidth > 900) {
+        // Modo PC
+        menu.classList.remove("show");
+        submenus.forEach(s => s.classList.remove("open"));
+    } else {
+        // Modo móvil → hover no aplica
+        submenus.forEach(s => s.classList.remove("open"));
     }
-}
+});
 </script>
+
 
 
 
