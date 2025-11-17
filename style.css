@@ -178,113 +178,78 @@ nav a:hover {
 }
 
 
-/* ----------------- MENÚ HAMBURGUESA ------------------ */
-.menu-spacex {
-  position: absolute; /* Evita que tape toda la pantalla */
-  top: 70px;
-  right: 20px;
-  background: #0a1a2a;
-  padding: 10px 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  display: none; /* Oculto por defecto */
-  z-index: 5000; /* Debajo del logo pero arriba del fondo */
-}
 
-/* Cuando el menú está activo */
-.menu-spacex.active {
-  display: block;
-}
-
-/* El overlay oscuro que te estaba tapando todo */
-.menu-overlay {
-  display: none !important; /* ELIMINADO */
-}
-
-/* ----------------- SUBMENÚS ------------------ */
-.submenu ul {
-  display: none;
-  padding-left: 15px;
-}
-
-.submenu.open ul {
-  display: block;
-}
-
-/* Links */
-.menu-spacex a {
-  color: #fff;
-  text-decoration: none;
-  padding: 6px 0;
-  display: block;
+/* --- MENÚ SUPERIOR FIJO --- */
+.menu-container {
+    width: 100%;
+    background: #081b2d;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;   /* POR ENCIMA DE BOTONES FLOTANTES */
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* Botón hamburguesa */
 .menu-btn {
-  font-size: 28px;
-  cursor: pointer;
-  z-index: 6000; /* Más alto que el menú */
-  position: relative;
+    font-size: 28px;
+    cursor: pointer;
+    color: white;
+    display: none; /* En PC no aparece */
 }
 
-/* =============================== */
-/*  MODO ESCRITORIO (PC)           */
-/* =============================== */
-@media (min-width: 900px) {
-
-  .menu-btn {
-    display: none !important; /* Oculta hamburguesa */
-  }
-
-  .menu-spacex {
-    position: absolute;
-    top: 30px;
-    right: 40px;
-    display: flex !important;
-    gap: 30px;
-    background: transparent !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    align-items: center;
-    z-index: 2000; /* No tapa el banner */
-  }
-
-  .menu-spacex ul {
-    display: flex;
-    gap: 25px;
+/* Menú horizontal en PC */
+.menu-spacex ul {
     list-style: none;
-  }
-
-  .menu-spacex li {
-    position: relative;
-  }
-
-  /* Submenús tipo "dropdown" */
-  .submenu ul {
-    position: absolute;
-    top: 25px;
-    left: 0;
-    background: #0a1a2a;
-    padding: 12px;
-    border-radius: 10px;
-    display: none;
-    flex-direction: column;
-    min-width: 220px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-  }
-
-  .submenu:hover ul {
     display: flex;
-  }
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
 
-  .submenu ul li {
-    padding: 5px 0;
-  }
-
-  .menu-spacex a {
-    color: white !important;
+.menu-spacex ul li a {
+    color: white;
     text-decoration: none;
     font-size: 16px;
-  }
 }
 
+/* SUBMENÚ */
+.submenu ul {
+    display: none;
+    position: absolute;
+    background: #0d2c45;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.submenu:hover ul {
+    display: block;
+}
+
+/* ----------- VERSION TABLET / MÓVIL ---------- */
+@media (max-width: 900px) {
+    .menu-btn {
+        display: block; /* Mostrar botón */
+    }
+
+    .menu-spacex ul {
+        display: none; /* Esconder menú normal */
+        flex-direction: column;
+        background: #081b2d;
+        width: 100%;
+        margin-top: 15px;
+        padding: 10px;
+    }
+
+    .menu-spacex ul.show {
+        display: flex; /* Mostrar menú al presionar ☰ */
+    }
+
+    .submenu ul {
+        position: relative;
+        background: #0d2c45;
+    }
+}
