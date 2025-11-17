@@ -177,3 +177,49 @@ nav a:hover {
     text-shadow: 0px 4px 10px rgba(0,0,0,0.7);
 }
 
+.menu-spacex {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.menu-spacex ul {
+  list-style: none;
+  display: flex;
+  gap: 35px;
+}
+
+.menu-spacex a {
+  text-decoration: none;
+  color: white;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.menu-spacex .submenu {
+  position: relative;
+}
+
+.menu-spacex .submenu ul {
+  display: none;
+  position: absolute;
+  top: 28px;
+  left: 0;
+  background: rgba(0,0,0,0.9);
+  padding: 12px 0;
+  border-radius: 4px;
+  width: 220px;
+}
+
+.menu-spacex .submenu:hover ul {
+  display: block;
+}
+
+.menu-spacex .submenu ul li {
+  padding: 8px 15px;
+}
+
+.menu-spacex .submenu ul li:hover {
+  background: rgba(255,255,255,0.06);
+}
