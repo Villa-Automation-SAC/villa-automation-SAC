@@ -184,7 +184,7 @@ nav a:hover {
    ===================================================== */
 
 /* =====================================================
-   MENÚ SUPERIOR FIJO
+   MENÚ SUPERIOR FIJO (PC + TABLET + MÓVIL)
    ===================================================== */
 
 .menu-container {
@@ -205,10 +205,12 @@ nav a:hover {
     font-size: 28px;
     cursor: pointer;
     color: white;
-    display: none; /* Solo aparece en móvil */
+    display: none;
 }
 
-/* ====== MENÚ PC ====== */
+/* ==============================
+   MENÚ PC
+   ============================== */
 
 .menu-spacex ul {
     list-style: none;
@@ -255,21 +257,15 @@ nav a:hover {
 }
 
 /* =====================================================
-   MENÚ MÓVIL / TABLET
+   MENÚ MÓVIL
    ===================================================== */
 
 @media (max-width: 900px) {
 
-    .submenu ul {
-        display: none;
+    .menu-btn {
+        display: block;
     }
 
-    .submenu.open ul {
-        display: block !important;
-    }
-}
-
-    /* Menú oculto por defecto */
     .menu-spacex ul {
         display: none;
         flex-direction: column;
@@ -283,12 +279,10 @@ nav a:hover {
         gap: 12px;
     }
 
-    /* Menú visible */
     .menu-spacex ul.show {
         display: flex;
     }
 
-    /* Submenú en móvil (click) */
     .submenu ul {
         display: none;
         background: #0d2c45;
@@ -311,8 +305,3 @@ nav a:hover {
     }
 }
 
-/* Para evitar que el logo tape el menú */
-header, .logo {
-    position: relative;
-    z-index: 1;
-}
