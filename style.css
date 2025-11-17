@@ -305,3 +305,43 @@ nav a:hover {
     }
 }
 
+/*  SOLO MÓVIL Y TABLET  */
+@media (max-width: 900px) {
+
+    /* menú móvil transparente */
+    .menu-spacex {
+        position: fixed;
+        top: 60px;
+        right: 10px;
+        width: 85%;
+        max-width: 300px;
+
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(10px);
+
+        border-radius: 12px;
+        padding: 12px;
+        z-index: 999999;
+        display: none;
+    }
+
+    /* menú cuando se despliega */
+    .menu-spacex.open {
+        display: block;
+    }
+
+    /* botón del menú móvil */
+    .menu-btn {
+        position: fixed;
+        top: 10px;
+        right: 12px;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        padding: 10px 14px;
+        font-size: 26px;
+        border-radius: 10px;
+        color: white;
+        z-index: 9999999;
+    }
+}
+
