@@ -793,31 +793,55 @@ function eliminarComentario(id) {
     });
 }
 
-</script>
-
 <script>
+/* Menú móvil: abrir/cerrar menú + abrir submenús sin tocar hover de PC */
 document.addEventListener("DOMContentLoaded", function () {
+  const btnMenu = document.querySelector(".menu-btn");
+  const menuUl = document.querySelector(".menu-spacex ul");
+  const mediaMax = 900;
 
-    const btnMenu = document.querySelector(".menu-btn");
-    const menu = document.querySelector(".menu-spacex ul");
-
-    // ABRIR / CERRAR MENÚ EN MÓVIL
+  // Abrir/Cerrar menú móvil (solo si estamos en móvil)
+  if (btnMenu) {
     btnMenu.addEventListener("click", () => {
-        if (window.innerWidth <= 900) {
-            menu.classList.toggle("show");
-        }
+      if (window.innerWidth <= mediaMax) {
+        menuUl.classList.toggle("show"); // tu CSS debe manejar .show
+      }
     });
+  }
 
-    // SUBMENÚS EN MÓVIL
-    document.querySelectorAll(".submenu > a").forEach(link => {
-        link.addEventListener("click", (e) => {
-            if (window.innerWidth <= 900) {
-                e.preventDefault();
-                link.parentElement.classList.toggle("open");
-            }
-        });
+  // Función usada por el inline onclick (por compatibilidad) y por event listeners:
+  window.toggleSubmenu = function (el) {
+    // el = el <a> que disparó el evento (si fue el onclick inline)
+    const li = el.closest(".submenu");
+    if (!li) return;
+    // Si estamos en PC no tocar (mantener hover)
+    if (window.innerWidth > 1024) return;
+    li.classList.toggle("open");
+  };
+
+  // Submenús: clic sobre la etiqueta (si usas eventlisteners en lugar de inline)
+  document.querySelectorAll(".menu-spacex .submenu > a").forEach(link => {
+    link.addEventListener("click", function (e) {
+      if (window.innerWidth > mediaMax) return; // dejar hover PC intacto
+      e.preventDefault(); // evitamos scroll/navegación
+      const li = this.closest(".submenu");
+      if (!li) return;
+      // alternar
+      li.classList.toggle("open");
+      // cerrar otros submenus (opcional)
+      document.querySelectorAll(".menu-spacex .submenu").forEach(s => {
+        if (s !== li) s.classList.remove("open");
+      });
     });
+  });
 
+  // Opcional: cerrar el menú al girar pantalla para evitar estados raros
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > mediaMax) {
+      menuUl.classList.remove("show");
+      document.querySelectorAll(".menu-spacex .submenu").forEach(s => s.classList.remove("open"));
+    }
+  });
 });
 </script>
 
