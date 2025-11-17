@@ -358,6 +358,9 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
 <!-- ============================= -->
 <!--   FORO Y DEBATES SUSCRIPTORES -->
 <!-- ============================= -->
+<!-- ============================= -->
+<!--   FORO Y DEBATES SUSCRIPTORES -->
+<!-- ============================= -->
 <script>
 
 // ===============================
@@ -377,8 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("foro").style.display = "block";
     }
 
-    // también cargamos los debates
-    cargarComentarios();
+    cargarComentarios(); // cargar lista de debates
 });
 
 
@@ -403,7 +405,7 @@ function suscribirse() {
 
 
 // ===============================
-//   PUBLICAR DEBATE → GOOGLE SHEETS
+//   PUBLICAR DEBATE PRINCIPAL
 // ===============================
 function publicarDebate() {
     const texto = document.getElementById("nuevo-debate").value;
@@ -425,14 +427,43 @@ function publicarDebate() {
             accion: "nuevoComentario",
             comentario: texto,
             email: email,
-            nombre: email,   // si deseas puedo agregar campo nombre
+            nombre: email,
         }),
     })
     .then(res => res.text())
     .then(() => {
         document.getElementById("alerta-debate").innerHTML = "¡Debate publicado!";
         document.getElementById("nuevo-debate").value = "";
-        cargarComentarios(); // recargar lista
+        cargarComentarios();
+    });
+}
+
+
+// ===============================
+//   NUEVO → PUBLICAR COMENTARIO NORMAL
+// ===============================
+function publicarComentario(idDebate) {
+    const nombre = document.getElementById("nombre-" + idDebate).value;
+    const texto = document.getElementById("comentario-" + idDebate).value;
+
+    if (nombre.trim() === "" || texto.trim() === "") {
+        alert("Completa los campos antes de comentar.");
+        return;
+    }
+
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            accion: "nuevoSubComentario",
+            idDebate: idDebate,
+            nombre: nombre,
+            comentario: texto
+        }),
+    })
+    .then(res => res.text())
+    .then(() => {
+        document.getElementById("comentario-" + idDebate).value = "";
+        cargarComentarios();
     });
 }
 
@@ -456,10 +487,24 @@ function cargarComentarios() {
                     <h4>💬 ${item.nombre}</h4>
                     <p>${item.comentario}</p>
                     <small style="opacity:0.7">${item.fecha}</small>
+
+                    <!-- CAJA PARA COMENTAR -->
+                    <div style="margin-top:10px;background:#0d1e30;padding:10px;border-radius:6px;">
+                        <input id="nombre-${item.id}" type="text" placeholder="Tu nombre"
+                            style="width:100%;padding:8px;border-radius:5px;margin-bottom:5px;">
+                        <textarea id="comentario-${item.id}" placeholder="Escribe tu comentario"
+                            style="width:100%;padding:8px;border-radius:5px;"></textarea>
+                        
+                        <button onclick="publicarComentario('${item.id}')"
+                            style="margin-top:5px;padding:8px 15px;background:#00bfff;border:none;border-radius:5px;color:white;cursor:pointer;">
+                            Responder
+                        </button>
+                    </div>
+
                     ${item.estado === "activo" ? `
                         <button onclick="eliminarComentario('${item.id}')"
                         style="padding:5px 10px;background:red;color:white;border:none;border-radius:5px;cursor:pointer;margin-top:10px;">
-                            Eliminar
+                            Eliminar Debate
                         </button>` : ""}
                 `;
 
@@ -470,7 +515,7 @@ function cargarComentarios() {
 
 
 // ===============================
-//   ELIMINAR COMENTARIO (ADMIN)
+//   ELIMINAR DEBATE (ADMIN)
 // ===============================
 function eliminarComentario(id) {
     const adminPass = prompt("Contraseña de administrador:");
@@ -495,6 +540,7 @@ function eliminarComentario(id) {
 }
 
 </script>
+
 
 
       <!-- ============================= -->
