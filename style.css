@@ -179,29 +179,37 @@ nav a:hover {
 
 
 
-/* --- MENÚ SUPERIOR FIJO --- */
+/* =====================================================
+   MENÚ SUPERIOR FIJO (PC + TABLET + MÓVIL)
+   ===================================================== */
+
 .menu-container {
     width: 100%;
     background: #081b2d;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999;   /* POR ENCIMA DE BOTONES FLOTANTES */
+    z-index: 90000; /* encima de todo */
     padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-/* Botón hamburguesa */
+/* Botón hamburguesa (solo móvil) */
 .menu-btn {
     font-size: 28px;
     cursor: pointer;
     color: white;
-    display: none; /* En PC no aparece */
+    display: none;
 }
 
-/* Menú horizontal en PC */
+/* --- MENÚ PRINCIPAL EN PC --- */
+.menu-spacex {
+    position: relative;
+    z-index: 9999;
+}
+
 .menu-spacex ul {
     list-style: none;
     display: flex;
@@ -210,53 +218,80 @@ nav a:hover {
     padding: 0;
 }
 
+.menu-spacex ul li {
+    position: relative;
+}
+
 .menu-spacex ul li a {
     color: white;
     text-decoration: none;
     font-size: 16px;
 }
 
-/* SUBMENÚ */
+/* ========================
+   SUBMENÚ EN PC
+   ======================== */
 .submenu ul {
-    display: none;
     position: absolute;
+    top: 100%;
+    left: 0;
     background: #0d2c45;
-    padding: 10px;
+    padding: 10px 0;
     border-radius: 6px;
+    display: none;
+    min-width: 220px;
+    z-index: 20000;
 }
 
 .submenu:hover ul {
     display: block;
 }
 
-/* ----------- VERSION TABLET / MÓVIL ---------- */
+.submenu ul li {
+    padding: 10px 15px;
+    white-space: nowrap;
+}
+
+.submenu ul li a:hover {
+    background: #1f2a4a;
+}
+
+/* =====================================================
+   MENÚ RESPONSIVE (TABLET / MÓVIL)
+   ===================================================== */
 @media (max-width: 900px) {
 
     .menu-btn {
         display: block;
     }
 
+    /* Ocultar menú principal */
     .menu-spacex ul {
         display: none;
         flex-direction: column;
-        background: #081b2d;
+        position: absolute;
+        top: 60px;
+        left: 0;
         width: 100%;
-        margin-top: 15px;
-        padding: 10px;
+        background: #081b2d;
+        padding: 15px;
+        z-index: 99999;
     }
 
+    /* Mostrar cuando se activa */
     .menu-spacex ul.show {
         display: flex;
     }
 
-    /* SUBMENÚ EN MÓVIL */
+    /* SUBMENÚ en móvil */
     .submenu ul {
         display: none;
         position: relative;
         background: #0d2c45;
         margin-top: 8px;
-        padding: 10px;
+        padding: 10px 0;
         border-radius: 6px;
+        z-index: 999999;
     }
 
     .submenu.open ul {
@@ -267,100 +302,12 @@ nav a:hover {
         display: flex;
         justify-content: space-between;
         align-items: center;
-    }
-
-}
-/* Asegurar que el menú desplegable esté siempre encima de todo */
-.menu-spacex ul {
-    position: absolute;
-    top: 60px;        /* Debajo del botón hamburguesa */
-    left: 0;
-    width: 100%;
-    z-index: 99999 !important;
-    background: #081b2d;
-}
-
-/* Cuando se abre el menú */
-.menu-spacex ul.show {
-    display: flex !important;
-}
-
-/* El contenedor del header no debe tapar el menú */
-.menu-container {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 99000 !important;
-}
-
-/* SUBMENÚ en móviles */
-@media (max-width: 900px) {
-    .submenu ul {
-        position: relative;
-        z-index: 999999 !important;
-        background: #0d2c45;
+        width: 100%;
     }
 }
-/* ===== ARREGLO DEL MENÚ PRINCIPAL ===== */
 
-/* Contenedor del navbar */
-.navbar {
+/* Asegurar que nada tape el menú */
+header, .logo {
     position: relative;
-    z-index: 999;
-}
-
-/* Logo siempre por encima */
-.navbar-logo img {
-    position: relative;
-    z-index: 1000;
-}
-
-/* Estilo correcto del dropdown */
-.navbar ul li {
-    position: relative;
-}
-
-.navbar ul li ul {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: #0d1128;   /* Fondo del submenu */
-    padding: 10px 0;
-    min-width: 220px;
-    border-radius: 6px;
-    display: none;
-    z-index: 1500;          /* SUBE EL SUBMENÚ */
-}
-
-/* Sube el hover */
-.navbar ul li:hover > ul {
-    display: block;
-}
-
-/* Items del submenu */
-.navbar ul li ul li {
-    width: 100%;
-    padding: 10px 15px;
-}
-
-.navbar ul li ul li a {
-    color: white;
-    display: block;
-    font-size: 14px;
-}
-
-.navbar ul li ul li a:hover {
-    background: #1e274f;
-}
-
-/* Evita que el dropdown sea tan ancho */
-.navbar ul li ul {
-    width: auto;
-    max-width: 260px;
-}
-
-/* Previene que tape el header */
-header {
-    position: relative;
-    z-index: 900;
+    z-index: 1;
 }
