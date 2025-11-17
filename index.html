@@ -815,6 +815,17 @@ function toggleSubmenu(element) {
 }
 </script>
 
+<script>
+function toggleMenu() {
+    const menu = document.querySelector('.menu-spacex');
+    menu.classList.toggle('open');
+}
+
+function toggleSubmenu(element) {
+    const submenu = element.nextElementSibling;
+    submenu.classList.toggle('open-sub');
+}
+</script>
 
 
 </body>
