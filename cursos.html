@@ -288,7 +288,7 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
 
 <!-- TOMO 3 -->
 <div class="module-card" onclick="showVideo(3)">
-    <div class="module-title">📘 Tomo 3 — Pruebas y Simulaciones</div>
+    <div class="module-title">📘 Tomo 3 — Clasificación de Sistemas de Control</div>
     <div class="video-box" id="video3">
         <iframe src="https://www.youtube.com/embed/RwR0ZNQvINY" allowfullscreen></iframe>
         <button onclick="completeModule(event,3)" class="finish-btn" disabled style="opacity:0.5; cursor:not-allowed;">Marcar como completado</button>
@@ -299,21 +299,28 @@ que desea desarrollar competencias en tecnologías avanzadas e innovación aplic
    <!-- ======================= QUIZ TOMO 3 ======================= -->
 <!-- ======================= QUIZ TOMO 3 ======================= -->
 <div class="quiz-box" id="quiz3" style="display:none;">
-    <h3>📝 Evaluación del Tomo 3 — Pruebas y Simulaciones</h3>
+    <h3>📝 Evaluación del curso (Responda de manera correcta para obtener su certificado)</h3>
 
     <!-- Pregunta 1 -->
-    <p><b>1. ¿Cuál es el objetivo principal de realizar simulaciones en ingeniería?</b></p>
+    <p><b>1. ¿Qué es un sistema de control en ingeniería?</b></p>
 
-    <label><input type="radio" name="q3_1" value="A"> A) Decorar modelos y visualizaciones</label><br>
-    <label><input type="radio" name="q3_1" value="B"> B) Analizar y evaluar el comportamiento antes de construir</label><br>
-    <label><input type="radio" name="q3_1" value="C"> C) Reducir el tiempo de renderizado</label><br><br>
+    <label><input type="radio" name="q3_1" value="A"> A) Un programa que simula señales digitales</label><br>
+    <label><input type="radio" name="q3_1" value="B"> B) Es una interconexión de elementos que forman una configuración denominada sistema</label><br>
+    <label><input type="radio" name="q3_1" value="C"> C) Un componente electrónico que amplifica voltajes</label><br><br>
 
     <!-- Pregunta 2 -->
-    <p><b>2. ¿Qué herramienta permite verificar el comportamiento antes de construir un prototipo?</b></p>
+    <p><b>2. ¿Cuales son las entredas tipicas a los sistemas de control?</b></p>
 
-    <label><input type="radio" name="q3_2" value="A"> A) Software de simulación</label><br>
-    <label><input type="radio" name="q3_2" value="B"> B) Cámara de seguridad</label><br>
-    <label><input type="radio" name="q3_2" value="C"> C) Diseño de logotipos</label><br><br>
+    <label><input type="radio" name="q3_2" value="A"> A) Escalonadas, Rampa y Impulso</label><br>
+    <label><input type="radio" name="q3_2" value="B"> B) Escalonadas, Perturbaciones y Impulso</label><br>
+    <label><input type="radio" name="q3_2" value="C"> C) Peturbaciones, Rampa y Ruidos</label><br><br>
+
+     <!-- Pregunta 3 -->
+    <p><b>2. ¿Cuales son las Clasificaciones de los Sistemas de Control segun su retroalimentación?</b></p>
+
+    <label><input type="radio" name="q3_3" value="A"> A) Sistemas de lazo conitnuo y sistema de lazo discreto</label><br>
+    <label><input type="radio" name="q3_3" value="B"> B) Sistemas de lazo lineal y sistema de lazo no lineal</label><br>
+    <label><input type="radio" name="q3_3" value="C"> C) Sistemas de lazo abierto y sistema de lazo cerrado</label><br><br>
 
     <button onclick="submitQuiz(3)" class="quiz-btn">Enviar respuestas</button>
     <p id="quiz3Feedback" class="quiz-feedback"></p>
@@ -754,9 +761,10 @@ const linkVerificacion =
         // Obtener respuestas seleccionadas
         let r1 = document.querySelector('input[name="q3_1"]:checked');
         let r2 = document.querySelector('input[name="q3_2"]:checked');
+         let r3 = document.querySelector('input[name="q3_3"]:checked');
 
         // Validar que marcó algo
-        if (!r1 || !r2) {
+        if (!r1 || !r3) {
             document.getElementById("quiz3Feedback").innerHTML = "⚠️ Debes marcar todas las respuestas.";
             document.getElementById("quiz3Feedback").style.color = "#ffcc00";
             return;
@@ -765,6 +773,7 @@ const linkVerificacion =
         // Respuestas correctas
         if (r1.value === "B") correct++;
         if (r2.value === "A") correct++;
+         if (r2.value === "C") correct++;
     }
 
     let feedback = document.getElementById("quiz" + module + "Feedback");
