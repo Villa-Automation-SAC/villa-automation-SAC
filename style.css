@@ -260,10 +260,14 @@ nav a:hover {
 
 @media (max-width: 900px) {
 
-    /* Mostrar botón hamburguesa */
-    .menu-btn {
-        display: block;
+    .submenu ul {
+        display: none;
     }
+
+    .submenu.open ul {
+        display: block !important;
+    }
+}
 
     /* Menú oculto por defecto */
     .menu-spacex ul {
