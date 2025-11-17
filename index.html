@@ -675,67 +675,27 @@ function toggleSubmenu(element) {
     // En PC no usamos click, solo hover
     if (window.innerWidth > 900) return;
 
-    // Abrir/cerrar
     li.classList.toggle("open");
 }
 
 /* ===================================
-   CERRAR SUBMENÚS CUANDO CAMBIA DE PC <-> MÓVIL
+   RESETEAR MENÚ AL CAMBIAR DE PANTALLA
    =================================== */
 window.addEventListener("resize", () => {
     const menu = document.getElementById("menuList");
     const submenus = document.querySelectorAll(".submenu");
 
     if (window.innerWidth > 900) {
-        // Modo PC
+        // Volver al modo PC
         menu.classList.remove("show");
         submenus.forEach(s => s.classList.remove("open"));
     } else {
-        // Modo móvil → hover no aplica
+        // Modo móvil → no usar hover
         submenus.forEach(s => s.classList.remove("open"));
     }
 });
 </script>
 
-<script>
-function toggleMenu() {
-    const menu = document.getElementById("menuList");
-    menu.classList.toggle("show");
-}
-
-function toggleSubmenu(element) {
-    const li = element.parentElement;
-
-    // Si está en PC (hover), no usar click
-    if (window.innerWidth > 900) return;
-
-    li.classList.toggle("open");
-}
-
-window.addEventListener("resize", () => {
-    const menu = document.getElementById("menuList");
-    const submenus = document.querySelectorAll(".submenu");
-
-    if (window.innerWidth > 900) {
-        menu.classList.remove("show");
-        submenus.forEach(s => s.classList.remove("open"));
-    } else {
-        submenus.forEach(s => s.classList.remove("open"));
-    }
-});
-</script>
-
-  <script>
-function toggleMenu() {
-  const menu = document.getElementById("menuList");
-  menu.classList.toggle("open"); 
-}
-
-function toggleSubmenu(element) {
-  const submenu = element.nextElementSibling;
-  submenu.classList.toggle("open");
-}
-</script>
 
 
 
