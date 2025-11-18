@@ -345,32 +345,3 @@ nav a:hover {
     }
 }
 
-/* -> SOLO para pantallas pequeñas (móvil/tablet) */
-@media (max-width: 900px) {
-  /* Submenús ocultos por defecto */
-  .menu-spacex ul ul {
-    display: none;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.28s ease;
-  }
-
-  /* Cuando el <li> tiene .open mostramos el submenú */
-  .menu-spacex li.submenu.open > ul {
-    display: block;
-    max-height: 800px; /* suficiente para mostrar contenido */
-  }
-
-  /* Mejor apariencia: fondo semitransparente para que el menú NO tape todo */
-  .menu-spacex ul {
-    background: rgba(8,27,45,0.92); /* casi opaco pero algo transparente */
-  }
-
-  /* Aseguramos que los enlaces internos sean clicables y con padding grande */
-  .menu-spacex li.submenu > ul li a {
-    display: block;
-    padding: 10px 14px;
-    touch-action: manipulation;
-  }
-}
-
