@@ -384,19 +384,60 @@
 <div id="popupOfertas" class="popup-contenedor">
     <div class="popup">
         <span class="cerrar" onclick="cerrarPopup()">&times;</span>
-        <h2>🎉 OFERTAS ESPECIALES 🎉</h2>
 
-        <p>✔ 20% de descuento en sensores<br>
-           ✔ 15% en equipos de automatización<br>
-           ✔ 10% en módulos Arduino<br>
-           ✔ Envío GRATIS por compras mayores a S/ 300</p>
+        <h2>🎉 Ofertas Especiales Villa Automation 🎉</h2>
+        <p style="margin-top:-10px;color:#444;">Promociones válidas por tiempo limitado</p>
 
-        <a href="ofertas.html" class="btn-ir">Ir a Ofertas</a>
+        <!-- PRODUCTO 1 -->
+        <div class="producto">
+            <img src="https://via.placeholder.com/80" alt="Producto">
+            <div>
+                <h3>Sensor de pH Profesional</h3>
+                <p class="precio">
+                    <span class="antes">Antes: S/ 220</span>
+                    <span class="ahora">Ahora: S/ 179</span>
+                </p>
+                <span class="descuento">-18%</span>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 2 -->
+        <div class="producto">
+            <img src="https://via.placeholder.com/80" alt="Producto">
+            <div>
+                <h3>Controlador Ambiental 3 en 1</h3>
+                <p class="precio">
+                    <span class="antes">Antes: S/ 350</span>
+                    <span class="ahora">Ahora: S/ 289</span>
+                </p>
+                <span class="descuento">-20%</span>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 3 -->
+        <div class="producto">
+            <img src="https://via.placeholder.com/80" alt="Producto">
+            <div>
+                <h3>Radar de Microondas 5.8GHz</h3>
+                <p class="precio">
+                    <span class="antes">Antes: S/ 180</span>
+                    <span class="ahora">Ahora: S/ 145</span>
+                </p>
+                <span class="descuento">-15%</span>
+            </div>
+        </div>
+
+        <!-- BOTÓN IR A OFERTAS -->
+        <a href="ofertas.html" class="btn-ir">Ver catálogo completo</a>
+
+        <!-- BOTÓN WHATSAPP -->
+        <a href="https://wa.me/51932546619?text=Hola%2C%20quiero%20saber%20más%20de%20las%20ofertas" 
+           class="btn-whatsapp">💬 Consultar por WhatsApp</a>
     </div>
 </div>
 
 <style>
-/* BOTÓN */
+/* BOTÓN PRINCIPAL */
 .boton-ofertas {
     display: inline-block;
     background: linear-gradient(45deg, #ff6a00, #ff2d55);
@@ -408,69 +449,121 @@
     text-decoration: none;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(255, 80, 50, 0.4);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: 0.2s ease;
 }
-
 .boton-ofertas:hover {
     transform: scale(1.07);
-    box-shadow: 0 6px 18px rgba(255, 80, 50, 0.6);
 }
 
-/* FONDO DEL POPUP */
+/* FONDO POPUP */
 .popup-contenedor {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: rgba(0,0,0,0.6);
-    z-index: 9999;
+    z-index: 99999;
 }
 
-/* VENTANA DEL POPUP */
+/* CUADRO POPUP */
 .popup {
     background: #ffffff;
     width: 90%;
-    max-width: 420px;
-    margin: 100px auto;
+    max-width: 460px;
+    margin: 60px auto;
     padding: 25px;
     border-radius: 20px;
     text-align: center;
     color: #333;
-    animation: aparecer 0.3s ease;
-    box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+    animation: aparecer 0.2s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
+/* ANIMACIÓN */
 @keyframes aparecer {
-    from { transform: scale(0.8); opacity: 0;}
-    to   { transform: scale(1);   opacity: 1;}
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
 }
 
-/* BOTÓN PARA IR A OFERTAS */
+/* CERRAR */
+.cerrar {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* PRODUCTO */
+.producto {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: #f7f7f7;
+    padding: 12px;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+.producto img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+}
+.producto h3 {
+    margin: 0;
+    font-size: 16px;
+    text-align: left;
+}
+.precio {
+    margin: 4px 0;
+}
+.precio .antes {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 14px;
+}
+.precio .ahora {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff2d55;
+}
+.descuento {
+    background: #ff2d55;
+    color: white;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    margin-left: auto;
+    font-weight: bold;
+}
+
+/* BOTÓN IR */
 .btn-ir {
     display: block;
+    padding: 12px;
     margin-top: 20px;
-    padding: 12px 20px;
-    background: #ff2d55;
+    background: #0a84ff;
     color: white;
     text-decoration: none;
     border-radius: 10px;
     font-weight: bold;
-    transition: 0.2s ease;
 }
-
 .btn-ir:hover {
-    transform: scale(1.05);
-    background: #ff6a00;
+    background: #0066d6;
 }
 
-/* BOTÓN DE CERRAR */
-.cerrar {
-    float: right;
-    font-size: 26px;
+/* WHATSAPP */
+.btn-whatsapp {
+    display: block;
+    margin-top: 12px;
+    padding: 12px;
+    background: #25d366;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
     font-weight: bold;
-    cursor: pointer;
+}
+.btn-whatsapp:hover {
+    background: #1ebd58;
 }
 </style>
 
@@ -483,10 +576,12 @@ function cerrarPopup() {
 }
 </script>
 
+
   
 <a href="index.html" class="back-btn">← Volver a la página principal</a>
 </body>
 </html>
+
 
 
 
