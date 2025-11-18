@@ -120,57 +120,62 @@
 <h2>🛒 Tienda Tecnológica - Villa Automation SAC</h2>
 
 <!-- BOTÓN DE OFERTAS -->
-<a class="boton-ofertas" onclick="abrirPopup()">🔥 Ver Ofertas</a>
+<a class="btn-ofertas-villa" onclick="abrirPopupVilla()">🔥 Ver Ofertas</a>
 
-<!-- POPUP (AISLADO) -->
-<div id="popupOfertas" class="popup-ofertas-wrapper">
-    <div class="popup-box">
-        <span class="close-btn" onclick="cerrarPopup()">&times;</span>
+<!-- POPUP -->
+<div id="popupVilla" class="popup-villa-container">
+    <div class="popup-villa-box">
 
-        <h2>🎉 Ofertas Especiales 🎉</h2>
-        <p class="subtitulo">Promociones válidas por tiempo limitado</p>
+        <span class="popup-villa-close" onclick="cerrarPopupVilla()">&times;</span>
 
-        <!-- PRODUCTO 1 -->
-        <div class="item">
-            <img src="https://via.placeholder.com/80">
-            <div class="info">
+        <h2 class="popup-villa-title">🎉 Ofertas Especiales 🎉</h2>
+        <p class="popup-villa-sub">Promociones por tiempo limitado</p>
+
+        <!-- ITEM 1 -->
+        <div class="popup-villa-item">
+            <img src="https://via.placeholder.com/80" class="popup-villa-img">
+            <div class="popup-villa-info">
                 <h3>Sensor de pH Profesional</h3>
-                <p class="precio">
-                    <span class="antes">Antes: S/ 220</span>
-                    <span class="ahora">Ahora: S/ 179</span>
+                <p><span class="antes">Antes: S/ 220</span>  
+                   <span class="ahora">Ahora: S/ 179</span>
                 </p>
             </div>
-            <span class="descuento">-18%</span>
+            <span class="popup-villa-desc">-18%</span>
         </div>
 
-        <!-- PRODUCTO 2 -->
-        <div class="item">
-            <img src="https://via.placeholder.com/80">
-            <div class="info">
+        <!-- ITEM 2 -->
+        <div class="popup-villa-item">
+            <img src="https://via.placeholder.com/80" class="popup-villa-img">
+            <div class="popup-villa-info">
                 <h3>Controlador Ambiental 3 en 1</h3>
-                <p class="precio">
-                    <span class="antes">Antes: S/ 350</span>
-                    <span class="ahora">Ahora: S/ 289</span>
+                <p><span class="antes">Antes: S/ 350</span>  
+                   <span class="ahora">Ahora: S/ 289</span>
                 </p>
             </div>
-            <span class="descuento">-20%</span>
+            <span class="popup-villa-desc">-20%</span>
         </div>
 
-        <a href="ofertas.html" class="btn-catalogo">Ver catálogo completo</a>
-        <a href="https://wa.me/51932546619" class="btn-whatsapp">💬 Consultar por WhatsApp</a>
+        <a href="ofertas.html" class="popup-villa-btn catalogo">Ver catálogo completo</a>
+        <a href="https://wa.me/51932546619" class="popup-villa-btn whatsapp">💬 Consultar por WhatsApp</a>
+
     </div>
 </div>
 
 <style>
-/* =================== AISLAMIENTO =================== */
-.popup-ofertas-wrapper * {
-    all: unset;
-    display: revert;
-    box-sizing: border-box;
+/* =============== BOTÓN PRINCIPAL ================== */
+.btn-ofertas-villa {
+    background: linear-gradient(45deg, #ff6a00, #ff2d55);
+    padding: 12px 26px;
+    color: white;
+    font-weight: bold;
+    border-radius: 40px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 18px;
 }
 
-/* FONDO */
-.popup-ofertas-wrapper {
+/* =============== FONDO OSCURO ================== */
+.popup-villa-container {
     display: none;
     position: fixed;
     top: 0; left: 0;
@@ -179,108 +184,112 @@
     z-index: 999999;
 }
 
-/* POPUP */
-.popup-ofertas-wrapper .popup-box {
-    background: #ffffff;
+/* =============== POPUP BOX ================== */
+.popup-villa-box {
+    background: #fff;
     width: 90%;
     max-width: 450px;
     margin: 80px auto;
     padding: 20px;
-    border-radius: 18px;
+    border-radius: 20px;
     text-align: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    position: relative;
+    animation: popupVillaShow 0.3s ease;
 }
 
-/* CERRAR */
-.popup-ofertas-wrapper .close-btn {
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+@keyframes popupVillaShow {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+/* =============== BOTÓN DE CIERRE ================== */
+.popup-villa-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 26px;
     cursor: pointer;
+    font-weight: bold;
 }
 
-/* PRODUCTO */
-.popup-ofertas-wrapper .item {
+/* =============== ITEMS ================== */
+.popup-villa-item {
     display: flex;
-    align-items: center;
-    gap: 10px;
     background: #f3f3f3;
-    padding: 10px;
+    padding: 12px;
     border-radius: 12px;
-    margin-top: 12px;
+    margin-top: 15px;
+    align-items: center;
 }
 
-.popup-ofertas-wrapper .item img {
+.popup-villa-img {
     width: 70px;
-    border-radius: 8px;
+    height: 70px;
+    border-radius: 10px;
 }
 
-.popup-ofertas-wrapper .info h3 {
+.popup-villa-info {
+    margin-left: 12px;
+    text-align: left;
+}
+
+.popup-villa-info h3 {
     margin: 0;
     font-size: 16px;
 }
 
-.popup-ofertas-wrapper .precio .antes {
-    text-decoration: line-through;
+.antes {
     color: #888;
+    text-decoration: line-through;
 }
 
-.popup-ofertas-wrapper .precio .ahora {
+.ahora {
     color: #e91e63;
     font-weight: bold;
-    margin-left: 5px;
+    margin-left: 3px;
 }
 
-.popup-ofertas-wrapper .descuento {
+/* DESCUENTO */
+.popup-villa-desc {
     margin-left: auto;
     background: #ff1744;
-    color: white;
-    padding: 4px 8px;
+    padding: 6px 10px;
     border-radius: 8px;
+    color: white;
     font-weight: bold;
 }
 
 /* BOTONES */
-.popup-ofertas-wrapper .btn-catalogo,
-.popup-ofertas-wrapper .btn-whatsapp {
+.popup-villa-btn {
     display: block;
     margin-top: 15px;
     padding: 12px;
-    text-align: center;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 10px;
     text-decoration: none;
-}
-
-.popup-ofertas-wrapper .btn-catalogo {
-    background: #0a84ff;
-    color: white;
-}
-
-.popup-ofertas-wrapper .btn-whatsapp {
-    background: #25D366;
-    color: white;
-}
-
-/* BOTÓN INICIAL */
-.boton-ofertas {
-    background: linear-gradient(45deg, #ff6a00, #ff2d55);
-    padding: 12px 26px;
-    border-radius: 40px;
-    color: white;
     font-weight: bold;
-    cursor: pointer;
+    text-align: center;
+}
+
+.popup-villa-btn.catalogo {
+    background: #0066ff;
+    color: white;
+}
+
+.popup-villa-btn.whatsapp {
+    background: #25d366;
+    color: white;
 }
 </style>
 
 <script>
-function abrirPopup() {
-    document.getElementById("popupOfertas").style.display = "block";
+function abrirPopupVilla() {
+    document.getElementById("popupVilla").style.display = "block";
 }
-function cerrarPopup() {
-    document.getElementById("popupOfertas").style.display = "none";
+function cerrarPopupVilla() {
+    document.getElementById("popupVilla").style.display = "none";
 }
 </script>
+
 
 
 
@@ -547,6 +556,7 @@ function cerrarPopup() {
 <a href="index.html" class="back-btn">← Volver a la página principal</a>
 </body>
 </html>
+
 
 
 
