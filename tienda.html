@@ -377,9 +377,117 @@
 <iframe width="90%" height="315" src="https://www.youtube.com/embed/fQwpj0aLJ1Q" allowfullscreen></iframe>
 
 
+<!-- BOTÓN DE OFERTAS -->
+<a class="boton-ofertas" onclick="abrirPopup()">🔥 Ver Ofertas</a>
+
+<!-- POPUP -->
+<div id="popupOfertas" class="popup-contenedor">
+    <div class="popup">
+        <span class="cerrar" onclick="cerrarPopup()">&times;</span>
+        <h2>🎉 OFERTAS ESPECIALES 🎉</h2>
+
+        <p>✔ 20% de descuento en sensores<br>
+           ✔ 15% en equipos de automatización<br>
+           ✔ 10% en módulos Arduino<br>
+           ✔ Envío GRATIS por compras mayores a S/ 300</p>
+
+        <a href="ofertas.html" class="btn-ir">Ir a Ofertas</a>
+    </div>
+</div>
+
+<style>
+/* BOTÓN */
+.boton-ofertas {
+    display: inline-block;
+    background: linear-gradient(45deg, #ff6a00, #ff2d55);
+    color: #fff;
+    padding: 12px 26px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 40px;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 80, 50, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.boton-ofertas:hover {
+    transform: scale(1.07);
+    box-shadow: 0 6px 18px rgba(255, 80, 50, 0.6);
+}
+
+/* FONDO DEL POPUP */
+.popup-contenedor {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 9999;
+}
+
+/* VENTANA DEL POPUP */
+.popup {
+    background: #ffffff;
+    width: 90%;
+    max-width: 420px;
+    margin: 100px auto;
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    color: #333;
+    animation: aparecer 0.3s ease;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+}
+
+@keyframes aparecer {
+    from { transform: scale(0.8); opacity: 0;}
+    to   { transform: scale(1);   opacity: 1;}
+}
+
+/* BOTÓN PARA IR A OFERTAS */
+.btn-ir {
+    display: block;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: #ff2d55;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.2s ease;
+}
+
+.btn-ir:hover {
+    transform: scale(1.05);
+    background: #ff6a00;
+}
+
+/* BOTÓN DE CERRAR */
+.cerrar {
+    float: right;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+
+<script>
+function abrirPopup() {
+    document.getElementById("popupOfertas").style.display = "block";
+}
+function cerrarPopup() {
+    document.getElementById("popupOfertas").style.display = "none";
+}
+</script>
+
+  
 <a href="index.html" class="back-btn">← Volver a la página principal</a>
 </body>
 </html>
+
 
 
 
