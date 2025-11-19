@@ -113,13 +113,83 @@
   .back-btn:hover {
     text-decoration: underline;
   }
+
+  /* ===== BOTÓN DE OFERTAS FLOTANTE ===== */
+.btn-ofertas-villa {
+    background: linear-gradient(45deg, #ff6a00, #ff2d55);
+    padding: 12px 26px;
+    color: white;
+    font-weight: bold;
+    border-radius: 40px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 18px;
+    position: absolute;
+    top: 10px;        /* SUBE o BAJA */
+    right: 20px;      /* MÁS A LA DERECHA */
+    animation: pulseVilla 1.5s infinite;
+}
+
+/* ANIMACIÓN DE PULSO */
+@keyframes pulseVilla {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #ff6a00;
+    }
+    50% {
+        transform: scale(1.12);
+        box-shadow: 0 0 18px #ff2d55;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #ff6a00;
+    }
+}
+
 </style>
 </head>
 <body>
 
 
 <!-- BOTÓN DE OFERTAS -->
+<!-- BOTÓN DE OFERTAS FLOTANTE ANIMADO -->
 <a class="btn-ofertas-villa" onclick="abrirPopupVilla()">🔥 Ver Ofertas</a>
+
+<style>
+/* BOTÓN FLOTANTE A LA DERECHA CERCA DEL TÍTULO */
+.btn-ofertas-villa {
+    position: fixed;
+    top: 80px;               /* Ajusta si quieres más arriba o abajo */
+    right: 25px;             /* Más cerca del borde */
+    background: linear-gradient(45deg, #ff6a00, #ff2d55);
+    padding: 14px 30px;
+    color: white;
+    font-weight: bold;
+    border-radius: 40px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 20px;
+    z-index: 99999;
+
+    /* SOMBRA */
+    box-shadow: 0 0 15px rgba(255, 50, 80, 0.7);
+
+    /* ANIMACIÓN DE PULSO */
+    animation: pulsoOferta 1.4s infinite;
+}
+
+/* EFECTO PULSO */
+@keyframes pulsoOferta {
+    0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 50, 80, 0.5); }
+    50% { transform: scale(1.08); box-shadow: 0 0 20px rgba(255, 50, 80, 1); }
+    100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 50, 80, 0.5); }
+}
+
+/* OPCIONAL: efecto hover */
+.btn-ofertas-villa:hover {
+    transform: scale(1.12);
+}
+</style>
 
 <!-- POPUP -->
 <div id="popupVilla" class="popup-villa-container">
@@ -555,6 +625,7 @@ function cerrarPopupVilla() {
 <a href="index.html" class="back-btn">← Volver a la página principal</a>
 </body>
 </html>
+
 
 
 
