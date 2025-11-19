@@ -135,6 +135,81 @@
   }
   .hero-text h1 { font-size: 40px; margin: 0 0 10px; }
   .hero-text p { font-size: 20px; }
+
+  /*....boton cotizar........ Fondo oscuro */
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Caja del formulario */
+.popup-contenido {
+  background: white;
+  padding: 25px;
+  width: 90%;
+  max-width: 450px;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  animation: fadeIn .3s ease;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Botón cerrar */
+.cerrar {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* Inputs */
+#form-cotizacion input, 
+#form-cotizacion textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* Botón enviar */
+.btn-enviar {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(45deg,#00b4ff,#0077ff);
+  color: white;
+  border: none;
+  font-size: 17px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Botón de cotizar en tarjetas */
+.btn-cotizar {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background: linear-gradient(45deg,#ff4d79,#ff6fb3);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}
+
 </style>
 
 <script>
@@ -151,6 +226,7 @@ setInterval(() => {
   <h1>Tecnología Aeroespacial</h1>
   <p>Villa Automation S.A.C – Innovación para exploración, defensa y aplicaciones científicas.</p>
   <a href="index.html" class="back-btn">? Volver a la página principal</a>
+  
 </header>
 
 <div class="section">
@@ -160,42 +236,124 @@ setInterval(() => {
   <div class="grid">
 
     <div class="card">
-      <img src="assets/cohete32.jpeg" alt="Cohete" />
-      <h3>Tecnología Aeroespacial</h3>
-      <p>Plataformas desarrolladas para investigación científica y defensa.</p>
+      <img src="assets/cohete32.jpeg" alt="Cohetex23" />
+      <h3>Asesoria en Tecnología Aeroespacial</h3>
+      <p>Asesoria especializada en plataformas desarrolladas para investigación científica y defensa.</p>
+    <button class="btn-cotizar" onclick="abrirFormulario('Nombre del producto')">
+    📝 Cotizar
+</button>
+      
     </div>
 
     <div class="card">
       <img src="assets/cohete19.png" alt="Cohete" />
       <h3>Cohetes JICAAT</h3>
       <p>Vehículos reutilizables orientados a validación de sistemas aeroespaciales.</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Cohetes JICAAT')">
+    📝 Cotizar
+</button>
+
     </div>
 
     <div class="card">
       <img src="assets/cohete4.jpg" alt="Aviónica" />
       <h3>Aviónica y Control</h3>
       <p>Guiado, navegación y control basado en sensores IMU y algoritmos PID/MPC.</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Aviónica y Control')">
+    📝 Cotizar
+</button>
+
     </div>
 
     <div class="card">
       <img src="assets/cohete31.jpeg" alt="Pruebas" />
       <h3>Pruebas de Campo</h3>
       <p>Ensayos, encendido, telemetría y reconstrucción de trayectoria.</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Pruebas de Campo')">
+    📝 Cotizar
+</button>
+
     </div>
 
     <div class="card">
       <img src="assets/cohete40.jpg" alt="Motor" />
       <h3>Propulsión</h3>
       <p>Diseño de motores sólidos experimentales basados en Tsiolkovsky.</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Propulsión')">
+    📝 Cotizar
+</button>
+
     </div>
 
     <div class="card">
       <img src="assets/jicaat.jpg" alt="JICAAT" />
-      <h3>Satélites JICAAT-V.A</h3>
+      <h3>Diseño y Contrucción /h3>
       <p>Cubesats para monitoreo ambiental y desechos espaciales.</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Diseño y Contrucción')">
+    📝 Cotizar
+</button>
+
     </div>
 
   </div>
+  <!-- === POPUP FORMULARIO DE COTIZACIÓN === -->
+<div id="popup-cotizacion" class="popup">
+  <div class="popup-contenido">
+    <span class="cerrar" onclick="cerrarFormulario()">&times;</span>
+    <h2>Solicitud de Cotización</h2>
+
+    <form id="form-cotizacion" action="" method="GET">
+
+      <label>Producto</label>
+      <input type="text" id="producto" name="producto" readonly>
+
+      <label>Nombre</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label>Teléfono</label>
+      <input type="text" id="telefono" name="telefono" required>
+
+      <label>Correo</label>
+      <input type="email" id="correo" name="correo" required>
+
+      <label>Mensaje</label>
+      <textarea id="mensaje" name="mensaje"></textarea>
+
+      <button type="button" class="btn-enviar" onclick="enviarCorreo()">Enviar</button>
+    </form>
+  </div>
+</div>
+
+  <script>
+function abrirFormulario(producto) {
+    document.getElementById("producto").value = producto;
+    document.getElementById("popup-cotizacion").style.display = "flex";
+}
+
+function cerrarFormulario() {
+    document.getElementById("popup-cotizacion").style.display = "none";
+}
+
+function enviarCorreo() {
+    const producto = document.getElementById("producto").value;
+    const nombre = document.getElementById("nombre").value;
+    const telefono = document.getElementById("telefono").value;
+    const correo = document.getElementById("correo").value;
+    const mensaje = document.getElementById("mensaje").value;
+
+    const cuerpo = 
+`Producto: ${producto}
+Nombre: ${nombre}
+Teléfono: ${telefono}
+Correo: ${correo}
+Mensaje: ${mensaje}`;
+
+    const mailtoLink = `mailto:tu_correo@dominio.com?subject=Solicitud de cotización&body=${encodeURIComponent(cuerpo)}`;
+
+    window.location.href = mailtoLink;
+}
+</script>
+
 </body>
 
   <body>
@@ -371,6 +529,7 @@ allowfullscreen></iframe>
 
 
 </html>
+
 
 
 
