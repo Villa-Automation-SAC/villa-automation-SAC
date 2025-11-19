@@ -1,35 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<title>Tecnologia Aeroespacial-Villa Automation</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body { font-family: Arial; background:#081b2d; color:white; padding:20px; margin:0; }
-img { width:100%; border-radius:12px; margin-bottom:15px; }
-.container { max-width:800px; margin:auto; }
-a { color:lightgreen; text-decoration:none; }
-.back-btn { margin-top:20px; display:inline-block; }
-</style>
-</head>
-<body>
-<div class="container">
-<h1>Tecnologia Aeroespacial </h1>
-<p>
-  En el presente espacio les presentamos la Tecnología Aeroespacial  desarrollada por nuestra empresa Villa Automation S.A.C
-</p>
-
-<!-- Imagen referenciada -->
-<img src="assets/cohete32.jpeg" alt="Aeroespacial">
-
-<p>
-Villa Automation desarrolla tecnología aeroespacial orientada a investigación, defensa y aplicaciones científicas.
-La empresa integra capacidades de diseño, simulación, fabricación y pruebas de sistemas aeroespaciales, abarcando cohetería, satélites experimentales, sistemas de control avanzado y plataformas de misión. 
-El enfoque combina ingeniería electrónica, control automático, inteligencia artificial y tecnologías de medición ambiental.
-</p>
-
-
-<title>Nuestros Productos</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tecnología Aeroespacial - Villa Automation</title>
 <style>
   body {
     margin: 0;
@@ -96,6 +70,66 @@ El enfoque combina ingeniería electrónica, control automático, inteligencia a
 </head>
 <body>
 
+<!-- HERO SLIDER ESTILO KUKA -->
+<div class="hero-slider">
+  <div class="slide active" style="background-image: url('assets/slide1.jpg');">
+    <div class="hero-text">
+      <h1>Innovación Aeroespacial</h1>
+      <p>Desarrollando tecnología para un futuro más seguro.</p>
+    </div>
+  </div>
+
+  <div class="slide" style="background-image: url('assets/slide2.jpg');">
+    <div class="hero-text">
+      <p>Satélites y sistemas de telemetría avanzada.</p>
+    </div>
+  </div>
+
+  <div class="slide" style="background-image: url('assets/slide3.jpg');">
+    <div class="hero-text">
+      <p>Cohetes JICAAT – Ingeniería peruana.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hero-slider {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    overflow: hidden;
+  }
+  .hero-slider .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  .hero-slider .slide.active { opacity: 1; }
+  .hero-text {
+    position: absolute;
+    bottom: 20%; left: 10%;
+    color: white;
+    text-shadow: 0 0 10px #000;
+    max-width: 500px;
+  }
+  .hero-text h1 { font-size: 40px; margin: 0 0 10px; }
+  .hero-text p { font-size: 20px; }
+</style>
+
+<script>
+let index = 0;
+const slides = document.querySelectorAll('.hero-slider .slide');
+setInterval(() => {
+  slides[index].classList.remove('active');
+  index = (index + 1) % slides.length;
+  slides[index].classList.add('active');
+}, 4500);
+</script>
+
 <header>
   <h1>Tecnología Aeroespacial</h1>
   <p>Villa Automation S.A.C – Innovación para exploración, defensa y aplicaciones científicas.</p>
@@ -148,9 +182,60 @@ El enfoque combina ingeniería electrónica, control automático, inteligencia a
   <a href="index.html" class="back-btn">Volver a la página principal</a>
 </div>
 
-</body>
-
   
+<header>
+  <h1>Tecnología Aeroespacial</h1>
+  <p>Villa Automation S.A.C – Innovación para exploración, defensa y aplicaciones científicas.</p>
+</header>
+
+<div class="section">
+  <h2>Nuestros Proyectos Aeroespaciales</h2>
+  <p>Desarrollo de cohetes experimentales, sistemas GNC, telemetría, propulsión y más.</p>
+
+  <div class="grid">
+
+    <div class="card">
+      <img src="assets/cohete32.jpeg" alt="Cohete" />
+      <h3>Tecnología Aeroespacial</h3>
+      <p>Plataformas desarrolladas para investigación científica y defensa.</p>
+    </div>
+
+    <div class="card">
+      <img src="assets/cohete19.png" alt="Cohete" />
+      <h3>Cohetes JICAAT</h3>
+      <p>Vehículos reutilizables orientados a validación de sistemas aeroespaciales.</p>
+    </div>
+
+    <div class="card">
+      <img src="assets/cohete4.jpg" alt="Aviónica" />
+      <h3>Aviónica y Control</h3>
+      <p>Guiado, navegación y control basado en sensores IMU y algoritmos PID/MPC.</p>
+    </div>
+
+    <div class="card">
+      <img src="assets/cohete31.jpeg" alt="Pruebas" />
+      <h3>Pruebas de Campo</h3>
+      <p>Ensayos, encendido, telemetría y reconstrucción de trayectoria.</p>
+    </div>
+
+    <div class="card">
+      <img src="assets/cohete40.jpg" alt="Motor" />
+      <h3>Propulsión</h3>
+      <p>Diseño de motores sólidos experimentales basados en Tsiolkovsky.</p>
+    </div>
+
+    <div class="card">
+      <img src="assets/jicaat.jpg" alt="JICAAT" />
+      <h3>Satélites JICAAT-V.A</h3>
+      <p>Cubesats para monitoreo ambiental y desechos espaciales.</p>
+    </div>
+
+  </div>
+
+  <a href="index.html" class="back-btn">Volver a la página principal</a>
+</div>
+
+
   
   <h1>¿Nuestros Productos? </h1>
   <p>
@@ -324,6 +409,7 @@ allowfullscreen></iframe>
 
 
 </html>
+
 
 
 
