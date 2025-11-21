@@ -1,27 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Inteligencia Artificial</title>
+
+<!-- ======================= ESTILOS GENERALES ======================= -->
 <style>
-
-      /* Espaciado general entre tarjetas y textos */
-section, .contenido-texto, .info-general {
-    padding: 25px 40px !important;  /* Espacio arriba, abajo y a los lados */
-    margin-top: 30px !important;    /* Separa del bloque anterior */
-}
-
-/* Para que el texto no se pegue a los bordes */
-p, h2, h3 {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-.texto-ia {
-    padding: 20px 35px;
-}
-  
   body {
     margin: 0;
     font-family: Arial;
@@ -36,11 +21,27 @@ p, h2, h3 {
     text-align: center;
   }
 
-  h1, h2 {
+  h1, h2, h3 {
     margin: 0 0 10px;
   }
 
   p { line-height: 1.6; }
+
+  section, .contenido-texto, .info-general {
+    padding: 25px 40px;
+    margin-top: 30px;
+  }
+
+  /* Imágenes globales */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+    max-height: 450px;
+    object-fit: cover;
+  }
 
   .section {
     max-width: 1100px;
@@ -48,7 +49,7 @@ p, h2, h3 {
     padding: 30px 20px;
   }
 
-  /* GRID TIPO TARJETAS COMO ABB */
+  /* GRID TIPO TARJETAS */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -64,14 +65,12 @@ p, h2, h3 {
   }
 
   .card img {
-    width: 100%;
     border-radius: 10px;
-    margin-bottom: 15px;
   }
 
   .card h3 {
-    margin-top: 0;
     color: #081b2d;
+    margin: 0 0 10px;
   }
 
   .back-btn {
@@ -84,48 +83,8 @@ p, h2, h3 {
     text-decoration: none;
   }
 </style>
-  <style>
-  /* Ajuste global para imágenes largas */
-  img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 20px auto;
-    border-radius: 10px;
-  }
 
-  /* Para evitar imágenes excesivamente altas */
-  img {
-    max-height: 450px;
-    object-fit: cover;
-  }
-</style>
-
-</head>
-<body>
-
-<!-- HERO SLIDER ESTILO KUKA -->
-<div class="hero-slider">
-  <div class="slide active" style="background-image: url('assets/controlador.jpg');">
-    <div class="hero-text">
-      <h1>Innovación Tecnologica</h1>
-      <p>Desarrollando tecnología para un futuro más seguro e Inteligente .</p>
-    </div>
-  </div>
-
-  <div class="slide" style="background-image: url('assets/controladoria.png');">
-    <div class="hero-text">
-      <p>Inteligencia Artificial para entornos industriales, agrícolas, contrucción, Ambiental y domésticos.</p>
-    </div>
-  </div>
-
-  <div class="slide" style="background-image: url('assets/controlador06.jpg');">
-    <div class="hero-text">
-      <p>Inteligencia Artificial basado en Ingeniería peruana.</p>
-    </div>
-  </div>
-</div>
-
+<!-- ======================= HERO SLIDER ======================= -->
 <style>
   .hero-slider {
     position: relative;
@@ -133,110 +92,129 @@ p, h2, h3 {
     height: 70vh;
     overflow: hidden;
   }
+
   .hero-slider .slide {
     position: absolute;
-    top: 0; left: 0;
     width: 100%; height: 100%;
     background-size: cover;
     background-position: center;
     opacity: 0;
     transition: opacity 1s ease-in-out;
   }
-  .hero-slider .slide.active { opacity: 1; }
+
+  .hero-slider .slide.active {
+    opacity: 1;
+  }
+
   .hero-text {
     position: absolute;
-    bottom: 20%; left: 10%;
+    bottom: 20%;
+    left: 10%;
     color: white;
     text-shadow: 0 0 10px #000;
     max-width: 500px;
   }
-  .hero-text h1 { font-size: 40px; margin: 0 0 10px; }
-  .hero-text p { font-size: 20px; }
 
-  /*....boton cotizar........ Fondo oscuro */
-.popup {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
+  .hero-text h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
 
-/* Caja del formulario */
-.popup-contenido {
-  background: white;
-  padding: 25px;
-  width: 90%;
-  max-width: 450px;
-  border-radius: 15px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-  animation: fadeIn .3s ease;
-}
-
-/* Animación */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* Botón cerrar */
-.cerrar {
-  float: right;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-/* Inputs */
-#form-cotizacion input, 
-#form-cotizacion textarea {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.btn-enviar {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(45deg, #2d3e1f, #3f522a); /* Verde militar */
-  color: white;
-  border: none;
-  font-size: 17px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.btn-enviar:hover {
-  background: linear-gradient(45deg, #3f522a, #4f6635);
-}
-
-
-.btn-cotizar {
-  margin-top: 10px;
-  padding: 10px 15px;
-  background: linear-gradient(45deg, #2d3e1f, #3f522a); /* Verde militar */
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  width: 100%;
-  font-weight: bold;
-  transition: 0.3s ease;
-}
-
-.btn-cotizar:hover {
-  background: linear-gradient(45deg, #3f522a, #4f6635);
-}
-
+  .hero-text p {
+    font-size: 20px;
+  }
 </style>
+
+<!-- ======================= POPUP COTIZACIÓN ======================= -->
+<style>
+  .popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .popup-contenido {
+    background: white;
+    padding: 25px;
+    width: 90%;
+    max-width: 450px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    animation: fadeIn .3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .cerrar {
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+  }
+
+  #form-cotizacion input,
+  #form-cotizacion textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+
+  .btn-enviar, .btn-cotizar {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    font-size: 17px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(45deg, #2d3e1f, #3f522a);
+    color: white;
+    transition: 0.3s;
+  }
+
+  .btn-enviar:hover,
+  .btn-cotizar:hover {
+    background: linear-gradient(45deg, #3f522a, #4f6635);
+  }
+</style>
+
+</head>
+<body>
+
+
+<!-- ================================================================= -->
+<!-- =======================   HERO SLIDER   ========================== -->
+<!-- ================================================================= -->
+
+<div class="hero-slider">
+  <div class="slide active" style="background-image: url('assets/controlador.jpg');">
+    <div class="hero-text">
+      <h1>Innovación Tecnológica</h1>
+      <p>Desarrollando tecnología para un futuro más seguro e inteligente.</p>
+    </div>
+  </div>
+
+  <div class="slide" style="background-image: url('assets/controladoria.png');">
+    <div class="hero-text">
+      <p>Inteligencia Artificial para entornos industriales, agrícolas, construcción y hogar.</p>
+    </div>
+  </div>
+
+  <div class="slide" style="background-image: url('assets/controlador06.jpg');">
+    <div class="hero-text">
+      <p>Inteligencia Artificial basada en ingeniería peruana.</p>
+    </div>
+  </div>
+</div>
 
 <script>
 let index = 0;
@@ -248,471 +226,139 @@ setInterval(() => {
 }, 4500);
 </script>
 
+
+<!-- ================================================================= -->
+<!-- ======================= HEADER PRINCIPAL ========================= -->
+<!-- ================================================================= -->
+
 <header>
   <h1>Inteligencia Artificial</h1>
-  <p>Villa Automation S.A.C – Inteligencia Artificial, Robotica con IA, industria  y aplicaciones científicas basados en IA.</p>
-  <a href="index.html" class="back-btn"> Volver a la página principal ?</a>
-  
+  <p>Villa Automation S.A.C – IA, robótica y aplicaciones científicas.</p>
+  <a href="index.html" class="back-btn">Volver a la página principal</a>
 </header>
 
-<!-- =============================================== -->
-<!-- === SECCIÓN INTELIGENCIA ARTIFICIAL – VILLA AUTOMATION === -->
-<!-- =============================================== -->
+<!-- ================================================================= -->
+<!-- ========== SECCIÓN PRINCIPAL | TARJETAS DE SERVICIOS IA ========= -->
+<!-- ================================================================= -->
 
 <div class="section">
   <h2>Soluciones Basadas en Inteligencia Artificial</h2>
   <p>
-    En Villa Automation S.A.C desarrollamos sistemas inteligentes aplicados a la 
-    industria, agricultura, defensa, robótica y ciencia. Nuestros modelos de IA 
-    permiten analizar datos, tomar decisiones autónomas y optimizar procesos en 
-    tiempo real. 
+    En Villa Automation S.A.C desarrollamos sistemas inteligentes aplicados a la industria,
+    agricultura, minería, defensa, robótica y ciencia…
   </p>
 
   <div class="grid">
-
+    <!-- Se mantienen tus tarjetas originales -->
     <!-- TARJETA 1 -->
     <div class="card">
-      <img src="assets/ia1.jpg" alt="IA Industrial" />
+      <img src="assets/ia1.jpg">
       <h3>IA para Automatización Industrial</h3>
-      <p>
-        Desarrollamos algoritmos de visión artificial, control predictivo, 
-        reconocimiento de objetos, clasificación inteligente, mantenimiento 
-        predictivo y análisis avanzado para líneas de producción.
-      </p>
-      <button class="btn-cotizar" onclick="abrirFormulario('IA para Automatización Industrial')">
-        💬 Cotizar
-      </button>
+      <p>Visión artificial, control predictivo…</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('IA para Automatización Industrial')">💬 Cotizar</button>
     </div>
 
     <!-- TARJETA 2 -->
     <div class="card">
-      <img src="assets/ia2.jpg" alt="IA agrícola" />
+      <img src="assets/ia2.jpg">
       <h3>IA para Agricultura y Clima</h3>
-      <p>
-        Implementamos modelos capaces de predecir plagas, estimar rendimiento de 
-        cultivos, anticipar heladas, optimizar riego y gestionar invernaderos 
-        con inteligencia avanzada.
-      </p>
-      <button class="btn-cotizar" onclick="abrirFormulario('IA para Agricultura y Clima')">
-        💬 Cotizar
-      </button>
+      <p>Predicción de plagas, heladas, riego inteligente…</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('IA para Agricultura y Clima')">💬 Cotizar</button>
     </div>
 
     <!-- TARJETA 3 -->
     <div class="card">
-      <img src="assets/ia3.jpg" alt="IA Robótica" />
-      <h3>IA aplicada a Robots y Manipuladores</h3>
-      <p>
-        IA para navegación autónoma, detección de objetos, asistencia colaborativa, 
-        control inteligente, aprendizaje por refuerzo y robótica avanzada para industria, 
-        minería y agricultura.
-      </p>
-      <button class="btn-cotizar" onclick="abrirFormulario('IA aplicada a Robots y Manipuladores')">
-        💬 Cotizar
-      </button>
+      <img src="assets/ia3.jpg">
+      <h3>IA aplicada a Robots</h3>
+      <p>Navegación autónoma, aprendizaje por refuerzo…</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('IA aplicada a Robots')">💬 Cotizar</button>
     </div>
 
     <!-- TARJETA 4 -->
     <div class="card">
-      <img src="assets/ia4.jpg" alt="IA Defensa" />
+      <img src="assets/ia4.jpg">
       <h3>IA para Seguridad y Defensa</h3>
-      <p>
-        Sistemas de vigilancia inteligente, análisis de amenazas, detección de intrusos, 
-        drones inteligentes y plataformas para monitoreo avanzado con IA en tiempo real.
-      </p>
-      <button class="btn-cotizar" onclick="abrirFormulario('IA para Seguridad y Defensa')">
-        💬 Cotizar
-      </button>
+      <p>Vigilancia inteligente, detección avanzada…</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('IA para Seguridad y Defensa')">💬 Cotizar</button>
     </div>
 
     <!-- TARJETA 5 -->
     <div class="card">
-      <img src="assets/ia5.jpg" alt="IA Satélites" />
-      <h3>IA para Satélites y Aeroespacial</h3>
-      <p>
-        Procesamiento autónomo de telemetría, predicción de órbitas, control 
-        inteligente de actitud, gestión térmica, reconocimiento desde órbita y 
-        análisis de datos científicos con modelos avanzados.
-      </p>
-      <button class="btn-cotizar" onclick="abrirFormulario('IA para Satélites y Aeroespacial')">
-        💬 Cotizar
-      </button>
+      <img src="assets/ia5.jpg">
+      <h3>IA para Satélites</h3>
+      <p>Predicción de órbitas, control de actitud…</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('IA para Satélites')">💬 Cotizar</button>
     </div>
 
     <!-- TARJETA 6 -->
     <div class="card">
-      <img src="assets/ia6.jpg" alt="IA Analítica" />
-      <h3>Analítica Predictiva e Industria 4.0</h3>
-      <p>
-        Implementación de plataformas inteligentes capaces de predecir fallas, 
-        optimizar energía, reducir costos operativos y mejorar la eficiencia total 
-        de plantas industriales.
-      </p>
-      <button class="btn-cotizar" onclick="abrirFormulario('Analítica Predictiva e Industria 4.0')">
-        💬 Cotizar
-      </button>
+      <img src="assets/ia6.jpg">
+      <h3>Analítica Predictiva</h3>
+      <p>Industria 4.0, predicción de fallas…</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Analítica Predictiva')">💬 Cotizar</button>
     </div>
 
   </div>
 </div>
 
-  </div>
-  <!-- === POPUP FORMULARIO DE COTIZACIÓN === -->
+
+<!-- ================================================================= -->
+<!-- ====================== POPUP COTIZACIÓN ========================== -->
+<!-- ================================================================= -->
+
 <div id="popup-cotizacion" class="popup">
   <div class="popup-contenido">
     <span class="cerrar" onclick="cerrarFormulario()">&times;</span>
     <h2>Solicitud de Cotización</h2>
 
-    <form id="form-cotizacion" action="" method="GET">
-
+    <form id="form-cotizacion">
       <label>Producto</label>
-      <input type="text" id="producto" name="producto" readonly>
+      <input type="text" id="producto" readonly>
 
       <label>Nombre</label>
-      <input type="text" id="nombre" name="nombre" required>
+      <input type="text" id="nombre" required>
 
       <label>Teléfono</label>
-      <input type="text" id="telefono" name="telefono" required>
+      <input type="text" id="telefono" required>
 
       <label>Correo</label>
-      <input type="email" id="correo" name="correo" required>
+      <input type="email" id="correo" required>
 
       <label>Mensaje</label>
-      <textarea id="mensaje" name="mensaje"></textarea>
+      <textarea id="mensaje"></textarea>
 
       <button type="button" class="btn-enviar" onclick="enviarCorreo()">Enviar</button>
     </form>
   </div>
 </div>
 
-  <script>
+<script>
 function abrirFormulario(producto) {
-    document.getElementById("producto").value = producto;
-    document.getElementById("popup-cotizacion").style.display = "flex";
+  document.getElementById("producto").value = producto;
+  document.getElementById("popup-cotizacion").style.display = "flex";
 }
 
 function cerrarFormulario() {
-    document.getElementById("popup-cotizacion").style.display = "none";
+  document.getElementById("popup-cotizacion").style.display = "none";
 }
 
 function enviarCorreo() {
-    const producto = document.getElementById("producto").value;
-    const nombre = document.getElementById("nombre").value;
-    const telefono = document.getElementById("telefono").value;
-    const correo = document.getElementById("correo").value;
-    const mensaje = document.getElementById("mensaje").value;
+  const cuerpo = `
+Producto: ${producto.value}
+Nombre: ${nombre.value}
+Teléfono: ${telefono.value}
+Correo: ${correo.value}
+Mensaje: ${mensaje.value}
+`;
 
-    const cuerpo = 
-`Producto: ${producto}
-Nombre: ${nombre}
-Teléfono: ${telefono}
-Correo: ${correo}
-Mensaje: ${mensaje}`;
-
-    const mailtoLink = `mailto:tu_correo@dominio.com?subject=Solicitud de cotización&body=${encodeURIComponent(cuerpo)}`;
-
-    window.location.href = mailtoLink;
+  window.location.href =
+    `mailto:tu_correo@dominio.com?subject=Solicitud de cotización&body=${encodeURIComponent(cuerpo)}`;
 }
 </script>
 
-  
-
-  <h1>Informaciones Generales sobre Controladores Inteligentes</h1>
-  <p>
-<p>
-En Villa Automation SAC desarrollamos controladores inteligentes de alto rendimiento diseñados para automatizar, supervisar y optimizar procesos industriales, 
-agrícolas y científicos. Nuestros equipos integran tecnología IoT, control avanzado y electrónica robusta para ofrecer soluciones confiables y escalables. 
-  Un ejemplo el controlador de la imagen arriba tiene las siguiente carateristicas:
-</p>
-<ul>
-<li>Control en tiempo real con algoritmos PID, MPC e IA.</li>
-<li>Comunicación inalámbrica: Wi-Fi, Bluetooth, LoRa y GSM.</li>
-<li>Pantallas LCD/OLED táctiles según modelo.</li>
-<li>Registro de datos en memoria local y nube.</li>
-<li>Compatibilidad con sensores industriales y protocolos estándar.</li>
-  <li>Diseño modular para expansiones y personalización.</li>
-   <li>Software seguro y actualizable .</li>
-</ul>
-<p>
-Aplicaciones
-  <ul>
-<li>Agricultura inteligente.</li>
-<li>Comunicación inalámbrica: Wi-Fi, Bluetooth, LoRa y GSM.</li>
-<li>Monitoreo ambiental y climático.</li>
-<li>Control de motores, bombas y actuadores.</li>
-<li>Instrumentación científica y educativa.</li>
-</ul>
-</p>
-    
-<style>
-  .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
-
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
-
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
-  }
-</style>
-
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/controlador1.jpg" alt="Controlador 1">
-  </div>
-
-  <div class="tarjeta-img">
-    <img src="assets/app.jpg" alt="Controlador 2">
-  </div>
-
-  <div class="tarjeta-img">
-    <img src="assets/app1.jpg" alt="Controlador 2">
-  </div>
-</div>
-
-    
-<p>
-Integración y Plataforma
-  <ul>
-<li>Monitorear variables en tiempo real mediante nuestro aplicativo en Play Store .</li>
-    <br><br>
-    <a href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil" target="_blank" style="
-    background:#34A853; 
-    color:white; 
-    padding:10px 20px; 
-    text-decoration:none; 
-    border-radius:8px; 
-    font-weight:bold;">
-    ?? Descargar en Google Play
-</a>
-<br><br>
-<li>Recibir alertas inteligentes.</li>
-<li>Analizar tendencias y generar reportes.</li>
-<li>Acceder desde cualquier dispositivo (PC/Tablet/Mobile).</li>
-</ul>
-</p>
-  Ventajas competitivas
-  <ul>
-<li>Desarrollo 100% peruano</li>
-<li>Soporte técnico especializado.</li>
-<li>Personalización para cada proyecto.</li>
-<li>Actualizaciones continuas.</li>
-<li>Alta confiabilidad y precisión.</li>
-</ul>
-<h1>Desarrollo de Controladores Inteligentes de Calidad de Aire y Gases</h1>
-<p>
-  Además de nuestras soluciones robóticas avanzadas, en Villa Automation SAC hemos desarrollado una línea de controladores inteligentes diseñados para monitorear, analizar y gestionar variables ambientales críticas. Estos equipos representan un paso fundamental hacia la modernización de los sistemas de seguridad, salud y automatización industrial.
-Nuestros controladores inteligentes para calidad de aire y detección de gases integran sensores de alta precisión, procesamiento digital avanzado y algoritmos de análisis predictivo que permiten identificar cambios en el ambiente en tiempo real. Gracias a su arquitectura modular, pueden adaptarse a diversos entornos: invernaderos, laboratorios, industrias, 
-  espacios cerrados, unidades móviles y sistemas de defensa.
-<style>
-  .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
-
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
-
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
-  }
-</style>
-
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/jaime1.jpg" alt="Controlador 1">
-  </div>
-
-  <div class="tarjeta-img">
-    <img src="assets/jaime3.jpg" alt="Controlador 2">
-  </div>
-</div>
-
-Estos dispositivos no solo brindan mediciones, sino que actúan como sistemas de decisión, permitiendo automatizar procesos, prevenir accidentes y garantizar ambientes seguros y eficientes. Su diseño robusto, intuitivo y adaptable los convierte en una herramienta indispensable para sectores como agricultura, minería, salud, defensa, educación, investigación y seguridad industrial.
-La capacidad de integrar estos controladores con robots, actuadores y sistemas digitales permite crear un ecosistema tecnológico que refuerza la autonomía y la eficiencia de cualquier operación. En Villa Automation SAC estamos comprometidos con el desarrollo de soluciones inteligentes que respondan a las necesidades reales de nuestros clientes y contribuyan a un futuro más seguro, más saludable y más automatizado.
-<p>
-  <style>
-  .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
-
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
-
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
-  }
-</style>
-
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/jaime6.jpg" alt="Controlador 1">
-  </div>
-
-  <div class="tarjeta-img">
-    <img src="assets/jaime7.jpg" alt="Controlador 2">
-  </div>
-</div>
-<p>
-Monitoreo continuo de CO2, CO, CH4, humo y gases tóxicos.
-Análisis de calidad de aire, humedad y temperatura.Alarmas inteligentes según umbrales definidos por el usuario.
-Control automático de ventilación, extractores y sistemas de mitigación. Registro de datos en memoria y reporte para auditorías o investigación.
-Comunicación inalámbrica mediante Bluetooth, WiFi o radiofrecuencia.
-Compatibilidad con aplicaciones móviles y plataformas IoT
-<p>
-  <style>
-    .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
-
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
-
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
-  }
-</style>
-
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/controlador15.jpg" alt="Controlador 1">
-  </div>
-
-  <div class="tarjeta-img">
-    <img src="assets/controlador16.jpg" alt="Controlador 2">
-  </div>
-</div>
-<p>
-<h1>Sistema de alarma de seguridad inteligente</h1>
-Nuestro Sistema de Alarma de Seguridad Inteligente combina tecnología de vanguardia con un diseño robusto y confiable. Integra sensores de movimiento, detección perimetral, alertas inmediatas y un potente módulo de sirena para disuadir cualquier intento de intrusión. El controlador, desarrollado por Villa Automation, está construido para operar 24/7 bajo condiciones exigentes, garantizando seguridad continua.
-Este sistema permite activar alarmas automáticas, enviar notificaciones en tiempo real y registrar eventos críticos, ofreciendo una protección moderna y eficiente. Su arquitectura inteligente facilita la integración con cámaras, módulos inalámbricos y sistemas de acceso, adaptándose a cualquier entorno.
-Ideal para viviendas, almacenes, comercios, instituciones y proyectos industriales que requieran una seguridad confiable, escalable y de rápida respuesta.
-<style>
-    .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
-
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
-
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
-  }
-</style>
-
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/controaldor03.jpg" alt="Controlador 1">
-  </div>
-
-  <div class="tarjeta-img">
-    <img src="assets/controlador04.jpg" alt="Controlador 2">
-  </div>
-
-  <div class="tarjeta-img">
-    <img src="assets/controlador02.jpg" alt="Controlador 2">
-  </div>
-</div>
-
-    
-  
-  <p>
-<video width="100%" controls>
-  <source src="assets/controlador.mp4" type="video/mp4">
-</video>
-<p>
-otros videos en you tube similares:
-<p>
-
-<iframe width="100%" height="315"
-src="https://www.youtube.com/embed/zE5XoZqH-WE"
-title="YouTube video player" frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe>
-   <p>
-<p>
-<iframe width="100%" height="315"
-src="https://www.youtube.com/embed/3HVXNcQUy1k"
-title="YouTube video player" frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe>
-<p>
-<p>
-<iframe width="100%" height="315"
-src="https://www.youtube.com/embed/fY4I2udUNlw"
-title="YouTube video player" frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe>
-   <p>     
-   <p>
-    Presupuesto dependera la cantida de sensores y modulos
-  <ul>
-<li>Basico: 200.0 S/</li>
-<li>avanzado: 400.0 S/</li>
-
-</ul> 
-
-  
-<a href="index.html" class="back-btn"> Volver a la página principal <-</a>
-</div>
- <p>
 </body>
 </html>
+
 
 
 
