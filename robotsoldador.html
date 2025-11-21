@@ -397,269 +397,312 @@ Mensaje: ${mensaje}`;
 </script>
 
 
-  
-  <body>
-  <h1>Informaciones Generales sobre Controladores Inteligentes</h1>
-  <p>
-<p>
-En Villa Automation SAC desarrollamos controladores inteligentes de alto rendimiento diseñados para automatizar, supervisar y optimizar procesos industriales, 
-agrícolas y científicos. Nuestros equipos integran tecnología IoT, control avanzado y electrónica robusta para ofrecer soluciones confiables y escalables. 
-  Un ejemplo el controlador de la imagen arriba tiene las siguiente carateristicas:
-</p>
-<ul>
-<li>Control en tiempo real con algoritmos PID, MPC e IA.</li>
-<li>Comunicación inalámbrica: Wi-Fi, Bluetooth, LoRa y GSM.</li>
-<li>Pantallas LCD/OLED táctiles según modelo.</li>
-<li>Registro de datos en memoria local y nube.</li>
-<li>Compatibilidad con sensores industriales y protocolos estándar.</li>
-  <li>Diseño modular para expansiones y personalización.</li>
-   <li>Software seguro y actualizable .</li>
-</ul>
-<p>
-Aplicaciones
-  <ul>
-<li>Agricultura inteligente.</li>
-<li>Comunicación inalámbrica: Wi-Fi, Bluetooth, LoRa y GSM.</li>
-<li>Monitoreo ambiental y climático.</li>
-<li>Control de motores, bombas y actuadores.</li>
-<li>Instrumentación científica y educativa.</li>
-</ul>
-</p>
-    
 <style>
-  .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
+/* ====== GRID PRINCIPAL ====== */
+.noticias-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+  font-family: Arial;
+}
 
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
+/* ====== TARJETA GRANDE ====== */
+.noticia-principal {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #111;
+  color: white;
+}
 
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
+.noticia-principal img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  opacity: 0.85;
+}
+
+.noticia-principal .texto {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+}
+
+.noticia-principal h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.noticia-principal p {
+  margin-top: 8px;
+  font-size: 15px;
+  opacity: 0.8;
+}
+
+/* ====== TARJETAS PEQUEÑAS ====== */
+.noticias-secundarias {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.noticia-mini {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.noticia-mini img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.noticia-mini .contenido {
+  padding: 15px;
+}
+
+.noticia-mini h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #222;
+}
+
+.noticia-mini p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .noticias-grid {
+    grid-template-columns: 1fr;
   }
+}
 </style>
 
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/controlador1.jpg" alt="Controlador 1">
+<!-- ======== SECCIÓN ESTILO ABB ======== -->
+<div class="noticias-grid">
+
+  <!-- === TARJETA PRINCIPAL === -->
+  <div class="noticia-principal">
+    <img src="https://via.placeholder.com/800x450" alt="">
+    <div class="texto">
+      <h2>Título del artículo principal</h2>
+      <p>Descripción breve del artículo o noticia principal de tu página.</p>
+    </div>
   </div>
 
-  <div class="tarjeta-img">
-    <img src="assets/app.jpg" alt="Controlador 2">
+  <!-- === TARJETAS SECUNDARIAS === -->
+  <div class="noticias-secundarias">
+
+    <div class="noticia-mini">
+      <img src="https://via.placeholder.com/500x300" alt="">
+      <div class="contenido">
+        <h3>Título de noticia secundaria 1</h3>
+        <p>Pequeña descripción del contenido.</p>
+      </div>
+    </div>
+
+    <div class="noticia-mini">
+      <img src="https://via.placeholder.com/500x300" alt="">
+      <div class="contenido">
+        <h3>Título de noticia secundaria 2</h3>
+        <p>Pequeña descripción del contenido.</p>
+      </div>
+    </div>
+
   </div>
 
-  <div class="tarjeta-img">
-    <img src="assets/app1.jpg" alt="Controlador 2">
-  </div>
 </div>
 
-    
-<p>
-Integración y Plataforma
-  <ul>
-<li>Monitorear variables en tiempo real mediante nuestro aplicativo en Play Store .</li>
-    <br><br>
-    <a href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil" target="_blank" style="
-    background:#34A853; 
-    color:white; 
-    padding:10px 20px; 
-    text-decoration:none; 
-    border-radius:8px; 
-    font-weight:bold;">
-    ?? Descargar en Google Play
-</a>
-<br><br>
-<li>Recibir alertas inteligentes.</li>
-<li>Analizar tendencias y generar reportes.</li>
-<li>Acceder desde cualquier dispositivo (PC/Tablet/Mobile).</li>
-</ul>
-</p>
-  Ventajas competitivas
-  <ul>
-<li>Desarrollo 100% peruano</li>
-<li>Soporte técnico especializado.</li>
-<li>Personalización para cada proyecto.</li>
-<li>Actualizaciones continuas.</li>
-<li>Alta confiabilidad y precisión.</li>
-</ul>
-<h1>Desarrollo de Controladores Inteligentes de Calidad de Aire y Gases</h1>
-<p>
-  Además de nuestras soluciones robóticas avanzadas, en Villa Automation SAC hemos desarrollado una línea de controladores inteligentes diseñados para monitorear, analizar y gestionar variables ambientales críticas. Estos equipos representan un paso fundamental hacia la modernización de los sistemas de seguridad, salud y automatización industrial.
-Nuestros controladores inteligentes para calidad de aire y detección de gases integran sensores de alta precisión, procesamiento digital avanzado y algoritmos de análisis predictivo que permiten identificar cambios en el ambiente en tiempo real. Gracias a su arquitectura modular, pueden adaptarse a diversos entornos: invernaderos, laboratorios, industrias, 
-  espacios cerrados, unidades móviles y sistemas de defensa.
-<style>
-  .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
-
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
-
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
-  }
-</style>
-
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/jaime1.jpg" alt="Controlador 1">
-  </div>
-
-  <div class="tarjeta-img">
-    <img src="assets/jaime3.jpg" alt="Controlador 2">
-  </div>
-</div>
-
-Estos dispositivos no solo brindan mediciones, sino que actúan como sistemas de decisión, permitiendo automatizar procesos, prevenir accidentes y garantizar ambientes seguros y eficientes. Su diseño robusto, intuitivo y adaptable los convierte en una herramienta indispensable para sectores como agricultura, minería, salud, defensa, educación, investigación y seguridad industrial.
-La capacidad de integrar estos controladores con robots, actuadores y sistemas digitales permite crear un ecosistema tecnológico que refuerza la autonomía y la eficiencia de cualquier operación. En Villa Automation SAC estamos comprometidos con el desarrollo de soluciones inteligentes que respondan a las necesidades reales de nuestros clientes y contribuyan a un futuro más seguro, más saludable y más automatizado.
-<p>
   <style>
-  .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
+.contenedor-noticia {
+  display: grid;
+  grid-template-columns: 250px 1fr 300px;
+  gap: 25px;
+  max-width: 1300px;
+  margin: auto;
+  padding: 25px;
+  font-family: Arial;
+}
 
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
+/* --------- COLUMNA IZQUIERDA (autor + recomendados) --------- */
+.autor-box {
+  text-align: center;
+}
 
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
+.autor-box img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.autor-box h4 {
+  margin: 10px 0 0;
+}
+
+.autor-box .categoria {
+  background: #c00;
+  padding: 4px 10px;
+  color: white;
+  margin-top: 10px;
+  display: inline-block;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.recomendado {
+  margin-top: 30px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card-mini {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f3f3f3;
+}
+
+.card-mini img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.card-mini p {
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+
+/* --------- COLUMNA CENTRAL (artículo) --------- */
+.articulo h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.articulo .subtitulo {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.articulo img {
+  width: 100%;
+  margin: 20px 0;
+  border-radius: 10px;
+}
+
+.articulo p {
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+
+/* --------- COLUMNA DERECHA (latest comments) --------- */
+.lateral h3 {
+  font-size: 22px;
+  border-left: 5px solid red;
+  padding-left: 10px;
+  margin-bottom: 20px;
+}
+
+.comentario-box {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.comentario-box h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.comentario-box small {
+  color: gray;
+  font-size: 12px;
+}
+
+.comentario-box p {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+
+/* ------ RESPONSIVE ------ */
+@media (max-width: 1100px) {
+  .contenedor-noticia {
+    grid-template-columns: 1fr;
   }
+}
 </style>
 
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/jaime6.jpg" alt="Controlador 1">
+
+<div class="contenedor-noticia">
+
+  <!-- ====================== COLUMNA IZQUIERDA ====================== -->
+  <div class="autor-box">
+    <img src="https://via.placeholder.com/300x350" alt="autor">
+
+    <h4>Nombre del Autor</h4>
+    <small>20 Nov 2025</small>
+
+    <div class="categoria">CIBERSEGURIDAD</div>
+
+    <div class="recomendado">Recomendado</div>
+
+    <div class="card-mini">
+      <img src="https://via.placeholder.com/500x300">
+      <p>Título de artículo recomendado</p>
+    </div>
+
+    <div class="card-mini">
+      <img src="https://via.placeholder.com/500x300">
+      <p>Otra recomendación interesante</p>
+    </div>
   </div>
 
-  <div class="tarjeta-img">
-    <img src="assets/jaime7.jpg" alt="Controlador 2">
-  </div>
-</div>
-<p>
-Monitoreo continuo de CO2, CO, CH4, humo y gases tóxicos.
-Análisis de calidad de aire, humedad y temperatura.Alarmas inteligentes según umbrales definidos por el usuario.
-Control automático de ventilación, extractores y sistemas de mitigación. Registro de datos en memoria y reporte para auditorías o investigación.
-Comunicación inalámbrica mediante Bluetooth, WiFi o radiofrecuencia.
-Compatibilidad con aplicaciones móviles y plataformas IoT
-<p>
-  <style>
-    .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
+  <!-- ====================== COLUMNA CENTRAL ====================== -->
+  <div class="articulo">
+    <h1>Título profesional del artículo</h1>
 
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
+    <div class="subtitulo">Subtítulo o descripción breve sobre el tema</div>
 
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
-  }
-</style>
+    <img src="https://via.placeholder.com/900x500">
 
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/controlador15.jpg" alt="Controlador 1">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget magna euismod,
+       efficitur neque sit amet, scelerisque ipsum.</p>
+
+    <p>Otro párrafo con contenido importante del artículo, explicando el tema en detalle para el lector.</p>
+
+    <p>Más contenido útil para el lector. Puedes colocar todo el texto que quieras aquí.</p>
   </div>
 
-  <div class="tarjeta-img">
-    <img src="assets/controlador16.jpg" alt="Controlador 2">
-  </div>
-</div>
-<p>
-<h1>Sistema de alarma de seguridad inteligente</h1>
-Nuestro Sistema de Alarma de Seguridad Inteligente combina tecnología de vanguardia con un diseño robusto y confiable. Integra sensores de movimiento, detección perimetral, alertas inmediatas y un potente módulo de sirena para disuadir cualquier intento de intrusión. El controlador, desarrollado por Villa Automation, está construido para operar 24/7 bajo condiciones exigentes, garantizando seguridad continua.
-Este sistema permite activar alarmas automáticas, enviar notificaciones en tiempo real y registrar eventos críticos, ofreciendo una protección moderna y eficiente. Su arquitectura inteligente facilita la integración con cámaras, módulos inalámbricos y sistemas de acceso, adaptándose a cualquier entorno.
-Ideal para viviendas, almacenes, comercios, instituciones y proyectos industriales que requieran una seguridad confiable, escalable y de rápida respuesta.
-<style>
-    .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
-  }
+  <!-- ====================== COLUMNA DERECHA ====================== -->
+  <div class="lateral">
+    <h3>Latest Comments</h3>
 
-  .tarjeta-img {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    max-width: 350px;
-    text-align: center;
-  }
+    <div class="comentario-box">
+      <h4>Comentario destacado 1</h4>
+      <small>Autor — 1 día atrás</small>
+      <p>Texto corto del comentario...</p>
+    </div>
 
-  .tarjeta-img img {
-    width: 100%;
-    border-radius: 10px;
-  }
-</style>
+    <div class="comentario-box">
+      <h4>Comentario destacado 2</h4>
+      <small>Usuario — 3 días atrás</small>
+      <p>Texto del comentario que complementa el artículo...</p>
+    </div>
 
-<div class="contenedor-tarjetas">
-  <div class="tarjeta-img">
-    <img src="assets/controaldor03.jpg" alt="Controlador 1">
   </div>
 
-  <div class="tarjeta-img">
-    <img src="assets/controlador04.jpg" alt="Controlador 2">
-  </div>
-
-  <div class="tarjeta-img">
-    <img src="assets/controlador02.jpg" alt="Controlador 2">
-  </div>
 </div>
 
-    
-  
-  <p>
-<video width="100%" controls>
-  <source src="assets/controlador.mp4" type="video/mp4">
-</video>
-<p>
-otros videos en you tube similares:
-<p>
 
 <iframe width="100%" height="315"
 src="https://www.youtube.com/embed/zE5XoZqH-WE"
@@ -697,6 +740,7 @@ allowfullscreen></iframe>
  <p>
 </body>
 </html>
+
 
 
 
