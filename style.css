@@ -344,33 +344,3 @@ nav a:hover {
         z-index: 9999999;
     }
 }
-
-.cohete-container {
-    position: relative;
-    width: 200px;
-    height: 200px;
-    margin-top: 10px;
-}
-
-.fondo-cohete {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
-.cohete-rotando {
-    width: 120px;
-    position: absolute;
-    top: 40px;
-    left: 40px;
-    z-index: 2;
-    animation: rotar 6s linear infinite;
-}
-
-@keyframes rotar {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
-}
