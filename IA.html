@@ -332,6 +332,7 @@ setInterval(() => {
   </div>
 </div>
 
+  
 <script>
 function abrirFormulario(producto) {
   document.getElementById("producto").value = producto;
@@ -356,8 +357,108 @@ Mensaje: ${mensaje.value}
 }
 </script>
 
+  <style>
+.kuka-section {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+  font-family: Arial;
+}
+
+/* --- GRID DE LAS 3 TARJETAS --- */
+.kuka-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+  margin-top: 40px;
+}
+
+/* --- TARJETA --- */
+.kuka-card {
+  text-align: left;
+}
+
+.kuka-card h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.kuka-card p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* --- IMAGEN --- */
+.kuka-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* --- BOTÓN REDONDO --- */
+.kuka-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.kuka-btn:hover {
+  background: #f0f0f0;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .kuka-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<!-- ==================== SECCIÓN KUKA ==================== -->
+<div class="kuka-section">
+
+  <div class="kuka-grid">
+
+    <!-- TARJETA 1 -->
+    <div class="kuka-card">
+      <h3>Sistemas de robots</h3>
+      <p>KUKA ofrece robots industriales en una gran variedad de versiones con distintas capacidades y alcances de carga útil.</p>
+      <img src="https://via.placeholder.com/600x400" alt="">
+      <div class="kuka-btn">→</div>
+    </div>
+
+    <!-- TARJETA 2 -->
+    <div class="kuka-card">
+      <h3>Máquinas de producción</h3>
+      <p>Nuestras máquinas permiten integrar componentes estandarizados en procesos de producción personalizados.</p>
+      <img src="https://via.placeholder.com/600x400" alt="">
+      <div class="kuka-btn">→</div>
+    </div>
+
+    <!-- TARJETA 3 -->
+    <div class="kuka-card">
+      <h3>Sistemas de producción</h3>
+      <p>Desde células de producción individuales hasta sistemas industriales completos para automatización avanzada.</p>
+      <img src="https://via.placeholder.com/600x400" alt="">
+      <div class="kuka-btn">→</div>
+    </div>
+
+  </div>
+
+</div>
+
 </body>
 </html>
+
 
 
 
