@@ -1,0 +1,698 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Inteligencia Artificial</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial;
+    background: #f5f7fa;
+    color: #222;
+  }
+
+  header {
+    background: #081b2d;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  h1, h2 {
+    margin: 0 0 10px;
+  }
+
+  p { line-height: 1.6; }
+
+  .section {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px;
+  }
+
+  /* GRID TIPO TARJETAS COMO ABB */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+
+  .card h3 {
+    margin-top: 0;
+    color: #081b2d;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 10px 18px;
+    background: #081b2d;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+</style>
+  <style>
+  /* Ajuste global para imágenes largas */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+  }
+
+  /* Para evitar imágenes excesivamente altas */
+  img {
+    max-height: 450px;
+    object-fit: cover;
+  }
+</style>
+
+</head>
+<body>
+
+<!-- HERO SLIDER ESTILO KUKA -->
+<div class="hero-slider">
+  <div class="slide active" style="background-image: url('assets/controlador.jpg');">
+    <div class="hero-text">
+      <h1>Innovación Tecnologica</h1>
+      <p>Desarrollando tecnología para un futuro más seguro.</p>
+    </div>
+  </div>
+
+  <div class="slide" style="background-image: url('assets/controladoria.png');">
+    <div class="hero-text">
+      <p>controladores inteligentes para entornos industriales, agrícolas y domésticos.</p>
+    </div>
+  </div>
+
+  <div class="slide" style="background-image: url('assets/controlador06.jpg');">
+    <div class="hero-text">
+      <p>sistemas inteligentes basado en Ingeniería peruana.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hero-slider {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    overflow: hidden;
+  }
+  .hero-slider .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  .hero-slider .slide.active { opacity: 1; }
+  .hero-text {
+    position: absolute;
+    bottom: 20%; left: 10%;
+    color: white;
+    text-shadow: 0 0 10px #000;
+    max-width: 500px;
+  }
+  .hero-text h1 { font-size: 40px; margin: 0 0 10px; }
+  .hero-text p { font-size: 20px; }
+
+  /*....boton cotizar........ Fondo oscuro */
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Caja del formulario */
+.popup-contenido {
+  background: white;
+  padding: 25px;
+  width: 90%;
+  max-width: 450px;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  animation: fadeIn .3s ease;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Botón cerrar */
+.cerrar {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* Inputs */
+#form-cotizacion input, 
+#form-cotizacion textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.btn-enviar {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(45deg, #2d3e1f, #3f522a); /* Verde militar */
+  color: white;
+  border: none;
+  font-size: 17px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-enviar:hover {
+  background: linear-gradient(45deg, #3f522a, #4f6635);
+}
+
+
+.btn-cotizar {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background: linear-gradient(45deg, #2d3e1f, #3f522a); /* Verde militar */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.btn-cotizar:hover {
+  background: linear-gradient(45deg, #3f522a, #4f6635);
+}
+
+
+</style>
+
+<script>
+let index = 0;
+const slides = document.querySelectorAll('.hero-slider .slide');
+setInterval(() => {
+  slides[index].classList.remove('active');
+  index = (index + 1) % slides.length;
+  slides[index].classList.add('active');
+}, 4500);
+</script>
+
+<header>
+  <h1>Controladores Inteligentes y Prototipos</h1>
+  <p>Villa Automation S.A.C – Innovación para la automatización, Robotica, industria  y aplicaciones científicas.</p>
+  <a href="index.html" class="back-btn"> Volver a la página principal ?</a>
+  
+</header>
+
+<div class="section">
+  <h2>Nuestros Proyectos multidiciplinarios</h2>
+  <p>Desarrollo de medidores, control de clima, control de incendios, control de riego y más.</p>
+
+  <div class="grid">
+
+    <div class="card">
+      <img src="assets/controlador12.jpg" alt="asesoria" />
+      <h3>Asesoria en Tecnologías de Controladores</h3>
+      <p>Villa Automation ofrece una asesoría especializada en Tecnologías de Controladores, brindando soluciones inteligentes para proyectos de automatización, robótica, industria y aeroespacial. Guiamos al cliente en la selección del controlador ideal desde microcontroladores avanzados para desarrollos ágiles, hasta STM32, PLC industriales y plataformas avanzadas  garantizando precisión, confiabilidad y alto rendimiento. 
+        Nuestra asesoría integra también estrategias modernas de control como PID, MPC y filtros Kalman, asegurando sistemas estables, eficientes y listos para cualquier desafío tecnológico. (presupuesto aprox: S/.200 a s/.1000).</p>
+    <button class="btn-cotizar" onclick="abrirFormulario('Asesoria en Tecnologías de Controladores')">
+    ?? Cotizar
+</button>
+      
+    </div>
+
+    <div class="card">
+      <img src="assets/controlador13.jpg" alt="Cohete" />
+      <h3>Controladores para invernaderos y agricola</h3>
+      <p>Villa Automation ofrece una asesoría integral en Tecnologías de Controladores para proyectos industriales, agrícolas y aeroespaciales. Orientamos al cliente en la elección del controlador ideal, desde microcontroladores avanzados para soluciones rápidas, hasta STM32 y PLC industriales para sistemas robustos y de alta precisión. 
+        En agricultura e invernaderos, brindamos tecnologías confiables basadas en tecnicas de control avanzados con sensores ambientales, automatización de riego, clima y energía (presupuesto aprox: S/.200 a s/.2000)</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('ControLadores para invernaderos y agricola')">
+    ?? Cotizar
+</button>
+
+    </div>
+
+    <div class="card">
+      <img src="assets/controlador07.jpg" alt="Aviónica" />
+      <h3>Controladores de ambiente o clima </h3>
+      <p>Villa Automation Guiamos al cliente en la selección del controlador óptimo, para soluciones rápidas e inteligentes, hasta STM32 y PLC industriales para sistemas robustos, precisos y confiables.
+        En agricultura e invernaderos implementamos controladores especializados para  clima, ventilación y energía, mientras que en ambientes industriales y ambientales 
+        integramos sensores de temperatura, humedad, Ph, CO2 y calidad del aire.(presupuesto aprox: S/.200 a s/.1000)</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Controladores de ambiente o clima')">
+    ?? Cotizar
+</button>
+
+    </div>
+
+    <div class="card">
+      <img src="assets/jaime7.jpg" alt="Pruebas" />
+      <h3>Controladores de calidad de Aire y gases toxicos</h3>
+      <p>Implementamos controladores especializados para ventilación, monitoreo ambiental y detección de gases tóxicos para aplicaciones como incendios forestales, viviendas y fabricas, integrando sensores avanzados de CO2, metano, amoníaco, partículas y calidad del aire. 
+       Garantizando máxima estabilidad, eficiencia y confiabilidad en cada aplicación tecnológica. (presupuesto aprox: S/.200 a s/.1000)</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Controladores de calidad de Aire y gases toxicos')">
+    ?? Cotizar
+</button>
+
+    </div>
+
+    <div class="card">
+      <img src="assets/controaldor03.jpg" alt="Motor" />
+      <h3>Sistema de alarma de seguridad inteligente</h3>
+      <p>contamos con una línea especializada en Sistemas de Alarma de Seguridad Inteligente. 
+        Guiamos al cliente en la selección del controlador ideal para implementar sistemas con sensores de movimiento, reconocimiento, cámaras, alertas remotas y notificaciones en tiempo real. 
+        Nuestros diseños integran tecnologías IoT, protocolos seguros y algoritmos avanzados que garantizan protección continua, respuesta rápida y máxima confiabilidad en cualquier entorno. (presupuesto aprox: S/.300 a s/.2000)</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Sistema de alarma de seguridad inteligente')">
+    ?? Cotizar
+</button>
+
+    </div>
+
+    <div class="card">
+      <img src="assets/controlador11.jpg" alt="JICAAT" />
+      <h3>Controladores de nivel de tanques </h3>
+      <p>Villa Automation ofrece soluciones profesionales en Controladores de Nivel de Tanques de Líquidos, utilizando tecnologías precisas y confiables para aplicaciones industriales, agrícolas y residenciales. Implementamos sensores ultrasónicos,
+        flotadores, celdas de presión y medidores de caudal para asegurar un monitoreo exacto del nivel, así como la automatización de bombas, válvulas y sistemas de distribución. (presupuesto aprox: S/.300 a s/.2000).</p>
+      <button class="btn-cotizar" onclick="abrirFormulario('Controladores de nivel de tanques')">
+    ?? Cotizar
+</button>
+
+    </div>
+
+  </div>
+  <!-- === POPUP FORMULARIO DE COTIZACIÓN === -->
+<div id="popup-cotizacion" class="popup">
+  <div class="popup-contenido">
+    <span class="cerrar" onclick="cerrarFormulario()">&times;</span>
+    <h2>Solicitud de Cotización</h2>
+
+    <form id="form-cotizacion" action="" method="GET">
+
+      <label>Producto</label>
+      <input type="text" id="producto" name="producto" readonly>
+
+      <label>Nombre</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label>Teléfono</label>
+      <input type="text" id="telefono" name="telefono" required>
+
+      <label>Correo</label>
+      <input type="email" id="correo" name="correo" required>
+
+      <label>Mensaje</label>
+      <textarea id="mensaje" name="mensaje"></textarea>
+
+      <button type="button" class="btn-enviar" onclick="enviarCorreo()">Enviar</button>
+    </form>
+  </div>
+</div>
+
+  <script>
+function abrirFormulario(producto) {
+    document.getElementById("producto").value = producto;
+    document.getElementById("popup-cotizacion").style.display = "flex";
+}
+
+function cerrarFormulario() {
+    document.getElementById("popup-cotizacion").style.display = "none";
+}
+
+function enviarCorreo() {
+    const producto = document.getElementById("producto").value;
+    const nombre = document.getElementById("nombre").value;
+    const telefono = document.getElementById("telefono").value;
+    const correo = document.getElementById("correo").value;
+    const mensaje = document.getElementById("mensaje").value;
+
+    const cuerpo = 
+`Producto: ${producto}
+Nombre: ${nombre}
+Teléfono: ${telefono}
+Correo: ${correo}
+Mensaje: ${mensaje}`;
+
+    const mailtoLink = `mailto:tu_correo@dominio.com?subject=Solicitud de cotización&body=${encodeURIComponent(cuerpo)}`;
+
+    window.location.href = mailtoLink;
+}
+</script>
+
+</body>
+
+  
+  <body>
+  <h1>Informaciones Generales sobre Controladores Inteligentes</h1>
+  <p>
+<p>
+En Villa Automation SAC desarrollamos controladores inteligentes de alto rendimiento diseñados para automatizar, supervisar y optimizar procesos industriales, 
+agrícolas y científicos. Nuestros equipos integran tecnología IoT, control avanzado y electrónica robusta para ofrecer soluciones confiables y escalables. 
+  Un ejemplo el controlador de la imagen arriba tiene las siguiente carateristicas:
+</p>
+<ul>
+<li>Control en tiempo real con algoritmos PID, MPC e IA.</li>
+<li>Comunicación inalámbrica: Wi-Fi, Bluetooth, LoRa y GSM.</li>
+<li>Pantallas LCD/OLED táctiles según modelo.</li>
+<li>Registro de datos en memoria local y nube.</li>
+<li>Compatibilidad con sensores industriales y protocolos estándar.</li>
+  <li>Diseño modular para expansiones y personalización.</li>
+   <li>Software seguro y actualizable .</li>
+</ul>
+<p>
+Aplicaciones
+  <ul>
+<li>Agricultura inteligente.</li>
+<li>Comunicación inalámbrica: Wi-Fi, Bluetooth, LoRa y GSM.</li>
+<li>Monitoreo ambiental y climático.</li>
+<li>Control de motores, bombas y actuadores.</li>
+<li>Instrumentación científica y educativa.</li>
+</ul>
+</p>
+    
+<style>
+  .contenedor-tarjetas {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+  }
+
+  .tarjeta-img {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-width: 350px;
+    text-align: center;
+  }
+
+  .tarjeta-img img {
+    width: 100%;
+    border-radius: 10px;
+  }
+</style>
+
+<div class="contenedor-tarjetas">
+  <div class="tarjeta-img">
+    <img src="assets/controlador1.jpg" alt="Controlador 1">
+  </div>
+
+  <div class="tarjeta-img">
+    <img src="assets/app.jpg" alt="Controlador 2">
+  </div>
+
+  <div class="tarjeta-img">
+    <img src="assets/app1.jpg" alt="Controlador 2">
+  </div>
+</div>
+
+    
+<p>
+Integración y Plataforma
+  <ul>
+<li>Monitorear variables en tiempo real mediante nuestro aplicativo en Play Store .</li>
+    <br><br>
+    <a href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil" target="_blank" style="
+    background:#34A853; 
+    color:white; 
+    padding:10px 20px; 
+    text-decoration:none; 
+    border-radius:8px; 
+    font-weight:bold;">
+    ?? Descargar en Google Play
+</a>
+<br><br>
+<li>Recibir alertas inteligentes.</li>
+<li>Analizar tendencias y generar reportes.</li>
+<li>Acceder desde cualquier dispositivo (PC/Tablet/Mobile).</li>
+</ul>
+</p>
+  Ventajas competitivas
+  <ul>
+<li>Desarrollo 100% peruano</li>
+<li>Soporte técnico especializado.</li>
+<li>Personalización para cada proyecto.</li>
+<li>Actualizaciones continuas.</li>
+<li>Alta confiabilidad y precisión.</li>
+</ul>
+<h1>Desarrollo de Controladores Inteligentes de Calidad de Aire y Gases</h1>
+<p>
+  Además de nuestras soluciones robóticas avanzadas, en Villa Automation SAC hemos desarrollado una línea de controladores inteligentes diseñados para monitorear, analizar y gestionar variables ambientales críticas. Estos equipos representan un paso fundamental hacia la modernización de los sistemas de seguridad, salud y automatización industrial.
+Nuestros controladores inteligentes para calidad de aire y detección de gases integran sensores de alta precisión, procesamiento digital avanzado y algoritmos de análisis predictivo que permiten identificar cambios en el ambiente en tiempo real. Gracias a su arquitectura modular, pueden adaptarse a diversos entornos: invernaderos, laboratorios, industrias, 
+  espacios cerrados, unidades móviles y sistemas de defensa.
+<style>
+  .contenedor-tarjetas {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+  }
+
+  .tarjeta-img {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-width: 350px;
+    text-align: center;
+  }
+
+  .tarjeta-img img {
+    width: 100%;
+    border-radius: 10px;
+  }
+</style>
+
+<div class="contenedor-tarjetas">
+  <div class="tarjeta-img">
+    <img src="assets/jaime1.jpg" alt="Controlador 1">
+  </div>
+
+  <div class="tarjeta-img">
+    <img src="assets/jaime3.jpg" alt="Controlador 2">
+  </div>
+</div>
+
+Estos dispositivos no solo brindan mediciones, sino que actúan como sistemas de decisión, permitiendo automatizar procesos, prevenir accidentes y garantizar ambientes seguros y eficientes. Su diseño robusto, intuitivo y adaptable los convierte en una herramienta indispensable para sectores como agricultura, minería, salud, defensa, educación, investigación y seguridad industrial.
+La capacidad de integrar estos controladores con robots, actuadores y sistemas digitales permite crear un ecosistema tecnológico que refuerza la autonomía y la eficiencia de cualquier operación. En Villa Automation SAC estamos comprometidos con el desarrollo de soluciones inteligentes que respondan a las necesidades reales de nuestros clientes y contribuyan a un futuro más seguro, más saludable y más automatizado.
+<p>
+  <style>
+  .contenedor-tarjetas {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+  }
+
+  .tarjeta-img {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-width: 350px;
+    text-align: center;
+  }
+
+  .tarjeta-img img {
+    width: 100%;
+    border-radius: 10px;
+  }
+</style>
+
+<div class="contenedor-tarjetas">
+  <div class="tarjeta-img">
+    <img src="assets/jaime6.jpg" alt="Controlador 1">
+  </div>
+
+  <div class="tarjeta-img">
+    <img src="assets/jaime7.jpg" alt="Controlador 2">
+  </div>
+</div>
+<p>
+Monitoreo continuo de CO2, CO, CH4, humo y gases tóxicos.
+Análisis de calidad de aire, humedad y temperatura.Alarmas inteligentes según umbrales definidos por el usuario.
+Control automático de ventilación, extractores y sistemas de mitigación. Registro de datos en memoria y reporte para auditorías o investigación.
+Comunicación inalámbrica mediante Bluetooth, WiFi o radiofrecuencia.
+Compatibilidad con aplicaciones móviles y plataformas IoT
+<p>
+  <style>
+    .contenedor-tarjetas {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+  }
+
+  .tarjeta-img {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-width: 350px;
+    text-align: center;
+  }
+
+  .tarjeta-img img {
+    width: 100%;
+    border-radius: 10px;
+  }
+</style>
+
+<div class="contenedor-tarjetas">
+  <div class="tarjeta-img">
+    <img src="assets/controlador15.jpg" alt="Controlador 1">
+  </div>
+
+  <div class="tarjeta-img">
+    <img src="assets/controlador16.jpg" alt="Controlador 2">
+  </div>
+</div>
+<p>
+<h1>Sistema de alarma de seguridad inteligente</h1>
+Nuestro Sistema de Alarma de Seguridad Inteligente combina tecnología de vanguardia con un diseño robusto y confiable. Integra sensores de movimiento, detección perimetral, alertas inmediatas y un potente módulo de sirena para disuadir cualquier intento de intrusión. El controlador, desarrollado por Villa Automation, está construido para operar 24/7 bajo condiciones exigentes, garantizando seguridad continua.
+Este sistema permite activar alarmas automáticas, enviar notificaciones en tiempo real y registrar eventos críticos, ofreciendo una protección moderna y eficiente. Su arquitectura inteligente facilita la integración con cámaras, módulos inalámbricos y sistemas de acceso, adaptándose a cualquier entorno.
+Ideal para viviendas, almacenes, comercios, instituciones y proyectos industriales que requieran una seguridad confiable, escalable y de rápida respuesta.
+<style>
+    .contenedor-tarjetas {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+  }
+
+  .tarjeta-img {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-width: 350px;
+    text-align: center;
+  }
+
+  .tarjeta-img img {
+    width: 100%;
+    border-radius: 10px;
+  }
+</style>
+
+<div class="contenedor-tarjetas">
+  <div class="tarjeta-img">
+    <img src="assets/controaldor03.jpg" alt="Controlador 1">
+  </div>
+
+  <div class="tarjeta-img">
+    <img src="assets/controlador04.jpg" alt="Controlador 2">
+  </div>
+
+  <div class="tarjeta-img">
+    <img src="assets/controlador02.jpg" alt="Controlador 2">
+  </div>
+</div>
+
+    
+  
+  <p>
+<video width="100%" controls>
+  <source src="assets/controlador.mp4" type="video/mp4">
+</video>
+<p>
+otros videos en you tube similares:
+<p>
+
+<iframe width="100%" height="315"
+src="https://www.youtube.com/embed/zE5XoZqH-WE"
+title="YouTube video player" frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe>
+   <p>
+<p>
+<iframe width="100%" height="315"
+src="https://www.youtube.com/embed/3HVXNcQUy1k"
+title="YouTube video player" frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe>
+<p>
+<p>
+<iframe width="100%" height="315"
+src="https://www.youtube.com/embed/fY4I2udUNlw"
+title="YouTube video player" frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe>
+   <p>     
+   <p>
+    Presupuesto dependera la cantida de sensores y modulos
+  <ul>
+<li>Basico: 200.0 S/</li>
+<li>avanzado: 400.0 S/</li>
+
+</ul> 
+</body>
+  
+<a href="index.html" class="back-btn"> Volver a la página principal <-</a>
+</div>
+ <p>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
