@@ -345,14 +345,32 @@ nav a:hover {
     }
 }
 
-<style>
-.cohete-rotando {
-    animation: giroCohete 4s linear infinite;
-    transform-origin: center;
+.cohete-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-top: 10px;
 }
 
-@keyframes giroCohete {
+.fondo-cohete {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.cohete-rotando {
+    width: 120px;
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    z-index: 2;
+    animation: rotar 6s linear infinite;
+}
+
+@keyframes rotar {
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
 }
-</style>
