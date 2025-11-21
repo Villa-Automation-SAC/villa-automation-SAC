@@ -134,17 +134,35 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
           </div>
         </div>
 
-        <aside class="card">
-          <h3>Servicios destacados</h3>
-          <ul style="padding-left:18px;color:var(--muted);margin-top:10px">
-            <li>Integración decontroladores Inteligentes</li>
-            <li>Robots colaborativos y manipuladores</li>
-            <li>Inteligencia Artificial</li>
-            <li>Aeronaves y Naves espaciales/ propulsión</li>
-          </ul>
-        </aside>
-      </section>
+       <aside class="card">
+  <h3>Panel Futurista en Tiempo Real</h3>
 
+  <!-- TARJETAS DE CLIMA + MPU -->
+  <div style="margin-top:10px">
+      
+      <!-- Temperatura -->
+      <div style="background:#0a0a0a;border:1px solid #0ff;padding:10px;border-radius:8px;margin-bottom:8px;">
+        <strong>🌡 Temperatura:</strong>
+        <span id="temp">-- °C</span>
+      </div>
+
+      <!-- Humedad -->
+      <div style="background:#0a0a0a;border:1px solid #0ff;padding:10px;border-radius:8px;margin-bottom:8px;">
+        <strong>💧 Humedad:</strong>
+        <span id="hum">-- %</span>
+      </div>
+
+      <!-- MPU6050 -->
+      <div style="background:#0a0a0a;border:1px solid #0ff;padding:10px;border-radius:8px;margin-bottom:8px;text-align:center;">
+        <strong>📈 MPU6050 (Simulación)</strong>
+        <canvas id="cuboMPU" width="160" height="160"></canvas>
+      </div>
+  </div>
+
+</aside>
+
+      </section>
+      
       <section id="servicios">
         <h2 style="margin-top:28px">Nuestros servicios</h2>
         <div class="services">
@@ -845,6 +863,38 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// === Clima ===
+async function cargarClima() {
+    const url = "https://api.open-meteo.com/v1/forecast?latitude=-13.15878&longitude=-74.22321&current=temperature_2m,relative_humidity_2m";
+    const r = await fetch(url);
+    const d = await r.json();
+    document.getElementById("temp").innerText = d.current.temperature_2m + " °C";
+    document.getElementById("hum").innerText  = d.current.relative_humidity_2m + " %";
+}
+cargarClima();
+setInterval(cargarClima, 15000);
+
+// === MPU6050 Simulación ===
+let canvas = document.getElementById("cuboMPU");
+let ctx = canvas.getContext("2d");
+let a = 0;
+
+function cubo() {
+    ctx.clearRect(0,0,160,160);
+    ctx.save();
+    ctx.translate(80,80);
+    ctx.rotate(a);
+    ctx.strokeStyle="#0ff";
+    ctx.strokeRect(-40,-40,80,80);
+    ctx.restore();
+    a += 0.03;
+    requestAnimationFrame(cubo);
+}
+cubo();
+</script>
+
 </body>
 </html>
