@@ -134,30 +134,28 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
           </div>
         </div>
 
-       <aside class="card">
-  <h3>Panel Futurista en Tiempo Real</h3>
+    <!-- === TARJETA FUTURISTA CON ANIMACIÓN Y GRÁFICO === -->
+<aside class="card" style="
+    background: url('https://i.imgur.com/ZfQZb3M.jpeg') center/cover no-repeat;
+    border-radius:15px;
+    padding:20px;
+    color:white;
+    box-shadow:0 0 25px rgba(0,255,255,0.25);
+">
+  <h3 style="color:#00eaff;text-shadow:0 0 8px #00eaff">Simulación MPU6050 + Sensor Ambiental</h3>
 
-  <!-- TARJETAS DE CLIMA + MPU -->
-  <div style="margin-top:10px">
-      
-      <!-- Temperatura -->
-      <div style="background:#0a0a0a;border:1px solid #0ff;padding:10px;border-radius:8px;margin-bottom:8px;">
-        <strong>🌡 Temperatura:</strong>
-        <span id="temp">-- °C</span>
-      </div>
+  <!-- Valores en tiempo real -->
+  <div style="margin-top:10px;font-size:15px;">
+      <p><strong>Aceleración X:</strong> <span id="accX">0</span> °</p>
+      <p><strong>Aceleración Y:</strong> <span id="accY">0</span> °</p>
+      <p><strong>Aceleración Z:</strong> <span id="accZ">0</span> °</p>
 
-      <!-- Humedad -->
-      <div style="background:#0a0a0a;border:1px solid #0ff;padding:10px;border-radius:8px;margin-bottom:8px;">
-        <strong>💧 Humedad:</strong>
-        <span id="hum">-- %</span>
-      </div>
-
-      <!-- MPU6050 -->
-      <div style="background:#0a0a0a;border:1px solid #0ff;padding:10px;border-radius:8px;margin-bottom:8px;text-align:center;">
-        <strong>📈 MPU6050 (Simulación)</strong>
-        <canvas id="cuboMPU" width="160" height="160"></canvas>
-      </div>
+      <p><strong>Temperatura:</strong> <span id="temp">0</span> °C</p>
+      <p><strong>Humedad:</strong> <span id="hum">0</span> %</p>
   </div>
+
+  <!-- Gráfico -->
+  <canvas id="sensorChart" style="margin-top:15px;height:200px;"></canvas>
 
 </aside>
 
@@ -865,36 +863,85 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- === Librería del gráfico === -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-// === Clima ===
-async function cargarClima() {
-    const url = "https://api.open-meteo.com/v1/forecast?latitude=-13.15878&longitude=-74.22321&current=temperature_2m,relative_humidity_2m";
-    const r = await fetch(url);
-    const d = await r.json();
-    document.getElementById("temp").innerText = d.current.temperature_2m + " °C";
-    document.getElementById("hum").innerText  = d.current.relative_humidity_2m + " %";
+// ====== SIMULACIÓN MPU6050 + TEMP / HUM ======
+function generarDatos() {
+    return {
+        accX: (Math.random() * 60 - 30).toFixed(1),
+        accY: (Math.random() * 60 - 30).toFixed(1),
+        accZ: (Math.random() * 60 - 30).toFixed(1),
+        temp: (20 + Math.random() * 10).toFixed(1),
+        hum: (50 + Math.random() * 20).toFixed(1)
+    };
 }
-cargarClima();
-setInterval(cargarClima, 15000);
 
-// === MPU6050 Simulación ===
-let canvas = document.getElementById("cuboMPU");
-let ctx = canvas.getContext("2d");
-let a = 0;
+// ====== CONFIGURAR EL GRÁFICO ======
+const ctx = document.getElementById("sensorChart");
 
-function cubo() {
-    ctx.clearRect(0,0,160,160);
-    ctx.save();
-    ctx.translate(80,80);
-    ctx.rotate(a);
-    ctx.strokeStyle="#0ff";
-    ctx.strokeRect(-40,-40,80,80);
-    ctx.restore();
-    a += 0.03;
-    requestAnimationFrame(cubo);
-}
-cubo();
+const data = {
+    labels: [],
+    datasets: [
+        {
+            label: "Temperatura (°C)",
+            data: [],
+            borderWidth: 2
+        },
+        {
+            label: "Humedad (%)",
+            data: [],
+            borderWidth: 2
+        }
+    ]
+};
+
+const config = {
+    type: "line",
+    data: data,
+    options: {
+        responsive: true,
+        animation: false,
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+};
+
+const sensorChart = new Chart(ctx, config);
+
+// ====== ACTUALIZACIÓN EN TIEMPO REAL ======
+setInterval(() => {
+    const d = generarDatos();
+
+    // Actualizar texto
+    document.getElementById("accX").textContent = d.accX;
+    document.getElementById("accY").textContent = d.accY;
+    document.getElementById("accZ").textContent = d.accZ;
+    document.getElementById("temp").textContent = d.temp;
+    document.getElementById("hum").textContent = d.hum;
+
+    // Agregar datos al gráfico
+    const tiempo = new Date().toLocaleTimeString();
+
+    sensorChart.data.labels.push(tiempo);
+    sensorChart.data.datasets[0].data.push(d.temp);
+    sensorChart.data.datasets[1].data.push(d.hum);
+
+    // Limitar puntos para no saturar
+    if (sensorChart.data.labels.length > 15) {
+        sensorChart.data.labels.shift();
+        sensorChart.data.datasets[0].data.shift();
+        sensorChart.data.datasets[1].data.shift();
+    }
+
+    sensorChart.update();
+}, 1500); // cada 1.5 segundos
 </script>
+
 
 </body>
 </html>
