@@ -185,6 +185,25 @@
   .btn-cotizar:hover {
     background: linear-gradient(45deg, #3f522a, #4f6635);
   }
+
+  .app-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: #0077ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.app-btn:hover {
+    background: #005ed1;
+    transform: translateY(-3px);
+}
+
 </style>
 
 </head>
@@ -262,7 +281,12 @@ setInterval(() => {
     <div class="card">
       <img src="assets/app.jpg">
       <h3>IA para Agricultura y Clima</h3>
-      <p>La Inteligencia Artificial (IA) está revolucionando la agricultura y la gestión del clima a través de la agricultura inteligente o de precisión. Villa automation a desarrollado Apps basado en IA que permite monitoreas y controlar de manera eficiente en el sector agricultura y clima, se relaciona con el concepto de integrar esta tecnología avanzada en entornos residenciales o comunidades agrícolas modernas, logrando una automatización completa y sostenible.…</p>
+      <p>La Inteligencia Artificial (IA) está revolucionando la agricultura y la gestión del clima a través de la agricultura inteligente o de precisión.
+        Villa automation a desarrollado Apps  <!-- BOTÓN DE TU APP -->
+    <a href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil&hl=es_PE" class="app-btn" target="_blank">
+        Abrir App Villa Automation
+    </a> 
+      basado en IA que permite monitoreas y controlar de manera eficiente en el sector agricultura y clima, se relaciona con el concepto de integrar esta tecnología avanzada en entornos residenciales o comunidades agrícolas modernas, logrando una automatización completa y sostenible.…</p>
       <button class="btn-cotizar" onclick="abrirFormulario('IA para Agricultura y Clima')">💬 Cotizar</button>
     </div>
 
@@ -468,6 +492,7 @@ Mensaje: ${mensaje.value}
 
 </body>
 </html>
+
 
 
 
