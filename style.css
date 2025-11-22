@@ -394,4 +394,20 @@ nav a:hover {
     background: #13243d;
     color: white;
 }
+/* Centrar el bloque completo */
+.video-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;   /* centra horizontal */
+    margin-top: 30px;
+}
+
+/* Contenedor de videos en horizontal */
+.video-gallery {
+    display: flex;
+    justify-content: center;   /* centra las tarjetas */
+    gap: 25px;
+    flex-wrap: wrap;           /* permite que bajen si no entra */
+    max-width: 1200px;         /* límite centrado elegante */
+}
 
