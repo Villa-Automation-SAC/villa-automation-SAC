@@ -584,21 +584,20 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
 <!-- BOTÓN FLOTANTE SUPERIOR DEL CURSO GRATUITO -->
 <div style="display:flex; flex-direction:column; gap:10px;">
     
-    <a href="cursos.html" class="alerta-superior">
+    <a href="cursos.html" class="alerta-superior alerta-1">
         🔔 Curso gratuito disponible – ¡Haz clic aquí!
     </a>
 
-    <a href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil&pcampaignid=web_share" class="alerta-superior">
+    <a href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil&pcampaignid=web_share"
+       class="alerta-superior alerta-2">
         📱 Descargar App Villa Automation
     </a>
 
 </div>
 
-    
 <style>
 .alerta-superior {
     position: fixed;
-    top: 80px; /* 🔥 AJUSTADO PARA NO TAPAR EL MENÚ */
     right: 25px;
     background: linear-gradient(45deg, #ff4d4d, #ff7b00);
     color: white;
@@ -610,7 +609,15 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
     text-decoration: none;
     animation: pulso 1.4s infinite;
     z-index: 9999;
+
+    /* ✅ ESTO ES LO QUE FALTABA */
+    display: block;
+    margin-bottom: 12px;
 }
+
+/* Posiciones separadas */
+.alerta-1 { top: 80px; }
+.alerta-2 { top: 150px; }
 
 @keyframes pulso {
     0% { transform: scale(1); }
@@ -621,14 +628,7 @@ Con un equipo multidisciplinario de ingenieros, investigadores y especialistas y
 .alerta-superior:hover {
     background: linear-gradient(45deg, #ff0000, #ff6a00);
     transform: scale(1.1);
-
-    .alerta-superior {
-    display: block;
-    margin-bottom: 12px; /* separa los botones */
 }
-
-}
-
 </style>
 
 
