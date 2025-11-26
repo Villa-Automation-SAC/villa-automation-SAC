@@ -61,16 +61,24 @@
         transform: translateX(-50%);
     }
 
-    button {
-        padding: 10px 20px;
-        font-size: 1.2em;
-        margin-top: 20px;
+    /* Botón girar más grande y con pulso */
+    #girar-btn {
+        padding: 20px 40px;
+        font-size: 2em;
+        margin-top: 30px;
         cursor: pointer;
-        border-radius: 10px;
+        border-radius: 15px;
         border: none;
         background: gold;
         color: #000;
-        box-shadow: 2px 2px 10px #000;
+        box-shadow: 2px 2px 15px #000;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 15px gold; }
+        50% { transform: scale(1.1); box-shadow: 0 0 25px gold; }
+        100% { transform: scale(1); box-shadow: 0 0 15px gold; }
     }
 
     #pregunta-box {
@@ -81,17 +89,28 @@
         display: none;
     }
 
+    /* Opciones de preguntas con pulso y hover */
     .opcion {
         display: block;
         margin: 10px 0;
-        padding: 10px;
+        padding: 15px;
         background: rgba(255,255,255,0.2);
         border-radius: 10px;
         cursor: pointer;
+        font-size: 1.2em;
+        transition: transform 0.2s, background 0.2s;
+        animation: pulse-opcion 2s infinite;
     }
 
     .opcion:hover {
         background: rgba(255,255,255,0.4);
+        transform: scale(1.05);
+    }
+
+    @keyframes pulse-opcion {
+        0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.5); }
+        100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.3); }
     }
 
     #score {
@@ -158,12 +177,11 @@ girarBtn.addEventListener('click', girarRuleta);
 function girarRuleta() {
     girarBtn.disabled = true;
 
-    let giro = Math.floor(Math.random() * 360) + 720; // Al menos 2 vueltas completas
+    let giro = Math.floor(Math.random() * 360) + 720; // Al menos 2 vueltas
     ruleta.style.transition = 'transform 4s cubic-bezier(0.25, 1, 0.5, 1)';
     ruleta.style.transform = `rotate(${giro}deg)`;
 
     setTimeout(() => {
-        // Calcular casilla
         let anguloFinal = giro % 360;
         let casilla = Math.floor(anguloFinal / 36); // 10 casillas
         mostrarPregunta(casilla);
