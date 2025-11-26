@@ -297,6 +297,16 @@ let globalNodes = null;
 function initAudio(){
   if(audioCtx) return;
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const comp = audioCtx.createDynamicsCompressor();
+comp.threshold.value = -18;
+comp.knee.value = 20;
+comp.ratio.value = 8;
+comp.attack.value = 0.003;
+comp.release.value = 0.15;
+
+masterGain.connect(comp);
+comp.connect(audioCtx.destination);
+
   masterGain = audioCtx.createGain();
   masterGain.gain.value = state.volume;
 
@@ -785,6 +795,7 @@ randomizePattern();
 </script>
 </body>
 </html>
+
 
 
 
