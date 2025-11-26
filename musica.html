@@ -1,155 +1,212 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>M˙sica Trance/House Generada en la Web</title>
-    <style>
-        body { font-family: Arial; background: #111; color: white; text-align: center; padding: 40px; }
-        button {
-            padding: 12px 20px; margin: 10px;
-            background: #00d4ff; border: none; border-radius: 8px;
-            font-size: 18px; cursor: pointer;
-        }
-        button:hover { background: #00aacc; }
-    </style>
+<meta charset="UTF-8" />
+<title>Musica Trance ‚Äì Web Player</title>
+
+<style>
+body {
+    margin: 0;
+    background: #0c0f12;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.header {
+    background: linear-gradient(180deg, #0f1630, #0c0f12);
+    padding: 40px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.cover {
+    width: 260px;
+    height: 260px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    background-image: url('https://i.imgur.com/s4L9z2Y.jpeg'); /* Portada tipo trance */
+}
+
+.title-block h1 {
+    font-size: 55px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.title-block p {
+    opacity: 0.6;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.control-area {
+    padding: 40px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.play-btn {
+    width: 75px;
+    height: 75px;
+    background: #1db954;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.play-btn:hover {
+    background: #18a947;
+}
+
+.stop-btn {
+    padding: 15px 30px;
+    border-radius: 6px;
+    background: #333;
+    cursor: pointer;
+}
+
+.stop-btn:hover {
+    background: #555;
+}
+
+.line {
+    margin-top: 20px;
+    padding: 40px;
+    opacity: 0.8;
+}
+</style>
 </head>
 <body>
 
-<h2>?? M˙sica Trance / House Instrumental Generada en la Web</h2>
-<p>M˙sica generada autom·ticamente con Web Audio API, sin archivos MP3.</p>
+<!-- HEADER ESTILO SPOTIFY -->
+<div class="header">
+    <div class="cover"></div>
 
-<button onclick="playMusic()">? Reproducir M˙sica</button>
-<button onclick="stopMusic()">? Detener</button>
-<button onclick="downloadWav()">? Descargar WAV</button>
+    <div class="title-block">
+        <h1>Musica Trance</h1>
+        <p>Estilo synthwave trance parecido a ‚ÄúNINA - Automatic Call‚Äù</p>
+    </div>
+</div>
+
+<!-- CONTROLES -->
+<div class="control-area">
+    <div class="play-btn" onclick="playMusic()">‚ñ∂</div>
+    <div class="stop-btn" onclick="stopMusic()">Detener</div>
+</div>
+
+<div class="line">
+    Reproductor Web ¬∑ Generador autom√°tico de m√∫sica trance ¬∑ Sin archivos MP3
+</div>
 
 <script>
 let audioCtx;
-let oscillators = [];
-let playing = false;
+let isPlaying = false;
+let nodes = [];
 
 function playMusic() {
-    if (playing) return;
+    if (isPlaying) return;
+    isPlaying = true;
 
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    playing = true;
 
-    // BPM tÌpico de trance
-    const bpm = 138;
-    const beat = 60 / bpm;
+    // BPM tipo synthwave / trance
+    let bpm = 118;
+    let beat = 60 / bpm;
 
-    // Synth Lead
-    for (let i = 0; i < 4; i++) {
-        let osc = audioCtx.createOscillator();
+    // PAD AMBIENTAL TIPO NINA ‚Äì AUTOMATIC CALL
+    let pad = audioCtx.createOscillator();
+    let padGain = audioCtx.createGain();
+
+    pad.type = "triangle";
+    pad.frequency.value = 220;  // A3 suave
+    padGain.gain.value = 0.25;
+
+    pad.connect(padGain).connect(audioCtx.destination);
+    pad.start();
+
+    nodes.push(pad);
+
+    // ARPEGIO SINTETIZADO
+    setInterval(() => {
+        if (!isPlaying) return;
+
+        let arp = audioCtx.createOscillator();
         let gain = audioCtx.createGain();
 
-        osc.type = "sawtooth"; // sonido trance cl·sico
-        osc.frequency.value = 220 * (i + 1); // armonÌas
+        let notas = [440, 554, 659, 880]; // A, C#, E, A (acorde trance)
+        let n = notas[Math.floor(Math.random() * notas.length)];
 
-        gain.gain.value = 0.06;
+        arp.type = "sawtooth";
+        arp.frequency.value = n;
 
-        osc.connect(gain).connect(audioCtx.destination);
-        osc.start();
+        gain.gain.setValueAtTime(0.20, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
 
-        oscillators.push(osc);
-    }
+        arp.connect(gain).connect(audioCtx.destination);
 
-    // BASSLINE (pulso trance)
-    let bassOsc = audioCtx.createOscillator();
-    let bassGain = audioCtx.createGain();
+        arp.start();
+        arp.stop(audioCtx.currentTime + 0.25);
 
-    bassOsc.type = "square";
-    bassOsc.frequency.value = 55;
+    }, beat * 1000 * 0.5); // velocidad del arpegio
 
-    bassGain.gain.value = 0.25;
 
-    bassOsc.connect(bassGain).connect(audioCtx.destination);
-    bassOsc.start();
-
-    oscillators.push(bassOsc);
-
-    // KICK DRUM (golpe trance)
+    // BAJO SINT√âTICO
     setInterval(() => {
-        if (!playing) return;
+        if (!isPlaying) return;
+
+        let bass = audioCtx.createOscillator();
+        let bassGain = audioCtx.createGain();
+
+        bass.type = "square";
+        bass.frequency.value = 55; // Bajo profundo
+
+        bassGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        bassGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+
+        bass.connect(bassGain).connect(audioCtx.destination);
+
+        bass.start();
+        bass.stop(audioCtx.currentTime + 0.25);
+
+    }, beat * 1000);
+
+
+    // KICK SINT√âTICO
+    setInterval(() => {
+        if (!isPlaying) return;
 
         let kick = audioCtx.createOscillator();
         let gain = audioCtx.createGain();
 
         kick.type = "sine";
-        kick.frequency.setValueAtTime(150, audioCtx.currentTime);
-        kick.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.1);
+        kick.frequency.setValueAtTime(120, audioCtx.currentTime);
+        kick.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.13);
 
         gain.gain.setValueAtTime(1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.13);
 
         kick.connect(gain).connect(audioCtx.destination);
         kick.start();
-        kick.stop(audioCtx.currentTime + 0.1);
+        kick.stop(audioCtx.currentTime + 0.13);
 
     }, beat * 1000);
 }
 
 function stopMusic() {
-    if (!playing) return;
-    oscillators.forEach(o => o.stop());
-    oscillators = [];
-    playing = false;
+    if (!isPlaying) return;
+
+    nodes.forEach(n => n.stop());
+    nodes = [];
+    isPlaying = false;
 }
-
-// Descargar WAV generado (sencillo)
-function downloadWav() {
-    const sampleRate = 44100;
-    const duration = 5; // segundos
-    const length = sampleRate * duration;
-    const buffer = new Float32Array(length);
-
-    // Generar un tono simple trance
-    for (let i = 0; i < length; i++) {
-        buffer[i] = Math.sin(2 * Math.PI * 440 * (i / sampleRate)) * 0.3;
-    }
-
-    // Convertir a WAV
-    function createWav(float32Array) {
-        let buffer = new ArrayBuffer(44 + float32Array.length * 2);
-        let view = new DataView(buffer);
-
-        function writeString(view, offset, string) {
-            for (let i = 0; i < string.length; i++)
-                view.setUint8(offset + i, string.charCodeAt(i));
-        }
-
-        writeString(view, 0, "RIFF");
-        view.setUint32(4, 36 + float32Array.length * 2, true);
-        writeString(view, 8, "WAVE");
-        writeString(view, 12, "fmt ");
-        view.setUint32(16, 16, true);
-        view.setUint16(20, 1, true);
-        view.setUint16(22, 1, true);
-        view.setUint32(24, sampleRate, true);
-        view.setUint32(28, sampleRate * 2, true);
-        view.setUint16(32, 2, true);
-        view.setUint16(34, 16, true);
-        writeString(view, 36, "data");
-        view.setUint32(40, float32Array.length * 2, true);
-
-        let offset = 44;
-        for (let i = 0; i < float32Array.length; i++) {
-            let sample = Math.max(-1, Math.min(1, float32Array[i]));
-            view.setInt16(offset, sample * 32767, true);
-            offset += 2;
-        }
-        return buffer;
-    }
-
-    let wav = createWav(buffer);
-    let blob = new Blob([wav], { type: "audio/wav" });
-
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement("a");
-    a.href = url;
-    a.download = "musica_trance.wav";
-    a.click();
-}
-
 </script>
+
 </body>
 </html>
