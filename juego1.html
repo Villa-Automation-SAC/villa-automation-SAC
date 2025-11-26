@@ -155,56 +155,69 @@ function colisionRectRect(a, b) {
 
 // ==================== LOOP DEL JUEGO ======================
 function update() {
-    if (gameOver) return;
+    // =========================
+    // CONTROLES DEL COHETE
+    // =========================
 
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // Cohete controla altura
-    if (keys["ArrowUp"]) cohete.velY -= 0.2;
-    cohete.velY *= 0.98;
-    cohete.y += cohete.velY;
-
-    // No salir del mapa
-    if (cohete.y < 50) cohete.y = 50;
-    if (cohete.y > canvas.height - 150) cohete.y = canvas.height - 150;
-
-    // Dibuja cohete
-    dibujarCohete();
-
-    // ================= METEORITOS =================
-    meteoros.forEach((m, i) => {
-        m.y += m.vel;
-        dibujarMeteorito(m);
-
-        if (colisionRectCir(cohete, m)) daño();
-        if (m.y > canvas.height+50) {
-            meteoros.splice(i,1);
-            score += 5;
-        }
-    });
-
-    // ================= SATÉLITES =================
-    satelites.forEach((s, i) => {
-        s.y += s.vel;
-        dibujarSatelite(s);
-
-        if (colisionRectRect(cohete, s)) daño();
-        if (s.y > canvas.height+60) {
-            satelites.splice(i,1);
-            score += 10;
-        }
-    });
-
-    document.getElementById("score").innerText = score;
-
-    // Objetivo: llegar arriba → Marte
-    if (cohete.y <= 50) {
-        victoria();
-        return;
+    // Aceleración vertical (subir)
+    if (keys["ArrowUp"] || keys["w"]) {
+        cohete.velY -= 0.2; 
     }
 
+    // Descenso manual
+    if (keys["ArrowDown"] || keys["s"]) {
+        cohete.velY += 0.2;
+    }
+
+    // Movimiento lateral izquierda
+    if (keys["ArrowLeft"] || keys["a"]) {
+        cohete.velX -= 0.2;
+    }
+
+    // Movimiento lateral derecha
+    if (keys["ArrowRight"] || keys["d"]) {
+        cohete.velX += 0.2;
+    }
+
+    // Turbo (Shift)
+    if (keys["Shift"]) {
+        cohete.velY -= 0.35;  
+    }
+
+    // Freno de emergencia (Control)
+    if (keys["Control"]) {
+        cohete.velX *= 0.9;
+        cohete.velY *= 0.9;
+    }
+
+    // Encender motores (barra espaciadora)
+    if (keys[" "]) {
+        cohete.velY -= 0.25;
+    }
+
+    // =========================
+    // FÍSICA REALISTA
+    // =========================
+    cohete.velY *= 0.98;  // resistencia aire
+    cohete.velX *= 0.98;
+
+    cohete.x += cohete.velX;
+    cohete.y += cohete.velY;
+
+    // Gravedad
+    cohete.velY += 0.05;
+
+    // Límites de pantalla
+    if (cohete.y < 0) cohete.y = 0;
+    if (cohete.y > canvas.height - cohete.h) cohete.y = canvas.height - cohete.h;
+
+    if (cohete.x < 0) cohete.x = 0;
+    if (cohete.x > canvas.width - cohete.w) cohete.x = canvas.width - cohete.w;
+
+    draw();
     requestAnimationFrame(update);
 }
+
 
 // ==================== DAÑO ======================
 function daño() {
@@ -257,3 +270,4 @@ init();
 
 </body>
 </html>
+
