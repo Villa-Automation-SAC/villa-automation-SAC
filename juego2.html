@@ -1,618 +1,211 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Camino a la Corona — Juego Bíblico</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --accent:#7dd3fc; --muted:#9aa6b2; --glass: rgba(255,255,255,0.03);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial; background: radial-gradient(1200px 600px at 10% 10%, rgba(34,211,238,0.06), transparent), radial-gradient(900px 500px at 90% 90%, rgba(99,102,241,0.04), transparent), var(--bg); color:#e6eef6;
-      -webkit-font-smoothing:antialiased;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruleta Bíblica</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: url('https://villa-automation-sac.github.io/villa-automation/assets/biblia.png') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+        text-align: center;
     }
 
-    .container{max-width:1100px;margin:36px auto;padding:24px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:14px}
-    .logo{width:62px;height:62px;border-radius:12px;background:linear-gradient(135deg,#06b6d4,#7c3aed);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
-    .logo svg{filter:drop-shadow(0 4px 12px rgba(0,0,0,0.6))}
-    h1{font-size:20px;margin:0}
-    p.lead{margin:0;color:var(--muted);font-size:13px}
+    h1 {
+        margin-top: 20px;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 8px #000;
+    }
 
-    .hud{display:flex;gap:12px;align-items:center}
-    .stat{background:var(--glass);padding:10px 14px;border-radius:12px;backdrop-filter:blur(6px);min-width:110px;text-align:center}
-    .stat .value{font-weight:700;font-size:18px}
-    .stat .label{font-size:12px;color:var(--muted)}
+    #ruleta-container {
+        position: relative;
+        width: 400px;
+        height: 400px;
+        margin: 30px auto;
+    }
 
-    main{margin-top:26px;display:grid;grid-template-columns:1fr 360px;gap:20px}
+    #ruleta {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 10px solid rgba(255,255,255,0.8);
+        box-shadow: 0 0 20px #fff;
+        transform: rotate(0deg);
+        transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
+        background: conic-gradient(
+            #ff9999 0deg 36deg,
+            #99ccff 36deg 72deg,
+            #ffcc99 72deg 108deg,
+            #99ff99 108deg 144deg,
+            #cc99ff 144deg 180deg,
+            #ff9966 180deg 216deg,
+            #66ccff 216deg 252deg,
+            #ff66cc 252deg 288deg,
+            #66ffcc 288deg 324deg,
+            #ffcc66 324deg 360deg
+        );
+    }
 
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04)}
+    #pointer {
+        width: 0; 
+        height: 0; 
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-bottom: 40px solid yellow;
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 
-    .question-area{min-height:260px;display:flex;flex-direction:column;gap:14px}
-    .level-pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(125,211,252,0.06);color:var(--accent);font-weight:700;border:1px solid rgba(125,211,252,0.08)}
-    .question{font-size:20px;font-weight:600}
-    .options{display:flex;flex-direction:column;gap:10px;margin-top:auto}
-    .option{padding:12px 14px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-    .option:hover{transform:translateY(-3px)}
-    .option.correct{border-color:rgba(34,197,94,0.8);background:linear-gradient(90deg, rgba(34,197,94,0.06), rgba(34,197,94,0.02))}
-    .option.wrong{border-color:rgba(239,68,68,0.9);background:linear-gradient(90deg, rgba(239,68,68,0.04), rgba(239,68,68,0.02))}
+    button {
+        padding: 10px 20px;
+        font-size: 1.2em;
+        margin-top: 20px;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+        background: gold;
+        color: #000;
+        box-shadow: 2px 2px 10px #000;
+    }
 
-    .right-column{display:flex;flex-direction:column;gap:12px}
-    .levels{display:flex;gap:8px;flex-wrap:wrap}
-    .lvl{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.02);min-width:60px;text-align:center}
-    .lvl.locked{opacity:0.45;filter:grayscale(0.25)}
-    .progress-bar{height:10px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden}
-    .progress-bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#7c3aed);width:0%}
+    #pregunta-box {
+        margin-top: 20px;
+        padding: 20px;
+        background: rgba(0,0,0,0.6);
+        border-radius: 15px;
+        display: none;
+    }
 
-    .cta{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:14px}
-    .btn{background:linear-gradient(90deg,#06b6d4,#7c3aed);color:#021022;padding:10px 14px;border-radius:10px;font-weight:700;border:none;cursor:pointer}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent)}
+    .opcion {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+        cursor: pointer;
+    }
 
-    footer{margin-top:28px;text-align:center;color:var(--muted);font-size:13px}
+    .opcion:hover {
+        background: rgba(255,255,255,0.4);
+    }
 
-    /* crown overlay */
-    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-    .crown-wrap{pointer-events:auto;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:22px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);display:none;flex-direction:column;align-items:center;gap:12px;min-width:320px}
-    .crown-wrap.show{display:flex;animation:pop .5s ease}
-    @keyframes pop{from{transform:translateY(18px) scale(.92);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+    #score {
+        margin-top: 20px;
+        font-size: 1.5em;
+        text-shadow: 1px 1px 5px #000;
+    }
 
-    /* responsive */
-    @media(max-width:900px){main{grid-template-columns:1fr} .right-column{order:-1}}
-    /* ESCALERA DE NIVELES */
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(#6dbbff, #dff3ff);
-    background-attachment: fixed;
-    z-index: -3;
-  }
-
-  body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url("https://villa-automation-sac.github.io/villa-automation/assets/biblia.png") repeat;
-    opacity: 0.25;
-    z-index: -2;
-  }
-
-  .heaven-light {
-    position: fixed;
-    top: -150px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,255,255,0) 70%);
-    filter: blur(45px);
-    z-index: -1;
-  }
-
-  .stairway {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-    margin: 40px auto 20px;
-    width: 100%;
-  }
-
-  .step {
-    padding: 15px;
-    border-radius: 10px;
-    background: #ffffffaa;
-    color: #000;
-    text-align: center;
-    font-weight: bold;
-    width: 200px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-    opacity: 0.5;
-    transition: 0.4s;
-  }
-
-  .step-1 { transform: translateX(0); }
-  .step-2 { transform: translateX(20px); }
-  .step-3 { transform: translateX(40px); }
-  .step-4 { transform: translateX(60px); }
-  .step-5 { transform: translateX(80px); }
-
-  .step.active {
-    opacity: 1;
-    background: #fff;
-    border: 2px solid gold;
-    transform: scale(1.05);
-  }
-  .stairway {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin: 25px auto;
-    width: 260px;
-  }
-
-  .step {
-    padding: 12px;
-    border-radius: 10px;
-    background: #1e2a49;
-    color: #ffffff;
-    text-align: center;
-    font-weight: bold;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-    opacity: 0.4;
-    transition: 0.3s;
-  }
-
-  .step.active {
-    background: #00c3ff;
-    color: #000;
-    opacity: 1;
-    transform: scale(1.05);
-  }
-
-  /* MEJORA DE TIPOGRAFÍA GENERAL */
-  body, button, .question-box {
-    font-family: "Poppins", Arial, sans-serif;
-    letter-spacing: 0.4px;
-  }
-  /* RULETA DE PREGUNTAS */
-  .roulette-container {
-    margin: 20px auto;
-    width: 260px;
-    height: 260px;
-    position: relative;
-  }
-
-  .roulette {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 6px solid #fff;
-    display: grid;
-    place-items: center;
-    position: relative;
-    overflow: hidden;
-    transition: transform 3s ease-out;
-  }
-
-  .roulette .slice {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    background: rgba(255,255,255,0.7);
-    border: 1px solid #0003;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    transform-origin: bottom right;
-  }
-
-  .roulette .slice:nth-child(1){transform: rotate(0deg);} 
-  .roulette .slice:nth-child(2){transform: rotate(72deg);} 
-  .roulette .slice:nth-child(3){transform: rotate(144deg);} 
-  .roulette .slice:nth-child(4){transform: rotate(216deg);} 
-  .roulette .slice:nth-child(5){transform: rotate(288deg);} 
-
-  .spin-btn {
-    margin: 10px auto;
-    display: block;
-    padding: 10px 20px;
-    border-radius: 10px;
-    background: #00c3ff;
-    color: #000;
-    font-weight: bold;
-    cursor: pointer;
-  }
+    #corona {
+        display: none;
+        margin-top: 20px;
+        font-size: 2em;
+        color: gold;
+        text-shadow: 2px 2px 10px #000;
+    }
 </style>
 </head>
 <body>
+<h1>Ruleta Bíblica</h1>
+<div id="ruleta-container">
+    <div id="pointer"></div>
+    <div id="ruleta"></div>
+</div>
+<button id="girar-btn">Girar Ruleta</button>
 
-  <!-- RULETA DE PREGUNTAS -->
-  <div class="roulette-container">
-    <div class="roulette" id="roulette">
-      <div class="slice">Nivel 1</div>
-      <div class="slice">Nivel 2</div>
-      <div class="slice">Nivel 3</div>
-      <div class="slice">Nivel 4</div>
-      <div class="slice">Nivel 5</div>
-    </div>
-  </div>
+<div id="pregunta-box">
+    <h2 id="pregunta-text"></h2>
+    <div id="opciones"></div>
+</div>
 
-  <!-- ESCALERA DE NIVELES -->
-  <div class="stairway" id="stairway">
-    <div class="step step-1" id="step1">Nivel 1</div>
-    <div class="step step-2" id="step2">Nivel 2</div>
-    <div class="step step-3" id="step3">Nivel 3</div>
-    <div class="step step-4" id="step4">Nivel 4</div>
-    <div class="step step-5" id="step5">Nivel 5</div>
-  </div>
-    <div class="step" id="step2">Nivel 2</div>
-    <div class="step" id="step3">Nivel 3</div>
-    <div class="step" id="step4">Nivel 4</div>
-    <div class="step" id="step5">Nivel 5</div>
-  </div>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <div class="logo" aria-hidden="true">
-          <!-- simple bible + cross icon -->
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="14" height="16" rx="2" fill="white" opacity="0.12"/><path d="M9 8h6M9 12h6M9 16h6" stroke="white" stroke-opacity="0.9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div>
-          <h1>Camino a la Corona</h1>
-          <p class="lead">Responde preguntas bíblicas, sube niveles y gana la corona 👑</p>
-        </div>
-      </div>
+<div id="score">Monedas: 0 s/</div>
+<div id="corona">🎉 ¡Felicidades! Has completado todas las casillas y ganado la corona 🎉</div>
 
-      <div class="hud">
-        <div class="stat" aria-live="polite">
-          <div class="value" id="coins">0</div>
-          <div class="label">Monedas</div>
-        </div>
-        <div class="stat">
-          <div class="value" id="levelShown">Nivel 1</div>
-          <div class="label">Nivel actual</div>
-        </div>
-        <div class="stat">
-          <div class="value" id="score">0</div>
-          <div class="label">Puntos</div>
-        </div>
-      </div>
-    </header>
+<audio id="musica-fondo" loop autoplay>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
-    <main>
-      <section class="card">
-        <div class="question-area">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span class="level-pill" id="levelPill">Nivel 1</span>
-            <div style="font-size:13px;color:var(--muted)">Pregunta <span id="qIndex">1</span>/3</div>
-          </div>
+<script>
+const preguntas = [
+    { tema: "Creación", pregunta: "¿Cuántos días tardó Dios en crear el mundo?", opciones: ["6 días", "7 días", "5 días"], correcta: 0 },
+    { tema: "Éxodo", pregunta: "¿Quién lideró a los israelitas fuera de Egipto?", opciones: ["Moisés", "Abraham", "David"], correcta: 0 },
+    { tema: "Nuevos Testamento", pregunta: "¿Dónde nació Jesús?", opciones: ["Belén", "Nazaret", "Jerusalén"], correcta: 0 },
+    { tema: "Milagros", pregunta: "¿Qué hizo Jesús con 5 panes y 2 peces?", opciones: ["Alimentó a 5000", "Curó enfermos", "Caminó sobre agua"], correcta: 0 },
+    { tema: "Profetas", pregunta: "¿Quién fue lanzado al foso de los leones?", opciones: ["Daniel", "Elías", "Jonás"], correcta: 0 },
+    { tema: "Apóstoles", pregunta: "¿Quién negó a Jesús tres veces?", opciones: ["Pedro", "Pablo", "Juan"], correcta: 0 },
+    { tema: "Parábolas", pregunta: "¿Cuál parábola habla de un hijo que se pierde y regresa?", opciones: ["Hijo Pródigo", "Buen Samaritano", "Sembrador"], correcta: 0 },
+    { tema: "Santos", pregunta: "¿Quién es considerado el patrón de los viajeros?", opciones: ["San Cristóbal", "San Pedro", "San Juan"], correcta: 0 },
+    { tema: "Profecías", pregunta: "¿Quién interpretó sueños para el faraón?", opciones: ["José", "Moisés", "Daniel"], correcta: 0 },
+    { tema: "Sacramentos", pregunta: "¿Cuál es el primer sacramento?", opciones: ["Bautismo", "Confirmación", "Eucaristía"], correcta: 0 }
+];
 
-          <div class="question" id="question">Cargando pregunta...</div>
+let score = 0;
+let casillasCompletadas = 0;
+let ruleta = document.getElementById('ruleta');
+let girarBtn = document.getElementById('girar-btn');
+let preguntaBox = document.getElementById('pregunta-box');
+let preguntaText = document.getElementById('pregunta-text');
+let opcionesDiv = document.getElementById('opciones');
+let scoreDiv = document.getElementById('score');
+let coronaDiv = document.getElementById('corona');
 
-          <div class="options" id="options" role="list"></div>
+girarBtn.addEventListener('click', girarRuleta);
 
-          <div class="cta">
-            <button class="btn ghost" id="btnSkip">Reiniciar Nivel</button>
-            <div style="display:flex;gap:8px">
-              <button class="btn ghost" id="btnHelp">Ayuda</button>
-              <button class="btn" id="btnNext" disabled>Siguiente</button>
-            </div>
-          </div>
-        </div>
-      </section>
+function girarRuleta() {
+    girarBtn.disabled = true;
 
-      <aside class="right-column">
-        <div class="card">
-          <h3 style="margin:0 0 8px 0">Progreso</h3>
-          <div class="levels" id="levelsWrap"></div>
-          <div style="margin-top:12px">
-            <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted)"><span>Compleción</span><span id="pct">0%</span></div>
-            <div class="progress-bar" aria-hidden="true"><i id="progressInner"></i></div>
-          </div>
-        </div>
+    let giro = Math.floor(Math.random() * 360) + 720; // Al menos 2 vueltas completas
+    ruleta.style.transition = 'transform 4s cubic-bezier(0.25, 1, 0.5, 1)';
+    ruleta.style.transform = `rotate(${giro}deg)`;
 
-        <div class="card">
-          <h3 style="margin:0 0 8px 0">Cómo jugar</h3>
-          <ul style="color:var(--muted);margin:0;padding-left:18px">
-            <li>Acierta las 3 preguntas de cada nivel para avanzar.</li>
-            <li>Cada nivel completado: <strong>+100 monedas</strong>.</li>
-            <li>Al completar 5 niveles: ¡gana la corona! 👑</li>
-          </ul>
-          <div style="margin-top:12px;display:flex;gap:8px">
-            <button class="btn" id="btnReset">Resetear Juego</button>
-            <button class="btn ghost" id="btnExport">Exportar Progreso</button>
-          </div>
-        </div>
+    setTimeout(() => {
+        // Calcular casilla
+        let anguloFinal = giro % 360;
+        let casilla = Math.floor(anguloFinal / 36); // 10 casillas
+        mostrarPregunta(casilla);
+    }, 4000);
+}
 
-        <div class="card">
-          <h3 style="margin:0 0 8px 0">Información</h3>
-          <p style="margin:0;color:var(--muted);font-size:13px">Diseño moderno responsive. Puedes añadir música de fondo, más preguntas o integrar en una app.</p>
-        </div>
-      </aside>
-    </main>
+function mostrarPregunta(casilla) {
+    let p = preguntas[casilla];
+    preguntaText.textContent = p.pregunta;
+    opcionesDiv.innerHTML = '';
 
-    <footer>
-      Hecho con ❤️ — ¡Que gane el más sabio!
-    </footer>
-  </div>
-
-  <!-- Crown Overlay -->
-  <div class="overlay" aria-hidden="true">
-    <div class="crown-wrap" id="crownWrap" role="dialog" aria-modal="true">
-      <svg width="96" height="96" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 17l2-6 4 4 3-8 4 6 3-5 0 10H3z" fill="#FFD166" stroke="#F59E0B" stroke-width="0.5"/></svg>
-      <h2 style="margin:0">¡Felicidades!</h2>
-      <p style="margin:0;color:var(--muted)">Has completado los 5 niveles y ganado la Corona Celestial 👑</p>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn" id="btnClaim">Reclamar Corona</button>
-        <button class="btn ghost" id="btnCloseCrown">Cerrar</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Preguntas: 5 niveles x 3 preguntas cada uno
-    const levels = [
-      {name:'Principiante', questions:[
-        {q:'¿Quién construyó el arca?', a:['Moisés','Noé','Abraham'], correct:1},
-        {q:'¿Quién fue tragado por un gran pez?', a:['Jonás','Elías','Pablo'], correct:0},
-        {q:'¿Dónde nació Jesús?', a:['Nazaret','Belén','Jerusalén'], correct:1}
-      ]},
-      {name:'Discípulo', questions:[
-        {q:'¿Quién recibió los 10 mandamientos?', a:['Moisés','David','Daniel'], correct:0},
-        {q:'¿Qué símbolo dejó Dios como promesa después del diluvio?', a:['La estrella','El arco iris','La luna'], correct:1},
-        {q:'¿Quién negó a Jesús tres veces?', a:['Juan','Pedro','Judas'], correct:1}
-      ]},
-      {name:'Servidor', questions:[
-        {q:'¿Cuál fue el primer milagro de Jesús?', a:['Sanar a un ciego','Caminar sobre el agua','Convertir agua en vino'], correct:2},
-        {q:'¿Cuál era la profesión de Pedro?', a:['Carpintero','Pescador','Pastor'], correct:1},
-        {q:'¿Qué libro contiene 150 salmos?', a:['Proverbios','Isaías','Salmos'], correct:2}
-      ]},
-      {name:'Guerrero de Fe', questions:[
-        {q:'¿Quién derribó a Goliat?', a:['Saúl','David','Samuel'], correct:1},
-        {q:'¿Quién interpretó los sueños del faraón en Egipto?', a:['José','Daniel','Jeremías'], correct:0},
-        {q:'¿Quién fue desobediente y miró atrás convirtiéndose en estatua de sal?', a:['Eva','La esposa de Lot','Raquel'], correct:1}
-      ]},
-      {name:'Victorioso', questions:[
-        {q:'¿Cuántos días ayunó Jesús en el desierto?', a:['20','40','15'], correct:1},
-        {q:'¿Cuál es el último libro de la Biblia?', a:['Judas','Apocalipsis','Hebreos'], correct:1},
-        {q:'¿Quién bautizó a Jesús?', a:['Pedro','Juan el Bautista','Mateo'], correct:1}
-      ]}
-    ];
-
-    // estado del juego persistente en localStorage
-    const STORAGE_KEY = 'camino-corona-v1';
-    let state = {
-      levelIndex:0,
-      qIndex:0,
-      coins:0,
-      score:0,
-      completed: Array(levels.length).fill(false)
-    };
-
-    // elementos
-    const questionEl = document.getElementById('question');
-    const optionsEl = document.getElementById('options');
-    const qIndexEl = document.getElementById('qIndex');
-    const coinsEl = document.getElementById('coins');
-    const levelShown = document.getElementById('levelShown');
-    const levelPill = document.getElementById('levelPill');
-    const scoreEl = document.getElementById('score');
-    const btnNext = document.getElementById('btnNext');
-    const btnSkip = document.getElementById('btnSkip');
-    const btnHelp = document.getElementById('btnHelp');
-    const btnReset = document.getElementById('btnReset');
-    const btnExport = document.getElementById('btnExport');
-    const levelsWrap = document.getElementById('levelsWrap');
-    const pct = document.getElementById('pct');
-    const progressInner = document.getElementById('progressInner');
-    const crownWrap = document.getElementById('crownWrap');
-    const btnClaim = document.getElementById('btnClaim');
-    const btnCloseCrown = document.getElementById('btnCloseCrown');
-    const btnClose = btnCloseCrown;
-
-    // init
-    function load(){
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(raw){
-        try{Object.assign(state, JSON.parse(raw));}catch(e){console.warn('no pude parsear storage')}
-      }
-      renderLevels();
-      render();
-    }
-
-    function save(){localStorage.setItem(STORAGE_KEY, JSON.stringify(state));}
-
-    function renderLevels(){
-      levelsWrap.innerHTML = '';
-      levels.forEach((lv,i)=>{
-        const div = document.createElement('div');
-        div.className = 'lvl' + (state.completed[i]? '':' locked');
-        div.innerHTML = `<div style="font-weight:700">N ${i+1}</div><div style="font-size:12px;color:var(--muted)">${lv.name}</div>`;
-        levelsWrap.appendChild(div);
-      });
-      const done = state.completed.filter(Boolean).length;
-      const percent = Math.round((done/levels.length)*100);
-      pct.textContent = percent + '%';
-      progressInner.style.width = percent + '%';
-    }
-
-    function render(){
-      coinsEl.textContent = state.coins;
-      scoreEl.textContent = state.score;
-      levelShown.textContent = 'Nivel '+(state.levelIndex+1);
-      levelPill.textContent = levels[state.levelIndex].name;
-      const qs = levels[state.levelIndex].questions;
-      const qObj = qs[state.qIndex];
-      qIndexEl.textContent = state.qIndex+1;
-      questionEl.textContent = qObj.q;
-
-      optionsEl.innerHTML = '';
-      qObj.a.forEach((label,idx)=>{
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.setAttribute('role','listitem');
-        btn.innerHTML = `<span>${label}</span><strong style="opacity:0.6">${String.fromCharCode(65+idx)}</strong>`;
-        btn.addEventListener('click', ()=> select(idx, btn));
-        optionsEl.appendChild(btn);
-      });
-
-      btnNext.disabled = true;
-      save();
-    }
-
-    function select(choice, btn){
-      // disable other options
-      Array.from(optionsEl.children).forEach(c=>c.style.pointerEvents='none');
-      const correct = levels[state.levelIndex].questions[state.qIndex].correct;
-      if(choice === correct){
-        btn.classList.add('correct');
-        state.score += 10;
-        state.qIndex++;
-        btnNext.disabled = false;
-      } else {
-        btn.classList.add('wrong');
-        // highlight correct
-        const correctBtn = optionsEl.children[correct];
-        if(correctBtn) correctBtn.classList.add('correct');
-        // reset level after short delay
-        setTimeout(()=>{
-          alert('Respuesta incorrecta. Reiniciando nivel.');
-          resetLevel();
-        },700);
-      }
-      render();
-    }
-
-    btnNext.addEventListener('click', ()=>{
-      const currentLevel = levels[state.levelIndex];
-      if(state.qIndex >= currentLevel.questions.length){
-        // complete level
-        completeLevel();
-        return;
-      }
-      // move to next q
-      render();
+    p.opciones.forEach((opcion, index) => {
+        let btn = document.createElement('div');
+        btn.classList.add('opcion');
+        btn.textContent = opcion;
+        btn.addEventListener('click', () => verificarRespuesta(index, p.correcta));
+        opcionesDiv.appendChild(btn);
     });
 
-    function completeLevel(){
-      state.completed[state.levelIndex] = true;
-      state.coins += 100; // reward
-      // move to next level if exists
-      if(state.levelIndex < levels.length -1){
-        state.levelIndex++;
-        state.qIndex = 0;
-        alert('¡Nivel completado! Avanzas al siguiente nivel. +100 monedas');
-        renderLevels();
-        render();
-      } else {
-        // finished game
-        state.qIndex = levels[state.levelIndex].questions.length; // mark done
-        save();
-        showCrown();
-      }
+    preguntaBox.style.display = 'block';
+}
+
+function verificarRespuesta(elegida, correcta) {
+    if (elegida === correcta) {
+        score += 1000;
+        casillasCompletadas++;
+        scoreDiv.textContent = `Monedas: ${score} s/`;
+        preguntaBox.style.display = 'none';
+        if (casillasCompletadas >= 10) {
+            coronaDiv.style.display = 'block';
+            girarBtn.disabled = true;
+        } else {
+            girarBtn.disabled = false;
+        }
+    } else {
+        alert("Respuesta incorrecta. Intenta otra vez.");
     }
-
-    function resetLevel(){
-      state.qIndex = 0;
-      // unlock nothing
-      render();
-    }
-
-    btnSkip.addEventListener('click', ()=>{
-      if(confirm('¿Deseas reiniciar el nivel actual?')) resetLevel();
-    });
-
-    btnHelp.addEventListener('click', ()=>{
-      alert('Pistas: medita en la Escritura y recuerda historias clave: Noé, Jonás, Jesús, Moisés, David.');
-    });
-
-    btnReset.addEventListener('click', ()=>{
-      if(confirm('Resetear todo el progreso?')){
-        state = {levelIndex:0,qIndex:0,coins:0,score:0,completed:Array(levels.length).fill(false)};
-        save();renderLevels();render();
-      }
-    });
-
-    btnExport.addEventListener('click', ()=>{
-      const data = JSON.stringify(state,null,2);
-      const blob = new Blob([data],{type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');a.href=url;a.download='progreso_camino_corona.json';a.click();URL.revokeObjectURL(url);
-    });
-
-    function showCrown(){
-      crownWrap.classList.add('show');
-      // simple confetti
-      confetti();
-    }
-
-    btnClaim.addEventListener('click', ()=>{
-      alert('Has reclamado la Corona 👑. ¡Gloria!');
-      crownWrap.classList.remove('show');
-    });
-    btnCloseCrown.addEventListener('click', ()=>{crownWrap.classList.remove('show');});
-
-    // lightweight confetti
-    function confetti(){
-      const c = document.createElement('canvas');
-      c.style.position='fixed';c.style.left=0;c.style.top=0;c.style.width='100%';c.style.height='100%';c.style.zIndex=9999;document.body.appendChild(c);
-      c.width = innerWidth; c.height = innerHeight;
-      const ctx = c.getContext('2d');
-      const pieces = [];
-      for(let i=0;i<120;i++) pieces.push({x:Math.random()*c.width,y:Math.random()*-c.height, r:Math.random()*6+4, s:Math.random()*3+1, c:['#FFD166','#F97316','#60A5FA','#34D399'][Math.floor(Math.random()*4)]});
-      let t=0; const id = setInterval(()=>{
-        ctx.clearRect(0,0,c.width,c.height);
-        t+=1;
-        pieces.forEach(p=>{
-          p.y += p.s; p.x += Math.sin((t+p.r)/10);
-          ctx.fillStyle = p.c; ctx.beginPath(); ctx.ellipse(p.x,p.y,p.r,p.r*0.6,0,0,Math.PI*2); ctx.fill();
-        });
-        if(t>200){ clearInterval(id); document.body.removeChild(c); }
-      },16);
-    }
-
-    // inicializar
-    load();
-    // ACTIVAR ESCALERA
-  function updateStairway(level) {
-    for (let i = 1; i <= 5; i++) {
-      const step = document.getElementById(`step${i}`);
-      if (i <= level) step.classList.add("active");
-      else step.classList.remove("active");
-    }
-  }
-
-  // INTEGRAR CON SISTEMA DE PREGUNTAS
-  function goToNextLevel() {
-    currentLevel++;
-    if (currentLevel > 5) currentLevel = 5;
-    updateStairway(currentLevel);
-  }
-  // RULETA — GIRAR Y ESCOGER PREGUNTA
-  function spinRoulette(){
-    const roulette = document.getElementById("roulette");
-    const randRotation = Math.floor(Math.random()*3600 + 720);
-    roulette.style.transform = `rotate(${randRotation}deg)`;
-
-    const level = ((randRotation % 360) / 72) + 1;
-    const finalLevel = Math.ceil(level);
-
-    setTimeout(()=>{
-      loadRandomQuestion(finalLevel);
-    }, 3200);
-  }
-
-  // CARGAR PREGUNTA ALEATORIA DEL NIVEL
-  function loadRandomQuestion(level){
-    const bank = questions[`nivel${level}`];
-    const random = bank[Math.floor(Math.random()*bank.length)];
-    showQuestion(random, level);
-  }
-
-  // BOTÓN PARA GIRAR
-  document.addEventListener("DOMContentLoaded",()=>{
-    const btn = document.createElement("button");
-    btn.className="spin-btn";
-    btn.innerText="Girar Ruleta";
-    btn.onclick = spinRoulette;
-    document.body.prepend(btn);
-  });
-
+}
 </script>
 </body>
 </html>
+
+
 
 
