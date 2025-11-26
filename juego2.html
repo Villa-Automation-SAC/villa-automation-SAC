@@ -27,15 +27,29 @@
         margin: 30px auto;
     }
 
-    /* Ruleta con pulso/brillo */
+    /* Contenedor del pulso para la ruleta */
+    #ruleta-pulse {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        animation: pulse-ruleta 2s infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    @keyframes pulse-ruleta {
+        0% { box-shadow: 0 0 20px rgba(255,255,255,0.5); transform: scale(1); }
+        50% { box-shadow: 0 0 35px rgba(255,255,255,0.8); transform: scale(1.02); }
+        100% { box-shadow: 0 0 20px rgba(255,255,255,0.5); transform: scale(1); }
+    }
+
     #ruleta {
         width: 100%;
         height: 100%;
         border-radius: 50%;
         border: 10px solid rgba(255,255,255,0.8);
         box-shadow: 0 0 20px rgba(255,255,255,0.5);
-        transform: rotate(0deg);
-        transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
         background: conic-gradient(
             #ff9999 0deg 36deg,
             #99ccff 36deg 72deg,
@@ -48,13 +62,7 @@
             #66ffcc 288deg 324deg,
             #ffcc66 324deg 360deg
         );
-        animation: pulse-ruleta 2s infinite;
-    }
-
-    @keyframes pulse-ruleta {
-        0% { box-shadow: 0 0 20px rgba(255,255,255,0.5); transform: rotate(0deg) scale(1); }
-        50% { box-shadow: 0 0 35px rgba(255,255,255,0.8); transform: rotate(0deg) scale(1.02); }
-        100% { box-shadow: 0 0 20px rgba(255,255,255,0.5); transform: rotate(0deg) scale(1); }
+        transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     #pointer {
@@ -139,8 +147,10 @@
 <body>
 <h1>Ruleta Bíblica</h1>
 <div id="ruleta-container">
+    <div id="ruleta-pulse">
+        <div id="ruleta"></div>
+    </div>
     <div id="pointer"></div>
-    <div id="ruleta"></div>
 </div>
 <button id="girar-btn">Girar Ruleta</button>
 
