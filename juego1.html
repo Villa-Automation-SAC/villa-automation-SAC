@@ -19,6 +19,7 @@
         font-size: 20px;
         color: #00eaff;
         text-shadow: 0 0 10px #00eaff;
+        z-index: 1000;
     }
 
     #messageBox {
@@ -28,27 +29,31 @@
         transform: translate(-50%, -50%);
         color: white;
         font-size: 32px;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0,0,0,0.7);
         padding: 20px 35px;
         border-radius: 12px;
         text-align: center;
         display: none;
+        z-index: 1000;
     }
 
-    #restartBtn {
+    .btn {
         margin-top: 12px;
-        padding: 10px 20px;
+        padding: 12px 30px;
         border: none;
         background: #00c3ff;
         color: white;
         font-size: 22px;
         cursor: pointer;
         border-radius: 10px;
+        transition: 0.3s;
     }
 
-    #restartBtn:hover {
+    .btn:hover {
         background: #008ecc;
+        transform: scale(1.05);
     }
+
 </style>
 </head>
 
@@ -56,17 +61,17 @@
 <canvas id="game"></canvas>
 
 <div id="hud">
-    Vida: <span id="vidas">3</span> <br>
-    Puntuación: <span id="score">0</span>
+    🚀 Vida: <span id="vidas">3</span><br>
+    ⭐ Puntuación: <span id="score">0</span>
 </div>
 
 <div id="messageBox">
     <span id="msgText"></span><br>
-    <button id="restartBtn">Reiniciar</button>
+    <button id="restartBtn" class="btn">Reiniciar</button>
 </div>
 
 <script>
-// ==================== VARIABLES DEL JUEGO ======================
+// ==================== VARIABLES ======================
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -80,42 +85,63 @@ let score = 0;
 let gameOver = false;
 let keys = {};
 
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+// ==================== EVENTOS TECLADO ======================
+document.addEventListener("keydown", e => (keys[e.key] = true));
+document.addEventListener("keyup", e => (keys[e.key] = false));
 
-// ==================== CONTROL DE TECLAS ======================
-document.addEventListener("keydown", e => { keys[e.key] = true; });
-document.addEventListener("keyup", e => { keys[e.key] = false; });
-
-// ==================== OBJETO COHETE ======================
+// ==================== CREAR COHETE ======================
 function crearCohete() {
     return {
-        x: canvas.width/2,
-        y: canvas.height - 120,
-        w: 40,
-        h: 60,
+        x: canvas.width / 2,
+        y: canvas.height - 150,
+        w: 50,
+        h: 80,
+        velX: 0,
         velY: 0
     };
 }
 
-// ==================== DIBUJOS ======================
+// ==================== DIBUJAR COHETE ======================
 function dibujarCohete() {
+    // cuerpo
     ctx.fillStyle = "#00eaff";
-    ctx.fillRect(cohete.x, cohete.y, cohete.w, cohete.h);
+    ctx.beginPath();
+    ctx.moveTo(cohete.x + cohete.w / 2, cohete.y);
+    ctx.lineTo(cohete.x, cohete.y + cohete.h);
+    ctx.lineTo(cohete.x + cohete.w, cohete.y + cohete.h);
+    ctx.closePath();
+    ctx.fill();
 
+    // ventana
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.arc(cohete.x + cohete.w / 2, cohete.y + 35, 12, 0, Math.PI * 2);
+    ctx.fill();
+
+    // fuego
     ctx.fillStyle = "orange";
-    ctx.fillRect(cohete.x + 10, cohete.y + cohete.h, 20, 20);
+    ctx.beginPath();
+    ctx.moveTo(cohete.x + 15, cohete.y + cohete.h);
+    ctx.lineTo(cohete.x + cohete.w - 15, cohete.y + cohete.h);
+    ctx.lineTo(cohete.x + cohete.w / 2, cohete.y + cohete.h + 30 + Math.random() * 10);
+    ctx.closePath();
+    ctx.fill();
 }
 
+// ==================== DIBUJAR OBJETOS ======================
 function dibujarMeteorito(m) {
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "orange";
     ctx.beginPath();
-    ctx.arc(m.x, m.y, m.r, 0, Math.PI*2);
+    ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
     ctx.fill();
 }
 
 function dibujarSatelite(s) {
-    ctx.fillStyle = "silver";
+    ctx.fillStyle = "gray";
     ctx.fillRect(s.x, s.y, s.w, s.h);
+    ctx.fillStyle = "lightblue";
+    ctx.fillRect(s.x - 20, s.y + 5, 20, s.h - 10);
+    ctx.fillRect(s.x + s.w, s.y + 5, 20, s.h - 10);
 }
 
 // ==================== GENERADORES ======================
@@ -123,8 +149,8 @@ function generarMeteorito() {
     meteoros.push({
         x: Math.random() * canvas.width,
         y: -50,
-        r: 30 + Math.random()*20,
-        vel: 2 + Math.random()*3
+        r: 25 + Math.random() * 25,
+        vel: 3 + Math.random() * 3
     });
 }
 
@@ -134,7 +160,7 @@ function generarSatelite() {
         y: -60,
         w: 60,
         h: 30,
-        vel: 1.5
+        vel: 2
     });
 }
 
@@ -142,136 +168,98 @@ function generarSatelite() {
 function colisionRectCir(rect, cir) {
     const dx = Math.max(rect.x, Math.min(cir.x, rect.x + rect.w));
     const dy = Math.max(rect.y, Math.min(cir.y, rect.y + rect.h));
-    const dist = Math.sqrt((cir.x - dx)**2 + (cir.y - dy)**2);
-    return dist < cir.r;
+    const distancia = Math.sqrt((cir.x - dx) ** 2 + (cir.y - dy) ** 2);
+    return distancia < cir.r;
 }
 
 function colisionRectRect(a, b) {
-    return !(a.x + a.w < b.x ||
-             a.x > b.x + b.w ||
-             a.y + a.h < b.y ||
-             a.y > b.y + b.h);
+    return !(
+        a.x + a.w < b.x ||
+        a.x > b.x + b.w ||
+        a.y + a.h < b.y ||
+        a.y > b.y + b.h
+    );
 }
-    
+
+// ==================== LOOP PRINCIPAL ======================
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dibujar cohete
     dibujarCohete();
 
-    // Dibujar meteoros
+    // meteoros
     meteoros.forEach(m => {
         m.y += m.vel;
         dibujarMeteorito(m);
 
-        // Colisión
         if (colisionRectCir(cohete, m)) {
             daño();
-            m.y = canvas.height + 100; 
+            m.y = canvas.height + 100;
         }
     });
 
-    // Dibujar satélites
+    // satélites
     satelites.forEach(s => {
         s.y += s.vel;
         dibujarSatelite(s);
 
-        // Colisión
         if (colisionRectRect(cohete, s)) {
             daño();
             s.y = canvas.height + 100;
         }
     });
 
-    // Puntaje
-    score++;
-    document.getElementById("score").innerText = score;
+    // puntaje
+    if (!gameOver) {
+        score++;
+        document.getElementById("score").innerText = score;
+    }
 
-    // Condición de victoria
-    if (score > 15000 && !gameOver) victoria();
+    // victoria
+    if (score > 20000 && !gameOver) {
+        victoria();
+    }
 }
 
-// ==================== LOOP DEL JUEGO ======================
 function update() {
-    // =========================
-    // CONTROLES DEL COHETE
-    // =========================
 
-    // Aceleración vertical (subir)
-    if (keys["ArrowUp"] || keys["w"]) {
-        cohete.velY -= 0.2; 
-    }
+    // Controles del cohete
+    if (keys["ArrowUp"] || keys["w"]) cohete.velY -= 0.25;
+    if (keys["ArrowDown"] || keys["s"]) cohete.velY += 0.25;
+    if (keys["ArrowLeft"] || keys["a"]) cohete.velX -= 0.25;
+    if (keys["ArrowRight"] || keys["d"]) cohete.velX += 0.25;
+    if (keys["Shift"]) cohete.velY -= 0.4;
+    if (keys["Control"]) { cohete.velX *= 0.8; cohete.velY *= 0.8; }
+    if (keys[" "]) cohete.velY -= 0.3;
 
-    // Descenso manual
-    if (keys["ArrowDown"] || keys["s"]) {
-        cohete.velY += 0.2;
-    }
-
-    // Movimiento lateral izquierda
-    if (keys["ArrowLeft"] || keys["a"]) {
-        cohete.velX -= 0.2;
-    }
-
-    // Movimiento lateral derecha
-    if (keys["ArrowRight"] || keys["d"]) {
-        cohete.velX += 0.2;
-    }
-
-    // Turbo (Shift)
-    if (keys["Shift"]) {
-        cohete.velY -= 0.35;  
-    }
-
-    // Freno de emergencia (Control)
-    if (keys["Control"]) {
-        cohete.velX *= 0.9;
-        cohete.velY *= 0.9;
-    }
-
-    // Encender motores (barra espaciadora)
-    if (keys[" "]) {
-        cohete.velY -= 0.25;
-    }
-
-    // =========================
-    // FÍSICA REALISTA
-    // =========================
-    cohete.velY *= 0.98;  // resistencia aire
+    // FÍSICA
+    cohete.velY *= 0.98;
     cohete.velX *= 0.98;
 
     cohete.x += cohete.velX;
     cohete.y += cohete.velY;
 
-    // Gravedad
     cohete.velY += 0.05;
 
-    // Límites de pantalla
-    if (cohete.y < 0) cohete.y = 0;
-    if (cohete.y > canvas.height - cohete.h) cohete.y = canvas.height - cohete.h;
-
+    // Límites
     if (cohete.x < 0) cohete.x = 0;
-    if (cohete.x > canvas.width - cohete.w) cohete.x = canvas.width - cohete.w;
+    if (cohete.x + cohete.w > canvas.width) cohete.x = canvas.width - cohete.w;
+    if (cohete.y < 0) cohete.y = 0;
+    if (cohete.y + cohete.h > canvas.height) cohete.y = canvas.height - cohete.h;
 
     draw();
-    requestAnimationFrame(update);
-}
 
+    if (!gameOver) requestAnimationFrame(update);
+}
 
 // ==================== DAÑO ======================
 function daño() {
     vidas--;
     document.getElementById("vidas").innerText = vidas;
-
     if (vidas <= 0) {
-        mostrarMensaje("NAVE DESTRUIDA<br>Reinicia");
+        mostrarMensaje("💥 NAVE DESTRUIDA");
         gameOver = true;
     }
-}
-
-// ==================== VICTORIA ======================
-function victoria() {
-    mostrarMensaje("¡ÉXITO!<br>Llegaste a Marte");
-    gameOver = true;
 }
 
 // ==================== MENSAJES ======================
@@ -280,7 +268,7 @@ function mostrarMensaje(txt) {
     document.getElementById("messageBox").style.display = "block";
 }
 
-// ==================== REINICIO ======================
+// ==================== REINICIAR ======================
 function init() {
     vidas = 3;
     score = 0;
@@ -293,20 +281,17 @@ function init() {
     document.getElementById("score").innerText = score;
     document.getElementById("messageBox").style.display = "none";
 
-    // generadores constantes
-    setInterval(generarMeteorito, 1200);
-    setInterval(generarSatelite, 2500);
+    setInterval(generarMeteorito, 900);
+    setInterval(generarSatelite, 2000);
 
     update();
 }
 
 document.getElementById("restartBtn").addEventListener("click", init);
 
-// Iniciar juego
+// iniciar juego
 init();
-</script>
 
+</script>
 </body>
 </html>
-
-
