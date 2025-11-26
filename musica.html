@@ -387,10 +387,10 @@ function clearScheduled(){
 /* scheduleLoop: maneja pasos según BPM con un pequeño lookahead */
 function scheduleLoop(){
   clearScheduled();
-  const lookaheadMs = 20; // lookahead en ms
-  const scheduleAhead = 0.30; // schedule 100ms ahead
-  const beat = 60 / state.bpm;      // duración negra
-  const stepTime = beat/4;          // 16 pasos por compás
+  const lookaheadMs = 10; // lookahead en ms
+  const scheduleAhead = 0.80; // schedule 100ms ahead
+  const beat = 20 / state.bpm;      // duración negra
+  const stepTime = beat/8;          // 16 pasos por compás
 
   currentStep = 0;
   let nextNoteTime = audioCtx.currentTime + 0.05;
@@ -785,6 +785,7 @@ randomizePattern();
 </script>
 </body>
 </html>
+
 
 
 
