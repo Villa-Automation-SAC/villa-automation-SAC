@@ -61,10 +61,13 @@ h1 {
     top: 50%;
     left: 50%;
     transform-origin: 0% 0%;
-    text-align: right;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     padding-right: 10px;
-    font-size: 1em;
     font-weight: bold;
+    font-size: 1em;
     color: black;
 }
 
@@ -184,7 +187,7 @@ h1 {
 <div id="progreso">
     <div id="barra-progreso"></div>
 </div>
-<div id="corona">🎉 ¡Felicidades! Has completado todas las casillas y ganado bonos de descuento de 5 s/ (reclama ya!) 🎉</div>
+<div id="corona">🎉 ¡Felicidades! Has completado todas las casillas y ganado la corona 🎉</div>
 
 <audio id="musica-fondo" loop autoplay>
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
@@ -198,15 +201,16 @@ const preguntas = [
     { tema: "Nuevos Testamento", pregunta: "¿Dónde nació Jesús?", opciones: ["Belén", "Nazaret", "Jerusalén"], correcta: 0 },
     { tema: "Milagros", pregunta: "¿Qué hizo Jesús con 5 panes y 2 peces?", opciones: ["Alimentó a 5000", "Curó enfermos", "Caminó sobre agua"], correcta: 0 },
     { tema: "Profetas", pregunta: "¿Quién fue lanzado al foso de los leones?", opciones: ["Daniel", "Elías", "Jonás"], correcta: 0 },
-    { tema: "Apóstoles", pregunta: "¿Quién negó a Jesús tres veces?", opciones: ["Pedro", "Pablo", "Juan"], correcta: 0 },
+    { tema: "Apóstoles", pregunta: "¿Cuál de estos no es el nombre de una de las 12 tribus de Israel?", opciones: ["Levi", "Judá", "Dina"], correcta: 2 },
     { tema: "Parábolas", pregunta: "¿Cuál parábola habla de un hijo que se pierde y regresa?", opciones: ["Hijo Pródigo", "Buen Samaritano", "Sembrador"], correcta: 0 },
     { tema: "Santos", pregunta: "¿Quién es considerado el patrón de los viajeros?", opciones: ["San Cristóbal", "San Pedro", "San Juan"], correcta: 0 },
-    { tema: "Profecías", pregunta: "¿Quién interpretó sueños para el faraón?", opciones: ["José", "Moisés", "Daniel"], correcta: 0 },
-    { tema: "Sacramentos", pregunta: "¿Cuál es el primer sacramento?", opciones: ["Bautismo", "Confirmación", "Eucaristía"], correcta: 0 }
+    { tema: "Profecías", pregunta: "¿Quién interpretó sueños para el faraón?", opciones: ["Lot", "Moisés", "José"], correcta: 2 },
+    { tema: "Sacramentos", pregunta: "¿Cuál personaje bíblico se conoce como «el hijo de la promesa?", opciones: ["Jacoob", "Isaac", "Ismael"], correcta: 1 }
 ];
 
 let score = 0;
 let casillasCompletadas = 0;
+let casillasUsadas = [];
 
 let ruleta = document.getElementById('ruleta');
 let girarBtn = document.getElementById('girar-btn');
@@ -217,12 +221,12 @@ let scoreDiv = document.getElementById('score');
 let coronaDiv = document.getElementById('corona');
 let barraProgreso = document.getElementById('barra-progreso');
 
-// Crear segmentos de la ruleta con los temas
+// Crear segmentos de la ruleta
 const colores = ['#ff9999','#99ccff','#ffcc99','#99ff99','#cc99ff','#ff9966','#66ccff','#ff66cc','#66ffcc','#ffcc66'];
 preguntas.forEach((p, i) => {
     let div = document.createElement('div');
     div.className = 'segmento';
-    div.style.transform = `rotate(${i*36}deg) skewY(-54deg)`; // 360/10 = 36
+    div.style.transform = `rotate(${i*36}deg)`;
     div.style.background = colores[i];
     div.textContent = p.tema;
     ruleta.appendChild(div);
@@ -231,6 +235,8 @@ preguntas.forEach((p, i) => {
 girarBtn.addEventListener('click', girarRuleta);
 
 function girarRuleta() {
+    if (casillasCompletadas >= 10) return;
+
     girarBtn.disabled = true;
 
     let giro = Math.floor(Math.random() * 360) + 720; 
@@ -240,6 +246,11 @@ function girarRuleta() {
     setTimeout(() => {
         let anguloFinal = giro % 360;
         let casilla = Math.floor(anguloFinal / 36);
+        // Evitar casillas repetidas
+        while (casillasUsadas.includes(casilla)) {
+            casilla = (casilla + 1) % 10;
+        }
+        casillasUsadas.push(casilla);
         mostrarPregunta(casilla);
     }, 4000);
 }
@@ -280,6 +291,7 @@ function verificarRespuesta(elegida, correcta) {
 </script>
 </body>
 </html>
+
 
 
 
