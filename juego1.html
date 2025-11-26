@@ -63,7 +63,6 @@
 <script>
 // --- CONFIGURACIÓN ---
 let showMars = false;
-let puntosParaMarte = 1000;
 
 // canvas
 const canvas = document.getElementById('c');
@@ -308,16 +307,11 @@ function loop(now){
         gameOverSound.play();
     }
 
-    // --- CHEQUEO DE ÉXITO ---
-    showMars = score >= 1000; // Marte visible
-    const dx = (cohete.x + cohete.w/2) - (W*0.85);
-    const dy = (cohete.y + cohete.h/2) - (H*0.18);
-    const distanceToMars = Math.hypot(dx, dy);
-
-    if(score>=2000 && !gameOver && distanceToMars < 120){
+    // --- ÉXITO POR PUNTAJE ---
+    if(score >= 2000 && !gameOver){
         gameOver = true;
         running = false;
-        centerText.innerHTML = '🏆 ¡FELICIDADES! llegaste a Marte y ganaste cupon de descuento de 5s/ en nuestros productos (reclama ya!)';
+        centerText.innerHTML = '🏆 ¡FELICIDADES! Alcanzaste 2000 puntos y llegaste a Marte';
         centerBox.style.display = 'block';
         resumeBtn.style.display = 'none';
         startBtn.style.display = 'inline-block';
@@ -337,6 +331,7 @@ resetAndStart();
 
 </body>
 </html>
+
 
 
 
