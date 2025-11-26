@@ -1,885 +1,109 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Musica Trance — Player estilo Spotify</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Villa Games – Juegos Online</title>
+
 <style>
-  :root{
-    --bg:#0e0f11;
-    --panel:#121314;
-    --accent:#1db954; /* verde tipo spotify */
-    --muted:#9aa0a6;
-    --glass: rgba(255,255,255,0.03);
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family: 'Inter', Arial, sans-serif;
-    background: linear-gradient(180deg,#070708 0%, #0a0a0b 100%);
-    color:#e6e6e6;
-  }
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial;
+        background: linear-gradient(135deg, #4ef2ff, #00c3ff);
+    }
 
-  .app{
-    display:flex;
-    gap:24px;
-    padding:28px;
-    min-height:100vh;
-  }
+    h1 {
+        text-align: center;
+        color: white;
+        margin-top: 25px;
+        font-size: 42px;
+        text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+    }
 
-  /* Barra lateral (vacía similar a spotify) */
-  .sidebar{
-    width:260px;
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-    border-radius:10px;
-    padding:18px;
-  }
-  .sidebar h3{ margin:6px 0 18px 0; color:var(--muted); font-weight:500 }
+    .grid-games {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: auto;
+    }
 
-  /* Panel principal */
-  .player-area{
-    flex:1;
-    display:flex;
-    gap:24px;
-    align-items:flex-start;
-  }
+    .game-card {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0px 6px 15px rgba(0,0,0,0.2);
+        transition: transform .25s, box-shadow .25s;
+        cursor: pointer;
+    }
 
-  .cover {
-    width:360px;
-    background:linear-gradient(135deg,#3a00ff44,#00ffa544);
-    border-radius:12px;
-    padding:18px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.6);
-  }
-  .cover img{ width:100%; border-radius:8px; object-fit:cover; }
-  .title{
-    text-align:left;
-    width:100%;
-  }
-  .title h1{ margin:8px 0 6px; font-size:28px; letter-spacing:-0.5px; }
-  .title p{ margin:0; color:var(--muted) }
+    .game-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 15px 25px rgba(0,0,0,0.3);
+    }
 
-  .controls {
-    margin-top:12px;
-    display:flex;
-    gap:10px;
-    align-items:center;
-  }
-  .play-btn{
-    width:68px; height:68px; border-radius:50%;
-    background:var(--accent); border:none; cursor:pointer;
-    display:grid; place-items:center; font-size:26px; color:#06110a;
-    box-shadow: 0 8px 20px rgba(29,185,84,0.18);
-  }
-  .btn-ghost{
-    background:transparent; border:1px solid rgba(255,255,255,0.06);
-    color:var(--muted); padding:10px 12px; border-radius:8px; cursor:pointer;
-  }
+    .game-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
 
-  .controls-col{
-    display:flex; flex-direction:column; gap:8px; width:100%;
-  }
+    .game-info {
+        padding: 15px;
+        text-align: center;
+    }
 
-  .sliders{ display:flex; gap:12px; align-items:center; }
-  .slider { display:flex; align-items:center; gap:8px; }
-  input[type="range"]{ appearance:none; width:220px; height:6px; background:var(--glass); border-radius:8px; }
-  input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--accent); box-shadow:0 2px 6px rgba(0,0,0,0.6) }
+    .game-info h3 {
+        margin: 0;
+        font-size: 22px;
+        color: #333;
+    }
 
-  .right-panel{
-    flex:1;
-    background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-    border-radius:10px;
-    padding:18px;
-    min-height:320px;
-  }
+    .play-btn {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 10px 18px;
+        background: #00c3ff;
+        color: #fff;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 18px;
+        transition: background .2s;
+    }
 
-  .download{
-    margin-top:14px;
-    display:inline-flex;
-    gap:10px;
-    align-items:center;
-  }
-  .download a{
-    display:inline-block;
-    padding:10px 16px;
-    background:var(--accent);
-    color:#06110a;
-    text-decoration:none;
-    border-radius:8px;
-    font-weight:700;
-  }
-
-  footer{ position:fixed; left:0; right:0; bottom:0; padding:10px 28px; background:rgba(0,0,0,0.4); color:var(--muted); display:flex; justify-content:space-between; align-items:center }
-  .badge{ font-size:13px; color:var(--muted) }
-  @media(max-width:980px){
-    .app{ flex-direction:column; padding:14px }
-    .player-area{ flex-direction:column; align-items:center }
-    .cover{ width:100% }
-    .title h1{ text-align:center }
-  }
+    .play-btn:hover {
+        background: #0099cc;
+    }
 </style>
+
 </head>
 <body>
 
-<div class="app">
-  <aside class="sidebar">
-    <h3>Tu Biblioteca</h3>
-    <div style="color:var(--muted); font-size:14px">
-      Reproduciendo: Trance — Instrumental
-    </div>
-    <hr style="margin:16px 0; border:0; height:1px; background:rgba(255,255,255,0.03)">
-    <div style="color:var(--muted); font-size:13px">Listas recomendadas</div>
-    <ul style="padding-left:14px; margin-top:8px; color:var(--muted)">
-      <li>Electrónica 2025</li>
-      <li>Trance Deep</li>
-      <li>House Classics</li>
-    </ul>
-  </aside>
+<h1>🎮 VILLA GAMES</h1>
 
-  <main class="player-area">
-    <section class="cover">
-      <!-- portada/imagen -->
-      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><rect rx='12' width='100%' height='100%' fill='%23000'/><g><circle cx='300' cy='260' r='160' fill='%23004488'/><g fill='%2300ffdd' opacity='0.18'><rect x='60' y='40' width='440' height='440' rx='20' transform='rotate(25 300 300)'/></g></g></svg>" alt="Portada" />
+<div class="grid-games">
 
-      <div class="title">
-        <h1>Trance — Instrumental (web)</h1>
-        <p>Artista: Generador NINA-style • Duración: variable</p>
-      </div>
-
-      <div class="controls">
-        <button class="play-btn" id="playBtn" title="Play">▶</button>
-        <div class="controls-col">
-          <div style="display:flex; gap:12px; align-items:center;">
-            <div class="slider">
-              <label style="font-size:13px; color:var(--muted)">BPM</label>
-              <input id="bpm" type="range" min="100" max="150" value="138">
-              <strong id="bpmVal" style="width:40px; text-align:center">138</strong>
-            </div>
-            <div class="slider">
-              <label style="font-size:13px; color:var(--muted)">Vol</label>
-              <input id="volume" type="range" min="0" max="1" step="0.01" value="0.85">
-            </div>
-          </div>
-
-          <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
-            <button class="btn-ghost" id="btnStop">Detener</button>
-            <button class="btn-ghost" id="btnRandom">Variación Aleatoria</button>
-            <div style="flex:1"></div>
-            <div style="color:var(--muted); font-size:13px">Timbre:</div>
-            <select id="timbre" style="background:transparent; color:inherit; border-radius:6px; border:1px solid rgba(255,255,255,0.04); padding:6px; margin-left:6px">
-              <option value="sawtooth">Saw</option>
-              <option value="square">Square</option>
-              <option value="sine">Sine</option>
-              <option value="triangle">Triangle</option>
-            </select>
-          </div>
+    <!-- JUEGO 1 -->
+    <div class="game-card">
+        <img src="https://i.imgur.com/8iN8nQ0.jpg" alt="Juego 1">
+        <div class="game-info">
+            <h3>Super Runner</h3>
+            <a href="https://poki.com" target="_blank" class="play-btn">Jugar</a>
         </div>
-      </div>
+    </div>
 
-      <div class="download">
-        <div style="color:var(--muted); font-size:13px; margin-right:8px">Generar y descargar pista (WAV):</div>
-        <input id="durationSec" type="number" min="8" max="600" value="45" style="width:72px; padding:8px; border-radius:6px; background:transparent; border:1px solid rgba(255,255,255,0.04); color:inherit; margin-right:8px">
-        <a id="downloadLink" href="#" download="trance_web.wav">⬇ Descargar WAV</a>
-      </div>
-    </section>
+    <!-- JUEGO 2 -->
+    <div class="game-card">
+        <img src="https://i.imgur.com/OY3NnZr.jpeg" alt="Juego 2">
+        <div class="game-info">
+            <h3>Crazy Battle</h3>
+            <a href="https://poki.com" target="_blank" class="play-btn">Jugar</a>
+        </div>
+    </div>
 
-    <aside class="right-panel">
-      <h3 style="margin-top:0">Controles avanzados</h3>
-      <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
-        <div style="width:120px; color:var(--muted)">Lead volume</div>
-        <input id="leadVol" type="range" min="0" max="1" step="0.01" value="0.12">
-      </div>
-
-      <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
-        <div style="width:120px; color:var(--muted)">Bass volume</div>
-        <input id="bassVol" type="range" min="0" max="1" step="0.01" value="0.45">
-      </div>
-
-      <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
-        <div style="width:120px; color:var(--muted)">Kick level</div>
-        <input id="kickVol" type="range" min="0" max="1" step="0.01" value="1.0">
-      </div>
-
-      <p style="color:var(--muted)">Pulsa <strong>Variación Aleatoria</strong> para cambiar patrones, notas y timbres. La descarga generará un WAV de la pista actual (longitud configurable).</p>
-
-      <hr style="margin:12px 0; border:0; height:1px; background:rgba(255,255,255,0.03)">
-
-      <div style="color:var(--muted); font-size:13px; margin-bottom:8px">Previsualización de instrumentos</div>
-      <button class="btn-ghost" id="previewLead">Play Lead</button>
-      <button class="btn-ghost" id="previewBass">Play Bass</button>
-      <button class="btn-ghost" id="previewKick">Play Kick</button>
-    </aside>
-  </main>
 </div>
 
-<footer>
-  <div class="badge">Generador Trance • Inspirado (no idéntico) a NINA — Automatic Call</div>
-  <div style="color:var(--muted)">Hecho con Web Audio API</div>
-</footer>
-
-<script>
-/* ------------------------------
-   Motor de audio: sintetizador
-   ------------------------------ */
-let audioCtx = null;
-let masterGain = null;
-let scheduledIntervals = [];
-let isPlaying = false;
-let schedulerTimer = null;
-let currentStep = 0;
-
-// estado / parámetros
-const state = {
-  bpm: 138,
-  volume: 0.85,
-  timbre: 'sawtooth',
-  leadVol: 0.12,
-  bassVol: 0.45,
-  kickVol: 1.0,
-  reverbLevel: 0.18,
-  delayTime: 0.18,
-  delayFeedback: 0.28
-};
-
-// helpers UI
-const bpmSlider = document.getElementById('bpm');
-const bpmVal = document.getElementById('bpmVal');
-const volumeSlider = document.getElementById('volume');
-const timbreSel = document.getElementById('timbre');
-const playBtn = document.getElementById('playBtn');
-const stopBtn = document.getElementById('btnStop');
-const randomBtn = document.getElementById('btnRandom');
-const downloadLink = document.getElementById('downloadLink');
-
-bpmSlider.addEventListener('input', ()=>{ state.bpm = Number(bpmSlider.value); bpmVal.textContent = state.bpm; });
-volumeSlider.addEventListener('input', ()=>{ state.volume = Number(volumeSlider.value); if(masterGain && audioCtx) masterGain.gain.setValueAtTime(state.volume, audioCtx.currentTime) });
-timbreSel.addEventListener('change', ()=> state.timbre = timbreSel.value);
-
-document.getElementById('leadVol').addEventListener('input', (e)=> state.leadVol = Number(e.target.value));
-document.getElementById('bassVol').addEventListener('input', (e)=> state.bassVol = Number(e.target.value));
-document.getElementById('kickVol').addEventListener('input', (e)=> state.kickVol = Number(e.target.value));
-
-playBtn.addEventListener('click', ()=> { if(!isPlaying) start(); else pause(); });
-stopBtn.addEventListener('click', stopAll);
-randomBtn.addEventListener('click', ()=> { randomizePattern(); });
-
-document.getElementById('previewLead').addEventListener('click', previewLead);
-document.getElementById('previewBass').addEventListener('click', previewBass);
-document.getElementById('previewKick').addEventListener('click', previewKick);
-
-/* --- generador de patrones simples --- */
-let pattern = {
-  // secuencias de 16 pasos
-  leadNotes: [4,4,7,12,0,4,7,12, 0,4,7,12,0,4,7,12],
-  bassNotes: [0,1,1,0, -12, -12,0,0, 1,0, -12,0, 1,1,2,0],
-  hats:      [1,0,1,0, 1,1,1,0, 1,0,1,0, 1,0,1,0],
-  kick:      [1,0,0,0, 1,0,1,0, 1,1,0,0, 1,0,1,0]
-};
-
-function randomizePattern(){
-  // genera pequeñas variaciones aleatorias manteniendo feeling trance
-  for(let i=0;i<16;i++){
-    pattern.leadNotes[i] = [0,2,4,5,7,9,12][Math.floor(Math.random()*7)];
-    pattern.bassNotes[i] = (Math.random()>0.75)? -12 : 0;
-    pattern.hats[i] = Math.random() > 0.4 ? 1 : 0;
-    pattern.kick[i] = (i%4===0) ? 1 : (Math.random()>0.9?1:0);
-  }
-  flashButton(randomBtn);
-}
-
-/* -------------- Audio graph helpers ------------- */
-let globalNodes = null;
-function initAudio(){
-  if(audioCtx) return;
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const comp = audioCtx.createDynamicsCompressor();
-comp.threshold.value = -18;
-comp.knee.value = 20;
-comp.ratio.value = 8;
-comp.attack.value = 0.003;
-comp.release.value = 0.15;
-
-masterGain.connect(comp);
-comp.connect(audioCtx.destination);
-
-  masterGain = audioCtx.createGain();
-  masterGain.gain.value = state.volume;
-
-  // simple delay (feedback) para dar movimiento
-  const delay = audioCtx.createDelay(1.0);
-  delay.delayTime.value = state.delayTime;
-  const fb = audioCtx.createGain();
-  fb.gain.value = state.delayFeedback;
-  delay.connect(fb);
-  fb.connect(delay);
-
-  // small chorus via two detuned delays (simple)
-  const chorusDelay = audioCtx.createDelay();
-  chorusDelay.delayTime.value = 0.015;
-
-  // mezcla seca -> delay -> master
-  const mix = audioCtx.createGain();
-  mix.gain.value = 1.0;
-
-  // reverb simple: pseudo reverb con múltiples delays (no convolver impulse)
-  const reverb = createSimpleReverb(audioCtx, 0.6);
-  const reverbGain = audioCtx.createGain();
-  reverbGain.gain.value = state.reverbLevel;
-
-  // chain: sources -> mix -> delay -> reverb -> master
-  mix.connect(delay);
-  delay.connect(masterGain);
-  mix.connect(reverb);
-  reverb.connect(reverbGain);
-  reverbGain.connect(masterGain);
-
-  mix.connect(masterGain); // añadir parte directa
-  masterGain.connect(audioCtx.destination);
-
-  globalNodes = { delay, fb, chorusDelay, mix, reverb, reverbGain, fb };
-}
-
-function createSimpleReverb(ctx, duration){
-  // crea una red de delays cortos para sensación de reverb (falso pero efectivo)
-  const out = ctx.createGain();
-  const delays = [0.02,0.035,0.047,0.063];
-  delays.forEach((d,i)=>{
-    const dl = ctx.createDelay();
-    dl.delayTime.value = d;
-    const g = ctx.createGain();
-    g.gain.value = 0.25/(i+1);
-    // conectar entrada del reverb (we'll connect externally) -> delay -> gain -> out
-    dl.connect(g);
-    g.connect(out);
-    out['dl'+i] = dl;
-  });
-  // devolver un nodo con connect/disconnect como buffer
-  const input = ctx.createGain();
-  input.connect(out);
-  out.connect = function(node){ out.gain.connect(node); };
-  return input;
-}
-
-let stepInterval = null;
-
-/* -------------- Playback control ------------- */
-function start(){
-  initAudio();
-  if(audioCtx.state === 'suspended') audioCtx.resume();
-  isPlaying = true;
-  playBtn.textContent = "⏸";
-  scheduleLoop();
-}
-
-function pause(){
-  isPlaying = false;
-  playBtn.textContent = "▶";
-  clearScheduled();
-}
-
-function stopAll(){
-  pause();
-  currentStep = 0;
-  clearScheduled();
-}
-
-function clearScheduled(){
-  if(schedulerTimer){ clearInterval(schedulerTimer); schedulerTimer = null; }
-  scheduledIntervals.forEach(id=> clearTimeout(id));
-  scheduledIntervals = [];
-}
-
-/* scheduleLoop: maneja pasos según BPM con un pequeño lookahead */
-function scheduleLoop(){
-  clearScheduled();
-  const lookaheadMs = 10; // lookahead en ms
-  const scheduleAhead = 0.80; // schedule 100ms ahead
-  const beat = 20 / state.bpm;      // duración negra
-  const stepTime = beat/8;          // 16 pasos por compás
-
-  currentStep = 0;
-  let nextNoteTime = audioCtx.currentTime + 0.05;
-
-  function scheduler(){
-    while(nextNoteTime < audioCtx.currentTime + scheduleAhead){
-      playStep(currentStep, nextNoteTime);
-      nextNoteTime += stepTime;
-      currentStep = (currentStep + 1) % 16;
-    }
-  }
-  scheduler();
-  schedulerTimer = setInterval(scheduler, lookaheadMs);
-}
-
-/* reproduce lo que debe sonar en un paso */
-function playStep(stepIndex, t){
-  // Kick
-  if(pattern.kick[stepIndex]){
-    playKick(t);
-  }
-  // Hat
-  if(pattern.hats[stepIndex]){
-    playHat(t);
-  }
-  // Bass (nota larga)
-  if(pattern.bassNotes[stepIndex]!==0){
-    const midi = 48 + pattern.bassNotes[stepIndex]; // C2 base
-    const freq = midiToFreq(midi);
-    playBass(freq, t);
-  }
-  // Lead (nota corta/arpegio) 
-  const leadNote = pattern.leadNotes[stepIndex];
-  const leadFreq = midiToFreq(60 + leadNote); // C4 base
-  playLead(leadFreq, t, stepIndex);
-}
-
-/* -------------- instrument builders ------------- */
-function playLead(freq, time, step){
-  const osc = audioCtx.createOscillator();
-  const env = audioCtx.createGain();
-  const filter = audioCtx.createBiquadFilter();
-
-  osc.type = state.timbre;
-  osc.frequency.value = freq;
-
-  // LFO para vibrato/chorus ligero
-  const lfo = audioCtx.createOscillator();
-  const lfoGain = audioCtx.createGain();
-  lfo.frequency.value = 6;
-  lfoGain.gain.value = 4;
-  lfo.connect(lfoGain);
-  lfoGain.connect(osc.frequency);
-
-  filter.type = 'lowpass';
-  filter.frequency.value = 1800 + Math.sin(step*0.6)*500;
-
-  env.gain.value = 0;
-
-  osc.connect(filter);
-  filter.connect(env);
-  env.connect(globalNodes.mix);
-
-  const dur = (60/state.bpm)/2;
-  env.gain.setValueAtTime(0.001, time);
-  env.gain.linearRampToValueAtTime(state.leadVol, time + 0.01);
-  env.gain.exponentialRampToValueAtTime(0.001, time + dur);
-
-  osc.start(time);
-  lfo.start(time);
-
-  osc.stop(time + dur + 0.05);
-  lfo.stop(time + dur + 0.05);
-}
-
-
-function playBass(freq, time){
-  const osc = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  const bassFilter = audioCtx.createBiquadFilter();
-
-  osc.type = 'sawtooth';
-  osc.frequency.value = freq;
-  bassFilter.type = 'lowpass';
-  bassFilter.frequency.value = 900;
-
-  g.gain.value = state.bassVol;
-
-  osc.connect(bassFilter);
-  bassFilter.connect(g);
-  g.connect(globalNodes ? globalNodes.mix : masterGain);
-
-  const dur = (60/state.bpm)*0.9;
-  // smooth start
-  g.gain.setValueAtTime(0.0001, time);
-  g.gain.linearRampToValueAtTime(state.bassVol, time + 0.02);
-  g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
-
-  osc.start(time);
-  osc.stop(time + dur + 0.02);
-}
-
-function playKick(time){
-  // Kick via sine sweep
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(160, time);
-  osc.frequency.exponentialRampToValueAtTime(40, time + 0.12);
-
-  gain.gain.setValueAtTime(state.kickVol, time);
-  gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
-
-  osc.connect(gain);
-  gain.connect(globalNodes ? globalNodes.mix : masterGain);
-
-  osc.start(time);
-  osc.stop(time + 0.14);
-}
-
-function playHat(time){
-  // hi-hat simple con ruido filtrado
-  const bufferSize = audioCtx.sampleRate * 0.02;
-  const noise = audioCtx.createBufferSource();
-  const buf = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const data = buf.getChannelData(0);
-  for(let i=0;i<bufferSize;i++) data[i] = (Math.random()*2-1)*0.5;
-  noise.buffer = buf;
-
-  const filt = audioCtx.createBiquadFilter();
-  filt.type = 'highpass';
-  filt.frequency.value = 7000;
-
-  const g = audioCtx.createGain();
-  g.gain.value = 0.08;
-
-  noise.connect(filt);
-  filt.connect(g);
-  g.connect(globalNodes ? globalNodes.mix : masterGain);
-
-  noise.start(time);
-  noise.stop(time + 0.05);
-}
-
-/* ---- preview helpers ---- */
-function previewLead(){ initAudio(); if(audioCtx.state === 'suspended') audioCtx.resume(); playLead(440, audioCtx.currentTime + 0.02, 0); }
-function previewBass(){ initAudio(); if(audioCtx.state === 'suspended') audioCtx.resume(); playBass(55, audioCtx.currentTime + 0.02); }
-function previewKick(){ initAudio(); if(audioCtx.state === 'suspended') audioCtx.resume(); playKick(audioCtx.currentTime + 0.02); }
-
-function midiToFreq(m){
-  return 440 * Math.pow(2, (m-69)/12);
-}
-function flashButton(el){
-  el.style.transform = 'scale(0.98)';
-  setTimeout(()=> el.style.transform = '', 120);
-}
-
-/* --------------------------
-   Renderizar audio para WAV
-   -------------------------- */
-async function renderWav(durationSeconds = 60){
-  // Renderiza OFFLINE la pista completa usando OfflineAudioContext
-  const sampleRate = 44100;
-  const offline = new OfflineAudioContext(2, sampleRate * durationSeconds, sampleRate);
-
-  // Parámetros locales a render
-  const bpm = state.bpm;
-  const stepTime = (60/bpm)/4;
-  const master = offline.createGain();
-  master.gain.value = state.volume;
-  master.connect(offline.destination);
-
-  function o_midiToFreq(m){ return 440 * Math.pow(2, (m-69)/12); }
-
-  // Simple pseudo-reverb para offline: red de delays
-  function offlineReverb(inputNode){
-    const out = offline.createGain();
-    const delays = [0.02,0.035,0.047,0.063];
-    delays.forEach((d,i)=>{
-      const dl = offline.createDelay();
-      dl.delayTime.value = d;
-      const g = offline.createGain();
-      g.gain.value = 0.22/(i+1);
-      inputNode.connect(dl);
-      dl.connect(g);
-      g.connect(out);
-    });
-    return out;
-  }
-
-  // Timeline: recorrer pasos y escribir instrumentos programáticamente
-  let t = 0;
-  for(let stepIndex=0; stepIndex < Math.floor(durationSeconds / stepTime); stepIndex++){
-    const s = stepIndex % 16;
-
-    // kick
-    if(pattern.kick[s]){
-      const o = offline.createOscillator();
-      const g = offline.createGain();
-      o.type = 'sine';
-      o.frequency.setValueAtTime(160, t);
-      o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
-      g.gain.setValueAtTime(state.kickVol, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
-      o.connect(g); g.connect(master);
-      o.start(t); o.stop(t + 0.14);
-    }
-
-    // hat
-    if(pattern.hats[s]){
-      const buf = offline.createBuffer(1, offline.sampleRate * 0.02, offline.sampleRate);
-      const arr = buf.getChannelData(0);
-      for(let i=0;i<arr.length;i++) arr[i] = (Math.random()*2-1)*0.5;
-      const noise = offline.createBufferSource();
-      noise.buffer = buf;
-      const filt = offline.createBiquadFilter();
-      filt.type = 'highpass';
-      filt.frequency.value = 7000;
-      const g = offline.createGain();
-      g.gain.value = 0.08;
-      noise.connect(filt); filt.connect(g); g.connect(master);
-      noise.start(t); noise.stop(t + 0.05);
-    }
-
-    // bass
-    if(pattern.bassNotes[s]!==0){
-      const midi = 48 + pattern.bassNotes[s];
-      const freq = o_midiToFreq(midi);
-      const o = offline.createOscillator();
-      o.type = 'sawtooth';
-      o.frequency.value = freq;
-      const g = offline.createGain();
-      const dur = (60/bpm)*0.9;
-      g.gain.setValueAtTime(state.bassVol, t);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      o.connect(g); g.connect(master);
-      o.start(t); o.stop(t + dur + 0.02);
-    }
-
-    // lead
-    const ln = pattern.leadNotes[s];
-    const lf = o_midiToFreq(60 + ln);
-    const oa = offline.createOscillator();
-    const ob = offline.createOscillator();
-    oa.type = state.timbre;
-    ob.type = state.timbre;
-    oa.frequency.value = lf;
-    ob.frequency.value = lf * 1.0015;
-    const lg = offline.createGain();
-    const leadDur = (60/bpm)/2;
-    lg.gain.setValueAtTime(state.leadVol, t);
-    lg.gain.exponentialRampToValueAtTime(0.0001, t + leadDur*0.9 );
-    const filt = offline.createBiquadFilter();
-    filt.type = 'lowpass';
-    filt.frequency.value = 2000 + (Math.sin(s*0.6)*400);
-    oa.connect(filt); ob.connect(filt); filt.connect(lg);
-
-    // connect to a simple offline reverb and master
-    const re = offlineReverb(lg);
-    lg.connect(re);
-    re.connect(master);
-    // also direct to master for presence
-    lg.connect(master);
-
-    oa.start(t); ob.start(t); oa.stop(t + leadDur); ob.stop(t + leadDur);
-    t += stepTime;
-  }
-
-  // Render
-  const rendered = await offline.startRendering();
-  // convertir AudioBuffer a WAV blob
-  const wav = audioBufferToWav(rendered);
-  const blob = new Blob([wav], { type: 'audio/wav' });
-  const url = URL.createObjectURL(blob);
-  return { blob, url };
-}
-
-// util: AudioBuffer -> WAV (PCM16)
-function audioBufferToWav(buffer, opt){
-  opt = opt || {}
-  var numChannels = buffer.numberOfChannels
-  var sampleRate = buffer.sampleRate
-  var format = opt.float32 ? 3 : 1
-  var bitDepth = format === 3 ? 32 : 16
-
-  var result
-  if (numChannels === 2) {
-    result = interleave(buffer.getChannelData(0), buffer.getChannelData(1))
-  } else {
-    result = buffer.getChannelData(0)
-  }
-
-  return encodeWAV(result, numChannels, sampleRate, bitDepth)
-}
-
-function interleave(inputL, inputR){
-  var length = inputL.length + inputR.length
-  var result = new Float32Array(length)
-
-  var index = 0
-  var inputIndex = 0
-
-  while (index < length){
-    result[index++] = inputL[inputIndex]
-    result[index++] = inputR[inputIndex]
-    inputIndex++
-  }
-  return result
-}
-
-function encodeWAV(samples, numChannels, sampleRate, bitDepth){
-  var bytesPerSample = bitDepth/8
-  var blockAlign = numChannels * bytesPerSample
-
-  var buffer = new ArrayBuffer(44 + samples.length * bytesPerSample)
-  var view = new DataView(buffer)
-
-  /* RIFF identifier */
-  writeString(view, 0, 'RIFF')
-  /* file length */
-  view.setUint32(4, 36 + samples.length * bytesPerSample, true)
-  /* RIFF type */
-  writeString(view, 8, 'WAVE')
-  /* format chunk identifier */
-  writeString(view, 12, 'fmt ')
-  /* format chunk length */
-  view.setUint32(16, 16, true)
-  /* sample format (raw) */
-  view.setUint16(20, 1, true)
-  /* channel count */
-  view.setUint16(22, numChannels, true)
-  /* sample rate */
-  view.setUint32(24, sampleRate, true)
-  /* byte rate (sampleRate * blockAlign) */
-  view.setUint32(28, sampleRate * blockAlign, true)
-  /* block align (channelCount * bytesPerSample) */
-  view.setUint16(32, blockAlign, true)
-  /* bits per sample */
-  view.setUint16(34, bitDepth, true)
-  /* data chunk identifier */
-  writeString(view, 36, 'data')
-  /* data chunk length */
-  view.setUint32(40, samples.length * bytesPerSample, true)
-  // write samples
-  floatTo16BitPCM(view, 44, samples)
-
-  return view
-}
-
-function floatTo16BitPCM(output, offset, input){
-  for (var i = 0; i < input.length; i++, offset += 2){
-    var s = Math.max(-1, Math.min(1, input[i]))
-    output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true)
-  }
-}
-
-function writeString(view, offset, string){
-  for (var i = 0; i < string.length; i++){
-    view.setUint8(offset + i, string.charCodeAt(i))
-  }
-}
-
-/* conectar descarga al link */
-downloadLink.addEventListener('click', async (e)=>{
-  e.preventDefault();
-  const durInput = document.getElementById('durationSec');
-  let duration = Number(durInput.value) || 45;
-  if(duration < 8) duration = 8;
-  if(duration > 600) duration = 600;
-
-  downloadLink.textContent = 'Generando WAV...';
-  downloadLink.style.pointerEvents = 'none';
-  try {
-    const { blob, url } = await renderWav(duration);
-    downloadLink.href = url;
-    downloadLink.download = 'trance_web.wav';
-    downloadLink.textContent = '⬇ Descargar WAV';
-    downloadLink.style.pointerEvents = 'auto';
-    // descarga automática opcional (descomentar si la quieres)
-    // let a = document.createElement('a'); a.href = url; a.download = 'trance_web.wav'; a.click();
-  } catch(err){
-    console.error(err);
-    downloadLink.textContent = 'Error generando WAV';
-    downloadLink.style.pointerEvents = 'auto';
-    setTimeout(()=>{ downloadLink.textContent = '⬇ Descargar WAV' }, 2000);
-  }
-});
-
-/* inicial pattern simple */
-randomizePattern();
-<audio id="player" src="musica.mp3" controls></audio>
-
-<!-- CONTROLES EXTRA ELECTRÓNICOS / PUNK -->
-<div style="margin-top:15px; background:#111; padding:15px; border-radius:10px; color:#0ff;">
-    <h3>🎛️ Controles Electrónicos / Punk</h3>
-
-    <label>Filtro Synth (Frecuencia)</label><br>
-    <input id="filterControl" type="range" min="200" max="12000" value="3000" style="width:100%"><br><br>
-
-    <label>Distorsión Punk</label><br>
-    <input id="distControl" type="range" min="0" max="100" value="20" style="width:100%"><br><br>
-
-    <label>Bitcrusher (Resolución)</label><br>
-    <input id="bitControl" type="range" min="1" max="16" value="8" style="width:100%"><br><br>
-</div>
-
-<script>
-let audio = document.getElementById("player");
-let context = new AudioContext();
-let source = context.createMediaElementSource(audio);
-
-// ==== EFECTOS ====
-
-let filter = context.createBiquadFilter();
-filter.type = "lowpass";
-filter.frequency.value = 3000;
-
-let distortion = context.createWaveShaper();
-function makeDistortion(amount) {
-    let n_samples = 44100;
-    let curve = new Float32Array(n_samples);
-    let deg = Math.PI / 180;
-    for (let i = 0; i < n_samples; ++i) {
-        let x = (i * 2 / n_samples) - 1;
-        curve[i] = (3 + amount) * x * 20 * deg / (Math.PI + amount * Math.abs(x));
-    }
-    distortion.curve = curve;
-}
-makeDistortion(20);
-
-// Bitcrusher
-let bitcrusher = context.createScriptProcessor(4096, 1, 1);
-bitcrusher.bits = 8;
-bitcrusher.normfreq = 0.1;
-bitcrusher.process = function(e) {
-    let input = e.inputBuffer.getChannelData(0);
-    let output = e.outputBuffer.getChannelData(0);
-    let step = Math.pow(1/2, bitcrusher.bits);
-    let phaser = 0;
-    let last = 0;
-
-    for (let i = 0; i < input.length; i++) {
-        phaser += bitcrusher.normfreq;
-        if (phaser >= 1.0) {
-            phaser -= 1.0;
-            last = step * Math.floor(input[i] / step);
-        }
-        output[i] = last;
-    }
-};
-
-// ==== CONEXIONES DE AUDIO ====
-source.connect(filter);
-filter.connect(distortion);
-distortion.connect(bitcrusher);
-bitcrusher.connect(context.destination);
-
-// ==== CONTROLES ====
-document.getElementById("filterControl").oninput = e => {
-    filter.frequency.value = e.target.value;
-};
-
-document.getElementById("distControl").oninput = e => {
-    makeDistortion(e.target.value);
-};
-
-document.getElementById("bitControl").oninput = e => {
-    bitcrusher.bits = e.target.value;
-};
-</script>
-
-</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
