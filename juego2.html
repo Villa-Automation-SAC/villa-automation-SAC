@@ -187,49 +187,6 @@ h1 {
 <div id="progreso">
     <div id="barra-progreso"></div>
 </div>
-<div id="corona">🎉 ¡Felicidades! Has completado todas las casillas y ganado bono de descuento de 10s/ en nuestros productos (reclama ya!) 🎉</div>
-<!-- BOTÓN FLOTANTE PROMOCIÓN NAVIDEÑA -->
-<a href="mailto:villaautomationeirl@gmail.com?subject=Solicitud%20de%20Bonos%20de%20Navidad&body=Hola,%20quiero%20información%20sobre%20las%20promociones%20y%20bonos%20de%20Navidad."
-   class="btn-promo-navidad">
-  🎁 Bonos de Navidad
-</a>
-
-<style>
-  .btn-promo-navidad {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #e63946;
-    color: white;
-    padding: 15px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 50px;
-    text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 9999;
-    animation: navidad-brilla 1.5s infinite alternate;
-  }
-
-  @keyframes navidad-brilla {
-    from { transform: scale(1); }
-    to { transform: scale(1.08); }
-  }
-
-  .btn-promo-navidad:hover {
-    background: #d62828;
-  }
-</style>
-
-<script>
-  const hoy = new Date();
-  const mes = hoy.getMonth(); // 0=enero ... 11=diciembre
-
-  // Mostrar solo en noviembre (10) y diciembre (11)
-  if (mes !== 10 && mes !== 11) {
-    document.querySelector('.btn-promo-navidad').style.display = 'none';
-  }
-</script>
 <audio id="musica-fondo" loop autoplay>
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
@@ -330,8 +287,52 @@ function verificarRespuesta(elegida, correcta) {
     }
 }
 </script>
+    <div id="corona">🎉 ¡Felicidades! Has completado todas las casillas y ganado bono de descuento de 10s/ en nuestros productos (reclama ya!) 🎉</div>
+<!-- BOTÓN FLOTANTE PROMOCIÓN NAVIDEÑA -->
+<a href="mailto:villaautomationeirl@gmail.com?subject=Solicitud%20de%20Bonos%20de%20Navidad&body=Hola,%20quiero%20información%20sobre%20las%20promociones%20y%20bonos%20de%20Navidad."
+   class="btn-promo-navidad">
+  🎁 Bonos de Navidad
+</a>
+
+<style>
+  .btn-promo-navidad {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #e63946;
+    color: white;
+    padding: 15px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 9999;
+    animation: navidad-brilla 1.5s infinite alternate;
+  }
+
+  @keyframes navidad-brilla {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+  }
+
+  .btn-promo-navidad:hover {
+    background: #d62828;
+  }
+</style>
+
+<script>
+  const hoy = new Date();
+  const mes = hoy.getMonth(); // 0=enero ... 11=diciembre
+
+  // Mostrar solo en noviembre (10) y diciembre (11)
+  if (mes !== 10 && mes !== 11) {
+    document.querySelector('.btn-promo-navidad').style.display = 'none';
+  }
+</script>
 </body>
 </html>
+
 
 
 
