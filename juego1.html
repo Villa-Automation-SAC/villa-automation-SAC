@@ -61,7 +61,7 @@
 </audio>
 
 <script>
-// --- CONFIGURACIÓN PARA MOSTRAR MARTE POR PUNTAJE ---
+// --- CONFIGURACIÓN ---
 let showMars = false;
 let puntosParaMarte = 1000;
 
@@ -124,26 +124,12 @@ function updateExhaust(dt){
 let audioCtx = null;
 function ensureAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ audioCtx=null; } } }
 
-// --- AUDIO DE FONDO Y GAME OVER ---
+// --- AUDIO DE FONDO Y SONIDO DE LOGRO ---
 const bgMusic = document.getElementById("musica-fondo");
 bgMusic.volume = 0.35;
 
 const gameOverSound = new Audio("assets/game_over.mp3");
 gameOverSound.volume = 0.8;
-
-function checkScoreGameOver() {
-    if(score >= 2000 && !gameOver){
-        gameOver = true;
-        running = false;
-        centerText.innerHTML = '💀 GAME OVER — Puntaje máximo alcanzado';
-        centerBox.style.display = 'block';
-        resumeBtn.style.display = 'none';
-        startBtn.style.display = 'inline-block';
-        clearSpawnIntervals();
-        bgMusic.pause();
-        gameOverSound.play();
-    }
-}
 
 // controles teclado
 window.addEventListener('keydown', e => { keys[e.key] = true; if(!running && e.key==='Enter') startMission(); if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); });
@@ -322,7 +308,23 @@ function loop(now){
         gameOverSound.play();
     }
 
-    checkScoreGameOver();
+    // --- CHEQUEO DE ÉXITO ---
+    if(score>=3000 && !gameOver){
+        showMars = true;
+        const dx = (cohete.x + cohete.w/2) - (W*0.85);
+        const dy = (cohete.y + cohete.h/2) - (H*0.18);
+        if(Math.hypot(dx, dy) < 80){
+            gameOver = true;
+            running = false;
+            centerText.innerHTML = '🏆 ¡FELICIDADES! Alcanzaste 3000 puntos y llegaste a Marte';
+            centerBox.style.display = 'block';
+            resumeBtn.style.display = 'none';
+            startBtn.style.display = 'inline-block';
+            clearSpawnIntervals();
+            bgMusic.pause();
+            gameOverSound.play();
+        }
+    }
 
     draw();
     if(running) requestAnimationFrame(loop);
@@ -332,8 +334,10 @@ resetAndStart();
 </script>
 
 
+
 </body>
 </html>
+
 
 
 
