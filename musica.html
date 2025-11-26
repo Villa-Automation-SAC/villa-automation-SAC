@@ -430,45 +430,42 @@ function playStep(stepIndex, t){
 
 /* -------------- instrument builders ------------- */
 function playLead(freq, time, step){
-  // 2 osciladores en detune para chorus + pequeño delay de chorus
-  const oscA = audioCtx.createOscillator();
-  const oscB = audioCtx.createOscillator();
-  const leadGain = audioCtx.createGain();
-  const filter = audioCtx.createBiquadFilter();
+  const osc = audioCtx.createOscillator();
   const env = audioCtx.createGain();
+  const filter = audioCtx.createBiquadFilter();
 
-  oscA.type = state.timbre;
-  oscB.type = state.timbre;
-  oscA.frequency.value = freq;
-  oscB.frequency.value = freq * 1.0016;
-  oscB.detune.value = 6;
+  osc.type = state.timbre;
+  osc.frequency.value = freq;
 
-  // filtro para suavizar
+  // LFO para vibrato/chorus ligero
+  const lfo = audioCtx.createOscillator();
+  const lfoGain = audioCtx.createGain();
+  lfo.frequency.value = 6;
+  lfoGain.gain.value = 4;
+  lfo.connect(lfoGain);
+  lfoGain.connect(osc.frequency);
+
   filter.type = 'lowpass';
-  filter.frequency.value = 1800 + (Math.sin(step*0.6)*500);
+  filter.frequency.value = 1800 + Math.sin(step*0.6)*500;
 
-  leadGain.gain.value = state.leadVol;
+  env.gain.value = 0;
 
-  // conexión: osc -> filter -> env -> mix -> master
-  oscA.connect(filter);
-  oscB.connect(filter);
+  osc.connect(filter);
   filter.connect(env);
-  env.connect(globalNodes ? globalNodes.mix : masterGain);
+  env.connect(globalNodes.mix);
 
-  // envelope
-  const dur = (60/state.bpm)/2; // semicorchea / corchea
-  const attack = 0.008;
-  const release = Math.max(0.02, dur*0.85);
+  const dur = (60/state.bpm)/2;
+  env.gain.setValueAtTime(0.001, time);
+  env.gain.linearRampToValueAtTime(state.leadVol, time + 0.01);
+  env.gain.exponentialRampToValueAtTime(0.001, time + dur);
 
-  env.gain.setValueAtTime(0.0001, time);
-  env.gain.linearRampToValueAtTime(state.leadVol, time + attack);
-  env.gain.exponentialRampToValueAtTime(0.0001, time + release);
+  osc.start(time);
+  lfo.start(time);
 
-  oscA.start(time);
-  oscB.start(time);
-  oscA.stop(time + release + 0.01);
-  oscB.stop(time + release + 0.01);
+  osc.stop(time + dur + 0.05);
+  lfo.stop(time + dur + 0.05);
 }
+
 
 function playBass(freq, time){
   const osc = audioCtx.createOscillator();
@@ -788,5 +785,6 @@ randomizePattern();
 </script>
 </body>
 </html>
+
 
 
