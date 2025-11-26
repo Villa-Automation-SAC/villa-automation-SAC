@@ -166,25 +166,27 @@
 
 <!-- SCRIPT DEL CONTADOR GLOBAL -->
 <script>
-// NAMESPACE y KEY únicas para tu contador global
-const namespace = "villaautomation";
-const key = "jugadores_global";
+const url = "https://api.npoint.io/9b5e7ed4e4e2c21ee5a0";
 
-// 1) Crear contador si no existe
-fetch(`https://api.countapi.xyz/create?namespace=${namespace}&key=${key}&value=0`)
-    .then(() => {
-        // 2) Incrementar contador global
-        return fetch(`https://api.countapi.xyz/update/${namespace}/${key}/?amount=1`);
-    })
-    .then(r => r.json())
-    .then(data => {
-        document.getElementById("contador-jugadores").innerText =
-            "Jugadores que han ingresado: " + data.value;
-    })
-    .catch(() => {
-        document.getElementById("contador-jugadores").innerText =
-            "Contador no disponible";
-    });
+fetch(url)
+  .then(r => r.json())
+  .then(data => {
+      let nuevoValor = data.visitas + 1;
+
+      // Actualizar contador en NPOINT
+      fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ visitas: nuevoValor })
+      });
+
+      document.getElementById("contador-jugadores").innerText =
+        "Jugadores que han ingresado: " + nuevoValor;
+  })
+  .catch(() => {
+      document.getElementById("contador-jugadores").innerText =
+        "Contador no disponible";
+  });
 </script>
 
 
@@ -192,6 +194,7 @@ fetch(`https://api.countapi.xyz/create?namespace=${namespace}&key=${key}&value=0
 
 </body>
 </html>
+
 
 
 
