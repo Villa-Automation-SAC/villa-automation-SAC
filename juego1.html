@@ -60,36 +60,17 @@
 let showMars = false;            // Marte oculto al inicio
 let puntosParaMarte = 1000;      // Cambia el puntaje necesario
 
-/* -----------------------
-   Juego: Mission a Marte
-   - Añadí un propulsor visual (flama + partículas) sin alterar la estructura HTML
-   - Cambios concentrados en la sección <script>
-   ------------------------*/
-
 // canvas
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 let W = canvas.width = window.innerWidth;
 let H = canvas.height = window.innerHeight;
 
-window.addEventListener('resize', ()=>{
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-});
+window.addEventListener('resize', ()=>{ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
 
-// imagen cohete (SVG embebido)
+// imagen cohete
 const imgCohete = new Image();
-imgCohete.src = "assets/cohete4.png"; + encodeURIComponent(`
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 220'>
- <defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='#00eaff'/><stop offset='1' stop-color='#0073b8'/></linearGradient></defs>
- <rect width='120' height='220' rx='18' fill='none'/>
- <g transform='translate(10,10)'>
-   <path d='M50 0 L90 80 Q60 120 50 200 Q40 120 10 80 Z' fill='url(#g)' stroke='#002' stroke-width='2'/>
-   <circle cx='50' cy='70' r='12' fill='#fff'/>
-   <rect x='35' y='195' width='30' height='10' rx='5' fill='#ff8c2b'/>
- </g>
-</svg>
-`);
+imgCohete.src = "assets/cohete4.png";
 
 // estado
 let cohete;
@@ -103,13 +84,12 @@ let running = false;
 let keys = {};
 let spawnIntervals = [];
 
-// NEW: propulsor / partículas
+// propulsor / partículas
 let exhaustParticles = [];
 function spawnExhaust(x, y, strength){
-  // strength: 0..1
   const count = Math.max(2, Math.floor(6 * strength));
   for(let i=0;i<count;i++){
-    const ang = (Math.PI/2) + (Math.random()-0.5) * 0.6; // spread downward
+    const ang = (Math.PI/2) + (Math.random()-0.5) * 0.6;
     const speed = 1.2 + Math.random()*2.2 + strength*3.0;
     exhaustParticles.push({
       x: x + (Math.random()-0.5)*10,
@@ -129,26 +109,47 @@ function updateExhaust(dt){
     p.age += dt;
     p.x += p.vx * dt * 60;
     p.y += p.vy * dt * 60;
-    // apply slight drag and upward buoyancy (to simulate flame streaming)
     p.vx *= 0.985;
     p.vy *= 0.992;
     if(p.age >= p.life) exhaustParticles.splice(i,1);
   }
 }
 
-// audio (opcional)
+// audio
 let audioCtx = null;
 function ensureAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ audioCtx=null; } } }
+
+// --- AUDIO DE FONDO Y GAME OVER ---
+let bgMusic = new Audio("assets/space_ambient.mp3"); // música celestial
+bgMusic.loop = true;
+bgMusic.volume = 0.35;
+
+let gameOverSound = new Audio("assets/game_over.mp3");
+gameOverSound.volume = 0.8;
+
+function checkScoreGameOver() {
+    if(score >= 2000 && !gameOver){
+        gameOver = true;
+        running = false;
+        centerText.innerHTML = '💀 GAME OVER — Puntaje máximo alcanzado';
+        centerBox.style.display = 'block';
+        resumeBtn.style.display = 'none';
+        startBtn.style.display = 'inline-block';
+        clearSpawnIntervals();
+        bgMusic.pause();
+        gameOverSound.play();
+    }
+}
 
 // controles teclado
 window.addEventListener('keydown', e => { keys[e.key] = true; if(!running && e.key==='Enter') startMission(); if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); });
 window.addEventListener('keyup', e => { keys[e.key] = false; });
 
-// touch buttons set keys on pointer events
+// touch buttons
 document.querySelectorAll('.touchBtn').forEach(btn=>{
-  btn.addEventListener('pointerdown', (ev)=> { const k=btn.dataset.key; keys[k]=true; btn.style.transform='scale(0.96)'; });
-  btn.addEventListener('pointerup', ()=> { const k=btn.dataset.key; keys[k]=false; btn.style.transform=''; });
-  btn.addEventListener('pointerleave', ()=> { const k=btn.dataset.key; keys[k]=false; btn.style.transform=''; });
+  btn.addEventListener('pointerdown', ()=>{ keys[btn.dataset.key]=true; btn.style.transform='scale(0.96)'; });
+  btn.addEventListener('pointerup', ()=>{ keys[btn.dataset.key]=false; btn.style.transform=''; });
+  btn.addEventListener('pointerleave', ()=>{ keys[btn.dataset.key]=false; btn.style.transform=''; });
 });
 
 // HUD elements
@@ -167,44 +168,14 @@ restartBtn.addEventListener('click', ()=>{ resetAndStart(); });
 resumeBtn.addEventListener('click', ()=>{ running=true; centerBox.style.display='none'; loop(); });
 
 // crear cohete
-function crearCohete(){
-  return {
-    x: W*0.5 - 30,
-    y: H - 180,
-    w: 60,
-    h: 110,
-    vx: 0,
-    vy: 0,
-    angle: -Math.PI/2, // hacia arriba
-    thrust: 0.16
-  };
-}
+function crearCohete(){ return { x: W*0.5 - 30, y: H - 180, w: 60, h: 110, vx: 0, vy: 0, angle: -Math.PI/2, thrust: 0.16 }; }
 
 // generadores
-function generarMeteorito(){
-  meteoros.push({
-    x: Math.random()*W,
-    y: -60,
-    r: 18 + Math.random()*28,
-    vx: (Math.random()-0.5)*0.6,
-    vy: 2 + Math.random()*3
-  });
-}
-function generarSatelite(){
-  satelites.push({
-    x: Math.random()*W,
-    y: -80,
-    w: 64,
-    h: 28,
-    vy: 1.5 + Math.random()
-  });
-}
+function generarMeteorito(){ meteoros.push({ x: Math.random()*W, y: -60, r: 18 + Math.random()*28, vx: (Math.random()-0.5)*0.6, vy: 2 + Math.random()*3 }); }
+function generarSatelite(){ satelites.push({ x: Math.random()*W, y: -80, w: 64, h: 28, vy: 1.5 + Math.random() }); }
 
 // limpiar intervals
-function clearSpawnIntervals(){
-  spawnIntervals.forEach(i=>clearInterval(i));
-  spawnIntervals = [];
-}
+function clearSpawnIntervals(){ spawnIntervals.forEach(i=>clearInterval(i)); spawnIntervals = []; }
 
 // start/reset
 function resetAndStart(){
@@ -241,261 +212,125 @@ function startMission(){
   lifeEl.innerText = Math.floor(life);
   scoreEl.innerText = score;
 
-  // spawn
   spawnIntervals.push(setInterval(generarMeteorito, 900));
   spawnIntervals.push(setInterval(generarSatelite, 2200));
+
+  // reproducir música de fondo
+  bgMusic.currentTime = 0;
+  bgMusic.play();
+
   loop();
 }
 
 // colisiones
-function rectCircleCollision(rect, circ){
-  const dx = Math.max(rect.x, Math.min(circ.x, rect.x + rect.w));
-  const dy = Math.max(rect.y, Math.min(circ.y, rect.y + rect.h));
-  const dist = Math.hypot(circ.x - dx, circ.y - dy);
-  return dist < circ.r;
-}
-function rectRectCollision(a,b){
-  return !(a.x + a.w < b.x || a.x > b.x + b.w || a.y + a.h < b.y || a.y > b.y + b.h);
-}
+function rectCircleCollision(rect, circ){ const dx = Math.max(rect.x, Math.min(circ.x, rect.x + rect.w)); const dy = Math.max(rect.y, Math.min(circ.y, rect.y + rect.h)); return Math.hypot(circ.x - dx, circ.y - dy) < circ.r; }
+function rectRectCollision(a,b){ return !(a.x + a.w < b.x || a.x > b.x + b.w || a.y + a.h < b.y || a.y > b.y + b.h); }
 
-// efectos de sonido simples
-let engineOsc=null, engineGain=null;
-function playEngine(on){
-  if(!audioCtx) return;
-  if(on){
-    if(!engineOsc){
-      engineOsc = audioCtx.createOscillator();
-      engineOsc.type = 'sawtooth';
-      engineOsc.frequency.value = 80;
-      engineGain = audioCtx.createGain();
-      engineGain.gain.value = 0;
-      engineOsc.connect(engineGain);
-      engineGain.connect(audioCtx.destination);
-      engineOsc.start();
-    }
-    engineGain.gain.exponentialRampToValueAtTime(0.02, audioCtx.currentTime+0.05);
-    engineOsc.frequency.setTargetAtTime(120 + (cohete.thrust*200), audioCtx.currentTime, 0.1);
-  } else {
-    if(engineGain) engineGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.1);
+// propulsor / partículas
+function drawExhaust(){
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  for(let i=exhaustParticles.length-1;i>=0;i--){
+    const p=exhaustParticles[i];
+    const alpha=Math.max(0,1-(p.age/p.life));
+    const s=p.size*(0.4+0.6*(1-p.age/p.life));
+    ctx.beginPath();
+    const grad=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,s*1.4);
+    grad.addColorStop(0,`rgba(255,${180-(p.hue%60)},0,${alpha*0.7})`);
+    grad.addColorStop(0.5,`rgba(255,140,40,${alpha*0.5})`);
+    grad.addColorStop(1,`rgba(120,40,10,${alpha*0.02})`);
+    ctx.fillStyle=grad;
+    ctx.arc(p.x,p.y,s*1.4,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.fillStyle=`rgba(255,255,200,${alpha})`; ctx.arc(p.x,p.y,s*0.6,0,Math.PI*2); ctx.fill();
   }
+  ctx.restore();
 }
 
 // dibujo
 function draw(){
-  // background: subtle gradient + stars
-  ctx.fillStyle = '#000812';
-  ctx.fillRect(0,0,W,H);
-
-  // stars
-  for(let i=0;i<60;i++){
-    ctx.fillStyle = 'rgba(255,255,255,'+ (Math.random()*0.25+0.05) +')';
-    ctx.fillRect(Math.random()*W, Math.random()*H, Math.random()*1.8, Math.random()*1.8);
-  }
-
-  // trajectory guide (distant)
-  ctx.beginPath();
-  ctx.strokeStyle = 'rgba(255,200,120,0.06)';
-  ctx.lineWidth = 4;
-  ctx.moveTo(W*0.12, H*0.85);
-  ctx.quadraticCurveTo(W*0.5, H*0.18, W*0.88, H*0.55);
-  ctx.stroke();
-
-  // draw meteoros
-  meteoros.forEach(m=>{
-    ctx.fillStyle = 'rgba(220,160,90,0.98)';
-    ctx.beginPath();
-    ctx.arc(m.x, m.y, m.r, 0, Math.PI*2);
-    ctx.fill();
-    // tail
-    ctx.strokeStyle = 'rgba(220,160,90,0.25)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(m.x - m.vx*10, m.y - m.vy*10);
-    ctx.lineTo(m.x, m.y);
-    ctx.stroke();
-  });
-
-  // satellites
-  satelites.forEach(s=>{
-    ctx.save();
-    ctx.translate(s.x, s.y);
-    ctx.fillStyle = 'rgba(200,220,255,0.95)';
-    ctx.fillRect(-s.w/2, -s.h/2, s.w, s.h);
-    ctx.fillStyle='rgba(120,150,180,0.95)';
-    ctx.fillRect(-s.w/2 - 16, -s.h/2 + 6, 16, s.h-12);
-    ctx.fillRect(s.w/2, -s.h/2 + 6, 16, s.h-12);
-    ctx.restore();
-  });
-
-  // NEW: draw exhaust particles behind rocket
-  ctx.save();
-  ctx.globalCompositeOperation = 'lighter';
-  for(let i=exhaustParticles.length-1;i>=0;i--){
-    const p = exhaustParticles[i];
-    const alpha = Math.max(0, 1 - (p.age / p.life));
-    const s = p.size * (0.4 + 0.6 * (1 - p.age / p.life));
-    // outer glow
-    ctx.beginPath();
-    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, s*1.4);
-    grad.addColorStop(0, `rgba(255,${180 - (p.hue%60)},0,${alpha*0.7})`);
-    grad.addColorStop(0.5, `rgba(255,140,40,${alpha*0.5})`);
-    grad.addColorStop(1, `rgba(120,40,10,${alpha*0.02})`);
-    ctx.fillStyle = grad;
-    ctx.arc(p.x, p.y, s*1.4, 0, Math.PI*2);
-    ctx.fill();
-    // core
-    ctx.beginPath();
-    ctx.fillStyle = `rgba(255,255,200,${alpha})`;
-    ctx.arc(p.x, p.y, s*0.6, 0, Math.PI*2);
-    ctx.fill();
-  }
-  ctx.restore();
-
-  // draw rocket image (centered at cohete.x, cohete.y)
-  if(imgCohete.complete){
-    ctx.drawImage(imgCohete, cohete.x, cohete.y, cohete.w, cohete.h);
-  } else {
-    // fallback: simple triangle
-    ctx.fillStyle = '#00eaff';
-    ctx.beginPath();
-    ctx.moveTo(cohete.x + cohete.w/2, cohete.y);
-    ctx.lineTo(cohete.x, cohete.y + cohete.h);
-    ctx.lineTo(cohete.x + cohete.w, cohete.y + cohete.h);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  // HUD is DOM-based (no draw)
+  ctx.fillStyle = '#000812'; ctx.fillRect(0,0,W,H);
+  for(let i=0;i<60;i++){ ctx.fillStyle='rgba(255,255,255,'+(Math.random()*0.25+0.05)+')'; ctx.fillRect(Math.random()*W, Math.random()*H, Math.random()*1.8, Math.random()*1.8); }
+  meteoros.forEach(m=>{ ctx.fillStyle='rgba(220,160,90,0.98)'; ctx.beginPath(); ctx.arc(m.x,m.y,m.r,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='rgba(220,160,90,0.25)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(m.x - m.vx*10,m.y - m.vy*10); ctx.lineTo(m.x,m.y); ctx.stroke(); });
+  satelites.forEach(s=>{ ctx.save(); ctx.translate(s.x,s.y); ctx.fillStyle='rgba(200,220,255,0.95)'; ctx.fillRect(-s.w/2,-s.h/2,s.w,s.h); ctx.fillStyle='rgba(120,150,180,0.95)'; ctx.fillRect(-s.w/2-16,-s.h/2+6,16,s.h-12); ctx.fillRect(s.w/2,-s.h/2+6,16,s.h-12); ctx.restore(); });
+  drawExhaust();
+  if(imgCohete.complete){ ctx.drawImage(imgCohete, cohete.x, cohete.y, cohete.w, cohete.h); }
+  else { ctx.fillStyle = '#00eaff'; ctx.beginPath(); ctx.moveTo(cohete.x+cohete.w/2, cohete.y); ctx.lineTo(cohete.x,cohete.y+cohete.h); ctx.lineTo(cohete.x+cohete.w,cohete.y+cohete.h); ctx.closePath(); ctx.fill(); }
 }
 
-// game logic / physics loop
+// physics & game loop
 let last = performance.now();
 function loop(now){
-  if(!running) return;
-  const t = now || performance.now();
-  let dt = (t - last) / 1000;
-  if(dt > 0.05) dt = 0.05;
-  last = t;
-  
-  // controls: rotation & thrust simplified (we keep cohete angle fixed vertically for simplicity)
-  // thrust actions
-  const thrusting = keys['ArrowUp'] || keys['w'] || keys[' '];
-  const turbo = keys['Shift'];
-  const brake = keys['Control'];
-  if(thrusting && fuel > 0){
-    const p = cohete.thrust * (turbo?2.2:1.0);
-    cohete.vy -= p * dt * 60;
-    fuel = Math.max(0, fuel - 0.08 * (turbo?2.5:1) * dt * 60);
-    // spawn exhaust particles at nozzle position (bottom-center)
-    const nozzleX = cohete.x + cohete.w/2;
-    const nozzleY = cohete.y + cohete.h + 6; // slightly below rocket image
-    spawnExhaust(nozzleX, nozzleY, Math.min(1, p*3));
+    if(!running) return;
+    const t = now || performance.now();
+    let dt = (t-last)/1000; if(dt>0.05) dt=0.05;
+    last = t;
 
-  }
-  if(keys['ArrowLeft'] || keys['a']) cohete.vx -= 0.16 * dt * 60;
-  if(keys['ArrowRight'] || keys['d']) cohete.vx += 0.16 * dt * 60;
-  if(keys['ArrowDown'] || keys['s']) cohete.vy += 0.14 * dt * 60;
-  if(brake){ cohete.vx *= 0.96; cohete.vy *= 0.96; }
+    const thrusting = keys['ArrowUp'] || keys['w'] || keys[' '];
+    const turbo = keys['Shift'];
+    const brake = keys['Control'];
 
-  // physics
-  cohete.vx *= 0.995;
-  cohete.vy *= 0.995;
-  cohete.vy += 0.018 * dt * 60; // mild gravity
-  cohete.x += cohete.vx * dt * 60;
-  cohete.y += cohete.vy * dt * 60;
-
-  // update objects
-  meteoros.forEach(m=>{
-    m.x += (m.vx) * dt * 60;
-    m.y += m.vy * dt * 60;
-  });
-  satelites.forEach(s=>{
-    s.y += s.vy * dt * 60;
-    s.x += Math.sin(t/600 + s.x*0.001)*0.6;
-  });
-
-  // update exhaust
-  updateExhaust(dt);
-
-  // collisions
-  meteoros.forEach((m, i)=>{
-    if(rectCircleCollision({x:cohete.x, y:cohete.y, w:cohete.w, h:cohete.h}, m)){
-      // hit
-      life = Math.max(0, life - (8 + Math.random()*10));
-      score = Math.max(0, score - 20);
-      // remove meteor (push below)
-      m.y = H + 200;
+    if(thrusting && fuel>0){
+        const p = cohete.thrust * (turbo?2.2:1);
+        cohete.vy -= p*dt*60;
+        fuel = Math.max(0,fuel-0.08*(turbo?2.5:1)*dt*60);
+        spawnExhaust(cohete.x+cohete.w/2, cohete.y+cohete.h+6, Math.min(1,p*3));
     }
-  });
-  satelites.forEach((s,i)=>{
-    if(rectRectCollision({x:cohete.x, y:cohete.y, w:cohete.w, h:cohete.h}, {x:s.x - s.w/2, y:s.y - s.h/2, w:s.w, h:s.h})){
-      life = Math.max(0, life - 22);
-      score = Math.max(0, score - 40);
-      s.y = H + 200;
-    }
-  });
+    if(keys['ArrowLeft'] || keys['a']) cohete.vx -= 0.16*dt*60;
+    if(keys['ArrowRight'] || keys['d']) cohete.vx += 0.16*dt*60;
+    if(keys['ArrowDown'] || keys['s']) cohete.vy += 0.14*dt*60;
+    if(brake){ cohete.vx*=0.96; cohete.vy*=0.96; }
 
-  // cleanup offscreen
-  meteoros = meteoros.filter(m => m.y < H + 150);
-  satelites = satelites.filter(s => s.y < H + 200);
+    cohete.vx*=0.995; cohete.vy*=0.995; cohete.vy+=0.018*dt*60;
+    cohete.x+=cohete.vx*dt*60; cohete.y+=cohete.vy*dt*60;
 
-  // update values
-  score += Math.floor(1 + (thrusting?2:0));
-  fuelEl.innerText = Math.max(0, Math.floor(fuel));
-  lifeEl.innerText = Math.max(0, Math.floor(life));
-  scoreEl.innerText = Math.floor(score);
+    meteoros.forEach(m=>{ m.x+=m.vx*dt*60; m.y+=m.vy*dt*60; });
+    satelites.forEach(s=>{ s.y+=s.vy*dt*60; s.x+=Math.sin(t/600 + s.x*0.001)*0.6; });
 
-  // engine sound
-  if(thrusting){ ensureAudio(); playEngine(true); } else { playEngine(false); }
+    updateExhaust(dt);
 
-  // fail / success
-  if(life <= 0 && !gameOver){
-    gameOver = true;
-    running = false;
-    centerText.innerHTML = '💥 NAVE DESTRUIDA';
-    centerBox.style.display = 'block';
-    resumeBtn.style.display = 'none';
-    startBtn.style.display = 'inline-block';
-    clearSpawnIntervals();
-  }
-  // success condition: reach top-right sector near Mars target
- if (showMars) {
-    const dx = (cohete.x + cohete.w/2) - (W*0.85);
-    const dy = (cohete.y + cohete.h/2) - (H*0.18);
+    meteoros.forEach(m=>{
+        if(rectCircleCollision({x:cohete.x,y:cohete.y,w:cohete.w,h:cohete.h},m)){
+            life=Math.max(0,life-(8+Math.random()*10));
+            score=Math.max(0,score-20); m.y=H+200;
+        }
+    });
+    satelites.forEach(s=>{
+        if(rectRectCollision({x:cohete.x,y:cohete.y,w:cohete.w,h:cohete.h},{x:s.x-s.w/2,y:s.y-s.h/2,w:s.w,h:s.h})){
+            life=Math.max(0,life-22);
+            score=Math.max(0,score-40); s.y=H+200;
+        }
+    });
 
-    if (Math.hypot(dx, dy) < 80 && !gameOver) {
-        gameOver = true;
-        running = false;
-        centerText.innerHTML = '🏁 ¡ÉXITO! Llegaste a Marte';
-        centerBox.style.display = 'block';
-        resumeBtn.style.display = 'none';
-        startBtn.style.display = 'inline-block';
+    meteoros = meteoros.filter(m=>m.y<H+150);
+    satelites = satelites.filter(s=>s.y<H+200);
+
+    score += Math.floor(1+(thrusting?2:0));
+    fuelEl.innerText = Math.max(0,Math.floor(fuel));
+    lifeEl.innerText = Math.max(0,Math.floor(life));
+    scoreEl.innerText = Math.floor(score);
+
+    if(life<=0 && !gameOver){
+        gameOver=true; running=false;
+        centerText.innerHTML='💥 NAVE DESTRUIDA';
+        centerBox.style.display='block';
+        resumeBtn.style.display='none';
+        startBtn.style.display='inline-block';
         clearSpawnIntervals();
+        bgMusic.pause();
+        gameOverSound.play();
     }
+
+    checkScoreGameOver();
+
+    draw();
+    if(running) requestAnimationFrame(loop);
 }
 
-
-  // draw on every frame
-  draw();
-  if(running) requestAnimationFrame(loop);
-}
-
-// init/reset
-resetAndStart(); // initial state shows center box
-// auto-start when clicking Start
-// bind start button already
-
-// event: back link
-backBtn.addEventListener('click', ()=>{ /* returns to index */ });
-
-// ensure spawn intervals set only once per start
-// We added intervals when startMission() is called and we clear them on reset.
-
-// safety: prevent multiple intervals if user presses start many times
-
+resetAndStart();
 </script>
+
 </body>
 </html>
+
 
 
 
