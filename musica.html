@@ -182,7 +182,8 @@
       </div>
 
       <div class="download">
-        <div style="color:var(--muted); font-size:13px">Generar y descargar pista (WAV):</div>
+        <div style="color:var(--muted); font-size:13px; margin-right:8px">Generar y descargar pista (WAV):</div>
+        <input id="durationSec" type="number" min="8" max="600" value="45" style="width:72px; padding:8px; border-radius:6px; background:transparent; border:1px solid rgba(255,255,255,0.04); color:inherit; margin-right:8px">
         <a id="downloadLink" href="#" download="trance_web.wav">⬇ Descargar WAV</a>
       </div>
     </section>
@@ -229,6 +230,8 @@ let audioCtx = null;
 let masterGain = null;
 let scheduledIntervals = [];
 let isPlaying = false;
+let schedulerTimer = null;
+let currentStep = 0;
 
 // estado / parámetros
 const state = {
@@ -238,6 +241,9 @@ const state = {
   leadVol: 0.12,
   bassVol: 0.45,
   kickVol: 1.0,
+  reverbLevel: 0.18,
+  delayTime: 0.18,
+  delayFeedback: 0.28
 };
 
 // helpers UI
@@ -251,7 +257,7 @@ const randomBtn = document.getElementById('btnRandom');
 const downloadLink = document.getElementById('downloadLink');
 
 bpmSlider.addEventListener('input', ()=>{ state.bpm = Number(bpmSlider.value); bpmVal.textContent = state.bpm; });
-volumeSlider.addEventListener('input', ()=>{ state.volume = Number(volumeSlider.value); if(masterGain) masterGain.gain.setValueAtTime(state.volume, audioCtx.currentTime) });
+volumeSlider.addEventListener('input', ()=>{ state.volume = Number(volumeSlider.value); if(masterGain && audioCtx) masterGain.gain.setValueAtTime(state.volume, audioCtx.currentTime) });
 timbreSel.addEventListener('change', ()=> state.timbre = timbreSel.value);
 
 document.getElementById('leadVol').addEventListener('input', (e)=> state.leadVol = Number(e.target.value));
@@ -262,7 +268,6 @@ playBtn.addEventListener('click', ()=> { if(!isPlaying) start(); else pause(); }
 stopBtn.addEventListener('click', stopAll);
 randomBtn.addEventListener('click', ()=> { randomizePattern(); });
 
-// previews
 document.getElementById('previewLead').addEventListener('click', previewLead);
 document.getElementById('previewBass').addEventListener('click', previewBass);
 document.getElementById('previewKick').addEventListener('click', previewKick);
@@ -284,24 +289,78 @@ function randomizePattern(){
     pattern.hats[i] = Math.random() > 0.4 ? 1 : 0;
     pattern.kick[i] = (i%4===0) ? 1 : (Math.random()>0.9?1:0);
   }
-  // feedback visual mínimo
   flashButton(randomBtn);
 }
 
-/* -------------- Playback control ------------- */
+/* -------------- Audio graph helpers ------------- */
+let globalNodes = null;
 function initAudio(){
   if(audioCtx) return;
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   masterGain = audioCtx.createGain();
   masterGain.gain.value = state.volume;
+
+  // simple delay (feedback) para dar movimiento
+  const delay = audioCtx.createDelay(1.0);
+  delay.delayTime.value = state.delayTime;
+  const fb = audioCtx.createGain();
+  fb.gain.value = state.delayFeedback;
+  delay.connect(fb);
+  fb.connect(delay);
+
+  // small chorus via two detuned delays (simple)
+  const chorusDelay = audioCtx.createDelay();
+  chorusDelay.delayTime.value = 0.015;
+
+  // mezcla seca -> delay -> master
+  const mix = audioCtx.createGain();
+  mix.gain.value = 1.0;
+
+  // reverb simple: pseudo reverb con múltiples delays (no convolver impulse)
+  const reverb = createSimpleReverb(audioCtx, 0.6);
+  const reverbGain = audioCtx.createGain();
+  reverbGain.gain.value = state.reverbLevel;
+
+  // chain: sources -> mix -> delay -> reverb -> master
+  mix.connect(delay);
+  delay.connect(masterGain);
+  mix.connect(reverb);
+  reverb.connect(reverbGain);
+  reverbGain.connect(masterGain);
+
+  mix.connect(masterGain); // añadir parte directa
   masterGain.connect(audioCtx.destination);
+
+  globalNodes = { delay, fb, chorusDelay, mix, reverb, reverbGain, fb };
+}
+
+function createSimpleReverb(ctx, duration){
+  // crea una red de delays cortos para sensación de reverb (falso pero efectivo)
+  const out = ctx.createGain();
+  const delays = [0.02,0.035,0.047,0.063];
+  delays.forEach((d,i)=>{
+    const dl = ctx.createDelay();
+    dl.delayTime.value = d;
+    const g = ctx.createGain();
+    g.gain.value = 0.25/(i+1);
+    // conectar entrada del reverb (we'll connect externally) -> delay -> gain -> out
+    dl.connect(g);
+    g.connect(out);
+    out['dl'+i] = dl;
+  });
+  // devolver un nodo con connect/disconnect como buffer
+  const input = ctx.createGain();
+  input.connect(out);
+  out.connect = function(node){ out.gain.connect(node); };
+  return input;
 }
 
 let stepInterval = null;
-let currentStep = 0;
 
+/* -------------- Playback control ------------- */
 function start(){
   initAudio();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
   isPlaying = true;
   playBtn.textContent = "⏸";
   scheduleLoop();
@@ -320,29 +379,31 @@ function stopAll(){
 }
 
 function clearScheduled(){
-  scheduledIntervals.forEach(id=> clearInterval(id));
+  if(schedulerTimer){ clearInterval(schedulerTimer); schedulerTimer = null; }
+  scheduledIntervals.forEach(id=> clearTimeout(id));
   scheduledIntervals = [];
-  if(stepInterval){ clearInterval(stepInterval); stepInterval=null; }
 }
 
-/* scheduleLoop: maneja pasos según BPM */
+/* scheduleLoop: maneja pasos según BPM con un pequeño lookahead */
 function scheduleLoop(){
   clearScheduled();
+  const lookaheadMs = 50; // lookahead en ms
+  const scheduleAhead = 0.1; // schedule 100ms ahead
   const beat = 60 / state.bpm;      // duración negra
   const stepTime = beat/4;          // 16 pasos por compás
-  const start = audioCtx.currentTime + 0.05;
-  currentStep = 0;
 
-  // función que ejecuta un paso
-  function step(){
-    const t = audioCtx.currentTime;
-    playStep(currentStep, t);
-    currentStep = (currentStep + 1) % 16;
+  currentStep = 0;
+  let nextNoteTime = audioCtx.currentTime + 0.05;
+
+  function scheduler(){
+    while(nextNoteTime < audioCtx.currentTime + scheduleAhead){
+      playStep(currentStep, nextNoteTime);
+      nextNoteTime += stepTime;
+      currentStep = (currentStep + 1) % 16;
+    }
   }
-  // ejecutar inmediatamente y luego en intervalo
-  step();
-  stepInterval = setInterval(step, stepTime*1000);
-  scheduledIntervals.push(stepInterval);
+  scheduler();
+  schedulerTimer = setInterval(scheduler, lookaheadMs);
 }
 
 /* reproduce lo que debe sonar en un paso */
@@ -369,69 +430,70 @@ function playStep(stepIndex, t){
 
 /* -------------- instrument builders ------------- */
 function playLead(freq, time, step){
-  // 2 osciladores en detune para chorus
+  // 2 osciladores en detune para chorus + pequeño delay de chorus
   const oscA = audioCtx.createOscillator();
   const oscB = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
+  const leadGain = audioCtx.createGain();
   const filter = audioCtx.createBiquadFilter();
+  const env = audioCtx.createGain();
 
   oscA.type = state.timbre;
   oscB.type = state.timbre;
   oscA.frequency.value = freq;
-  oscB.frequency.value = freq * 1.0015; // ligero detune
+  oscB.frequency.value = freq * 1.0016;
   oscB.detune.value = 6;
-  gain.gain.value = 0;
 
+  // filtro para suavizar
   filter.type = 'lowpass';
-  filter.frequency.value = 2000 + (Math.sin(step*0.6)*400);
+  filter.frequency.value = 1800 + (Math.sin(step*0.6)*500);
 
-  const leadGain = audioCtx.createGain();
   leadGain.gain.value = state.leadVol;
 
+  // conexión: osc -> filter -> env -> mix -> master
   oscA.connect(filter);
   oscB.connect(filter);
-  filter.connect(leadGain);
-  leadGain.connect(masterGain);
+  filter.connect(env);
+  env.connect(globalNodes ? globalNodes.mix : masterGain);
+
+  // envelope
+  const dur = (60/state.bpm)/2; // semicorchea / corchea
+  const attack = 0.008;
+  const release = Math.max(0.02, dur*0.85);
+
+  env.gain.setValueAtTime(0.0001, time);
+  env.gain.linearRampToValueAtTime(state.leadVol, time + attack);
+  env.gain.exponentialRampToValueAtTime(0.0001, time + release);
 
   oscA.start(time);
   oscB.start(time);
-
-  const dur = (60/state.bpm)/2; // semicorchea / corchea
-  // envelope
-  leadGain.gain.setValueAtTime(0.0001, time);
-  leadGain.gain.exponentialRampToValueAtTime(state.leadVol, time + 0.01);
-  leadGain.gain.exponentialRampToValueAtTime(0.0001, time + dur*0.9);
-
-  oscA.stop(time + dur);
-  oscB.stop(time + dur);
+  oscA.stop(time + release + 0.01);
+  oscB.stop(time + release + 0.01);
 }
 
 function playBass(freq, time){
   const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
+  const g = audioCtx.createGain();
+  const bassFilter = audioCtx.createBiquadFilter();
+
   osc.type = 'sawtooth';
   osc.frequency.value = freq;
-  gain.gain.value = 0.0001;
-
-  const bassFilter = audioCtx.createBiquadFilter();
   bassFilter.type = 'lowpass';
-  bassFilter.frequency.value = 800;
+  bassFilter.frequency.value = 900;
 
-  const g = audioCtx.createGain();
   g.gain.value = state.bassVol;
 
   osc.connect(bassFilter);
   bassFilter.connect(g);
-  g.connect(masterGain);
+  g.connect(globalNodes ? globalNodes.mix : masterGain);
+
+  const dur = (60/state.bpm)*0.9;
+  // smooth start
+  g.gain.setValueAtTime(0.0001, time);
+  g.gain.linearRampToValueAtTime(state.bassVol, time + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
 
   osc.start(time);
-  // envelope más largo
-  gain.gain.setValueAtTime(0.0001, time);
-  // small transient
-  g.gain.setValueAtTime(state.bassVol, time);
-  g.gain.exponentialRampToValueAtTime(0.0001, time + (60/state.bpm)*0.9);
-
-  osc.stop(time + (60/state.bpm)*0.9);
+  osc.stop(time + dur + 0.02);
 }
 
 function playKick(time){
@@ -445,7 +507,8 @@ function playKick(time){
   gain.gain.setValueAtTime(state.kickVol, time);
   gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
 
-  osc.connect(gain).connect(masterGain);
+  osc.connect(gain);
+  gain.connect(globalNodes ? globalNodes.mix : masterGain);
 
   osc.start(time);
   osc.stop(time + 0.14);
@@ -469,16 +532,16 @@ function playHat(time){
 
   noise.connect(filt);
   filt.connect(g);
-  g.connect(masterGain);
+  g.connect(globalNodes ? globalNodes.mix : masterGain);
 
   noise.start(time);
   noise.stop(time + 0.05);
 }
 
 /* ---- preview helpers ---- */
-function previewLead(){ initAudio(); playLead(440, audioCtx.currentTime + 0.02, 0); }
-function previewBass(){ initAudio(); playBass(55, audioCtx.currentTime + 0.02); }
-function previewKick(){ initAudio(); playKick(audioCtx.currentTime + 0.02); }
+function previewLead(){ initAudio(); if(audioCtx.state === 'suspended') audioCtx.resume(); playLead(440, audioCtx.currentTime + 0.02, 0); }
+function previewBass(){ initAudio(); if(audioCtx.state === 'suspended') audioCtx.resume(); playBass(55, audioCtx.currentTime + 0.02); }
+function previewKick(){ initAudio(); if(audioCtx.state === 'suspended') audioCtx.resume(); playKick(audioCtx.currentTime + 0.02); }
 
 function midiToFreq(m){
   return 440 * Math.pow(2, (m-69)/12);
@@ -505,6 +568,22 @@ async function renderWav(durationSeconds = 60){
 
   function o_midiToFreq(m){ return 440 * Math.pow(2, (m-69)/12); }
 
+  // Simple pseudo-reverb para offline: red de delays
+  function offlineReverb(inputNode){
+    const out = offline.createGain();
+    const delays = [0.02,0.035,0.047,0.063];
+    delays.forEach((d,i)=>{
+      const dl = offline.createDelay();
+      dl.delayTime.value = d;
+      const g = offline.createGain();
+      g.gain.value = 0.22/(i+1);
+      inputNode.connect(dl);
+      dl.connect(g);
+      g.connect(out);
+    });
+    return out;
+  }
+
   // Timeline: recorrer pasos y escribir instrumentos programáticamente
   let t = 0;
   for(let stepIndex=0; stepIndex < Math.floor(durationSeconds / stepTime); stepIndex++){
@@ -512,7 +591,6 @@ async function renderWav(durationSeconds = 60){
 
     // kick
     if(pattern.kick[s]){
-      // sine sweep
       const o = offline.createOscillator();
       const g = offline.createGain();
       o.type = 'sine';
@@ -520,13 +598,12 @@ async function renderWav(durationSeconds = 60){
       o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
       g.gain.setValueAtTime(state.kickVol, t);
       g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
-      o.connect(g).connect(master);
+      o.connect(g); g.connect(master);
       o.start(t); o.stop(t + 0.14);
     }
 
     // hat
     if(pattern.hats[s]){
-      // ruido corto
       const buf = offline.createBuffer(1, offline.sampleRate * 0.02, offline.sampleRate);
       const arr = buf.getChannelData(0);
       for(let i=0;i<arr.length;i++) arr[i] = (Math.random()*2-1)*0.5;
@@ -549,16 +626,16 @@ async function renderWav(durationSeconds = 60){
       o.type = 'sawtooth';
       o.frequency.value = freq;
       const g = offline.createGain();
+      const dur = (60/bpm)*0.9;
       g.gain.setValueAtTime(state.bassVol, t);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + (60/bpm)*0.9);
-      o.connect(g).connect(master);
-      o.start(t); o.stop(t + (60/bpm)*0.9);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + dur + 0.02);
     }
 
     // lead
     const ln = pattern.leadNotes[s];
     const lf = o_midiToFreq(60 + ln);
-    // two oscs detune
     const oa = offline.createOscillator();
     const ob = offline.createOscillator();
     oa.type = state.timbre;
@@ -566,14 +643,22 @@ async function renderWav(durationSeconds = 60){
     oa.frequency.value = lf;
     ob.frequency.value = lf * 1.0015;
     const lg = offline.createGain();
+    const leadDur = (60/bpm)/2;
     lg.gain.setValueAtTime(state.leadVol, t);
-    lg.gain.exponentialRampToValueAtTime(0.0001, t + (60/bpm)/2 * 0.9 );
+    lg.gain.exponentialRampToValueAtTime(0.0001, t + leadDur*0.9 );
     const filt = offline.createBiquadFilter();
     filt.type = 'lowpass';
     filt.frequency.value = 2000 + (Math.sin(s*0.6)*400);
-    oa.connect(filt); ob.connect(filt); filt.connect(lg); lg.connect(master);
-    oa.start(t); ob.start(t); oa.stop(t + (60/bpm)/2); ob.stop(t + (60/bpm)/2);
+    oa.connect(filt); ob.connect(filt); filt.connect(lg);
 
+    // connect to a simple offline reverb and master
+    const re = offlineReverb(lg);
+    lg.connect(re);
+    re.connect(master);
+    // also direct to master for presence
+    lg.connect(master);
+
+    oa.start(t); ob.start(t); oa.stop(t + leadDur); ob.stop(t + leadDur);
     t += stepTime;
   }
 
@@ -674,16 +759,27 @@ function writeString(view, offset, string){
 /* conectar descarga al link */
 downloadLink.addEventListener('click', async (e)=>{
   e.preventDefault();
-  downloadLink.textContent = 'Generando... espera';
+  const durInput = document.getElementById('durationSec');
+  let duration = Number(durInput.value) || 45;
+  if(duration < 8) duration = 8;
+  if(duration > 600) duration = 600;
+
+  downloadLink.textContent = 'Generando WAV...';
   downloadLink.style.pointerEvents = 'none';
-  const duration = 45; // segundos por defecto
-  const { blob, url } = await renderWav(duration);
-  downloadLink.href = url;
-  downloadLink.download = 'trance_web.wav';
-  downloadLink.textContent = '⬇ Descargar WAV';
-  downloadLink.style.pointerEvents = 'auto';
-  // opcional: iniciar descarga automática
-  // let a = document.createElement('a'); a.href = url; a.download = 'trance_web.wav'; a.click();
+  try {
+    const { blob, url } = await renderWav(duration);
+    downloadLink.href = url;
+    downloadLink.download = 'trance_web.wav';
+    downloadLink.textContent = '⬇ Descargar WAV';
+    downloadLink.style.pointerEvents = 'auto';
+    // descarga automática opcional (descomentar si la quieres)
+    // let a = document.createElement('a'); a.href = url; a.download = 'trance_web.wav'; a.click();
+  } catch(err){
+    console.error(err);
+    downloadLink.textContent = 'Error generando WAV';
+    downloadLink.style.pointerEvents = 'auto';
+    setTimeout(()=>{ downloadLink.textContent = '⬇ Descargar WAV' }, 2000);
+  }
 });
 
 /* inicial pattern simple */
