@@ -87,6 +87,16 @@
         color:rgba(255,255,255,0.95);
         margin: 40px 0 60px;
     }
+
+    /* ESTILO PARA EL CONTADOR */
+    #contador-jugadores {
+        font-size: 26px;
+        color: #ffffff;
+        text-align: center;
+        margin-top: 20px;
+        text-shadow: 0px 3px 6px rgba(0,0,0,0.35);
+        font-weight: bold;
+    }
 </style>
 
 </head>
@@ -94,9 +104,12 @@
 
 <h1>🎮 VILLA AUTOMATION GAMES</h1>
 
+<!-- CONTADOR GLOBAL DE JUGADORES -->
+<div id="contador-jugadores">Cargando jugadores...</div>
+
 <div class="grid-games">
 
-    <!-- JUEGO 1 -> apunta a game.html -->
+    <!-- JUEGO 1 -->
     <div class="game-card" onclick="location.href='juego1.html'">
         <img src="assets/cohete.jpg" alt="Juego 1">
         <div class="game-info">
@@ -105,7 +118,7 @@
         </div>
     </div>
 
-     <!-- JUEGO 2 -> apunta a game.html -->
+    <!-- JUEGO 2 -->
     <div class="game-card" onclick="location.href='juego2.html'">
         <img src="assets/biblia.png" alt="Juego 2">
         <div class="game-info">
@@ -117,15 +130,35 @@
 </div>
 
 <h1>¡Activa tu diversión!</h1>
-<p>Hemos habilitado la opción de juegos virtuales: al completar misiones y retos, podrás ganar bonos y descuentos en nuestros productos.
-    ¡Participa, diviértete y aprovecha los beneficios exclusivos de Villa Automation!</p>
-</div>
-    
-    
-    <footer>Hecho con ❤️ — Villa Automation Games</footer>
+<p style="text-align:center; max-width:900px; margin:0 auto;">
+    Hemos habilitado la opción de juegos virtuales: al completar misiones y retos, podrás ganar bonos y descuentos en nuestros productos.
+    ¡Participa, diviértete y aprovecha los beneficios exclusivos de Villa Automation!
+</p>
+
+<footer>Hecho con ❤️ — Villa Automation Games</footer>
+
+<!-- SCRIPT DEL CONTADOR GLOBAL -->
+<script>
+// ID único del contador global
+const contadorID = "villaautomation.games.global";
+
+// Cuando entra un usuario → aumentar contador
+fetch(`https://api.countapi.xyz/hit/${contadorID}`)
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("contador-jugadores").innerText =
+            "Jugadores que han ingresado: " + data.value;
+    })
+    .catch(err => {
+        document.getElementById("contador-jugadores").innerText =
+            "Contador no disponible";
+    });
+</script>
 
 </body>
 </html>
+
+
 
 
 
