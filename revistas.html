@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Librería y Artículos Científicos</title>
+<title>Librería Científica</title>
 
 <style>
     body{
@@ -13,7 +13,7 @@
         color:#222;
     }
 
-    /* BANNER SUPERIOR */
+    /* BANNER */
     .banner{
         background:#000;
         color:white;
@@ -29,14 +29,13 @@
         margin-left:10px;
     }
 
-    /* CONTENEDOR */
     .container{
         width:90%;
         margin:auto;
         margin-top:25px;
     }
 
-    /* TARJETAS GRANDES */
+    /* TARJETAS PRINCIPALES */
     .cards{
         display:flex;
         gap:20px;
@@ -77,7 +76,8 @@
         font-weight:600;
     }
 
-    /* SECCIÓN DE LIBROS */
+
+    /* SECCIÓN LIBROS */
     .section-title{
         margin-top:40px;
         font-size:26px;
@@ -94,7 +94,7 @@
         padding-bottom:20px;
     }
     .book{
-        min-width:160px;
+        min-width:200px;
         background:white;
         border-radius:10px;
         padding:10px;
@@ -113,7 +113,7 @@
     }
     .book-title{
         margin-top:10px;
-        font-size:16px;
+        font-size:18px;
         font-weight:600;
     }
     .book-author{
@@ -121,7 +121,85 @@
         color:#555;
     }
 
-    /* FOOTER */
+    /* BOTONES DE LIBRO */
+    .btn-group{
+        margin-top:10px;
+        display:flex;
+        flex-direction:column;
+        gap:8px;
+    }
+    .btn-download{
+        background:#007bff;
+        color:white;
+        padding:8px;
+        border-radius:6px;
+        text-decoration:none;
+    }
+    .btn-buy{
+        background:#00c853;
+        color:white;
+        padding:8px;
+        border-radius:6px;
+        cursor:pointer;
+        border:none;
+        font-size:15px;
+    }
+
+    /* MODAL FORMULARIO */
+    .modal-bg{
+        position:fixed;
+        left:0; top:0;
+        width:100%; height:100%;
+        background:rgba(0,0,0,0.6);
+        display:none;
+        justify-content:center;
+        align-items:center;
+        z-index:9999;
+    }
+    .modal{
+        background:white;
+        width:90%;
+        max-width:450px;
+        padding:20px;
+        border-radius:12px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.3);
+        animation:show .3s ease-out;
+    }
+    @keyframes show{
+        from{transform:scale(.8); opacity:0;}
+        to{transform:scale(1); opacity:1;}
+    }
+
+    .modal h2{
+        margin-top:0;
+        font-size:22px;
+    }
+    .modal input, .modal textarea, .modal select{
+        width:100%;
+        padding:10px;
+        margin-top:10px;
+        border-radius:6px;
+        border:1px solid #ccc;
+        font-size:15px;
+    }
+    .modal button{
+        margin-top:15px;
+        width:100%;
+        padding:10px;
+        background:#ffb400;
+        border:none;
+        font-size:16px;
+        border-radius:6px;
+        cursor:pointer;
+        font-weight:600;
+    }
+    .close{
+        float:right;
+        font-size:20px;
+        cursor:pointer;
+        margin-top:-10px;
+    }
+
     footer{
         margin-top:60px;
         background:#111;
@@ -141,10 +219,10 @@
 
 <div class="container">
 
-    <!-- TARJETAS PRINCIPALES -->
+    <!-- TARJETAS -->
     <div class="cards">
         <div class="card">
-            <img src="https://images.pexels.com/photos/1370296/pexels-photo-1370296.jpeg" />
+            <img src="https://images.pexels.com/photos/1370296/pexels-photo-1370296.jpeg">
             <div class="info">
                 <h3>Compra online y recoge en tienda</h3>
                 <a href="#" class="btn">VER MÁS</a>
@@ -152,15 +230,15 @@
         </div>
 
         <div class="card">
-            <img src="https://images.pexels.com/photos/159711/books-book-pages-read-literature-159711.jpeg" />
+            <img src="https://images.pexels.com/photos/159711/books-book-pages-read-literature-159711.jpeg">
             <div class="info">
-                <h3>Libros científicos recomendados</h3>
+                <h3>Libros científicos destacados</h3>
                 <a href="#" class="btn">VER LIBROS</a>
             </div>
         </div>
 
         <div class="card">
-            <img src="https://images.pexels.com/photos/1350560/pexels-photo-1350560.jpeg" />
+            <img src="https://images.pexels.com/photos/1350560/pexels-photo-1350560.jpeg">
             <div class="info">
                 <h3>Hazte socio y obtén beneficios</h3>
                 <a href="#" class="btn">UNIRME</a>
@@ -168,59 +246,79 @@
         </div>
     </div>
 
-    <!-- RECOMENDACIONES -->
-    <h2 class="section-title">Recomendados de esta semana</h2>
-    <div class="books">
-        <div class="book">
-            <img src="https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg" />
-            <p class="book-title">Física Cuántica para Todos</p>
-            <p class="book-author">Dr. Ramírez</p>
-        </div>
-        <div class="book">
-            <img src="https://images.pexels.com/photos/33283/stack-of-books-vintage-books-book-books.jpg" />
-            <p class="book-title">Misterios del Universo</p>
-            <p class="book-author">A. Martínez</p>
-        </div>
-        <div class="book">
-            <img src="https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg" />
-            <p class="book-title">Biología Moderna</p>
-            <p class="book-author">L. Medina</p>
-        </div>
-        <div class="book">
-            <img src="https://images.pexels.com/photos/356133/pexels-photo-356133.jpeg" />
-            <p class="book-title">Matemática Avanzada</p>
-            <p class="book-author">K. Torres</p>
-        </div>
-    </div>
 
-    <!-- MÁS VENDIDOS -->
-    <h2 class="section-title">Más vendidos</h2>
+    <!-- RECOMENDADOS -->
+    <h2 class="section-title">Recomendados Especiales</h2>
     <div class="books">
+
+        <!-- LIBRO ESPECIAL -->
         <div class="book">
-            <img src="https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg" />
-            <p class="book-title">El Cerebro Humano</p>
-            <p class="book-author">Juan Solís</p>
+            <img src="https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg">
+            <p class="book-title">Física Cuántica Avanzada</p>
+            <p class="book-author">Dr. Ramírez</p>
+
+            <div class="btn-group">
+                <a class="btn-download" href="#">📥 Descargar PDF</a>
+                <button class="btn-buy" onclick="openForm('Física Cuántica Avanzada')">🛒 Comprar Ahora</button>
+            </div>
         </div>
+
+        <!-- Otro libro -->
         <div class="book">
-            <img src="https://images.pexels.com/photos/3747437/pexels-photo-3747437.jpeg" />
-            <p class="book-title">Relatividad Fácil</p>
-            <p class="book-author">E. Delgado</p>
+            <img src="https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg">
+            <p class="book-title">Biología Molecular</p>
+            <p class="book-author">Dra. Medina</p>
+
+            <div class="btn-group">
+                <a class="btn-download" href="#">📥 Descargar PDF</a>
+                <button class="btn-buy" onclick="openForm('Biología Molecular')">🛒 Comprar Ahora</button>
+            </div>
         </div>
-        <div class="book">
-            <img src="https://images.pexels.com/photos/261909/pexels-photo-261909.jpeg" />
-            <p class="book-title">Tecnologías del Futuro</p>
-            <p class="book-author">C. Vega</p>
-        </div>
+
     </div>
 
 </div>
 
-<!-- FOOTER -->
+<!-- MODAL FORMULARIO DE COMPRA -->
+<div class="modal-bg" id="modalBg">
+    <div class="modal">
+        <span class="close" onclick="closeForm()">✖</span>
+        <h2>Formulario de Compra</h2>
+
+        <label>Libro seleccionado</label>
+        <input type="text" id="bookName" readonly>
+
+        <input type="text" placeholder="Tu nombre">
+        <input type="email" placeholder="Correo electrónico">
+        
+        <label>Método de pago</label>
+        <select>
+            <option>Tarjeta de Crédito</option>
+            <option>Yape / Plin</option>
+            <option>PayPal</option>
+        </select>
+
+        <textarea rows="3" placeholder="Comentarios opcionales"></textarea>
+
+        <button>Enviar Pedido</button>
+    </div>
+</div>
+
 <footer>
     © 2025 Librería Científica — Todos los derechos reservados
 </footer>
-<a href="index.html" class="back-btn">? Volver a la página principal</a>
+
+<script>
+    function openForm(book) {
+        document.getElementById("modalBg").style.display = "flex";
+        document.getElementById("bookName").value = book;
+    }
+
+    function closeForm(){
+        document.getElementById("modalBg").style.display = "none";
+    }
+</script>
+
 </body>
 </html>
-
 
