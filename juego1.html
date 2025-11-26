@@ -309,14 +309,14 @@ function loop(now){
     }
 
     // --- CHEQUEO DE ÉXITO ---
-    if(score>=3000 && !gameOver){
+    if(score>=2000 && !gameOver){
         showMars = true;
         const dx = (cohete.x + cohete.w/2) - (W*0.85);
         const dy = (cohete.y + cohete.h/2) - (H*0.18);
         if(Math.hypot(dx, dy) < 80){
             gameOver = true;
             running = false;
-            centerText.innerHTML = '🏆 ¡FELICIDADES! Alcanzaste 3000 puntos y llegaste a Marte';
+            centerText.innerHTML = '🏆 ¡FELICIDADES! Alcanzaste 2000 puntos y llegaste a Marte';
             centerBox.style.display = 'block';
             resumeBtn.style.display = 'none';
             startBtn.style.display = 'inline-block';
@@ -337,6 +337,7 @@ resetAndStart();
 
 </body>
 </html>
+
 
 
 
