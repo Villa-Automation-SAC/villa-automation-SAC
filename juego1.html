@@ -75,7 +75,7 @@ window.addEventListener('resize', ()=>{
 
 // imagen cohete (SVG embebido)
 const imgCohete = new Image();
-imgCohete.src = "/assets/cohete4.png"; + encodeURIComponent(`
+imgCohete.src = "assets/cohete4.png"; + encodeURIComponent(`
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 220'>
  <defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='#00eaff'/><stop offset='1' stop-color='#0073b8'/></linearGradient></defs>
  <rect width='120' height='220' rx='18' fill='none'/>
@@ -430,3 +430,4 @@ backBtn.addEventListener('click', ()=>{ /* returns to index */ });
 </script>
 </body>
 </html>
+
