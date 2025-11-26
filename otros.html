@@ -105,7 +105,11 @@
 <h1>🎮 VILLA AUTOMATION GAMES</h1>
 
 <!-- CONTADOR GLOBAL DE JUGADORES -->
-<div id="contador-jugadores">Cargando jugadores...</div>
+    
+<div id="contador-jugadores" style="text-align:center; font-size:28px; color:white; font-weight:bold;">
+    Cargando jugadores...
+</div>
+
 
 <div class="grid-games">
 
@@ -139,24 +143,22 @@
 
 <!-- SCRIPT DEL CONTADOR GLOBAL -->
 <script>
-// ID único del contador global
-const contadorID = "villaautomation.games.global";
-
-// Cuando entra un usuario → aumentar contador
-fetch(`https://api.countapi.xyz/hit/${contadorID}`)
-    .then(res => res.json())
+fetch("https://api.countapi.xyz/hit/villaautomation.demo.1")
+    .then(r => r.json())
     .then(data => {
         document.getElementById("contador-jugadores").innerText =
             "Jugadores que han ingresado: " + data.value;
     })
-    .catch(err => {
+    .catch(() => {
         document.getElementById("contador-jugadores").innerText =
             "Contador no disponible";
     });
 </script>
 
+
 </body>
 </html>
+
 
 
 
