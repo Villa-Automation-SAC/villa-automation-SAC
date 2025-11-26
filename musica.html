@@ -432,7 +432,7 @@ function playStep(stepIndex, t){
     const freq = midiToFreq(midi);
     playBass(freq, t);
   }
-  // Lead (nota corta/arpegio)
+  // Lead (nota corta/arpegio) 
   const leadNote = pattern.leadNotes[stepIndex];
   const leadFreq = midiToFreq(60 + leadNote); // C4 base
   playLead(leadFreq, t, stepIndex);
@@ -795,6 +795,7 @@ randomizePattern();
 </script>
 </body>
 </html>
+
 
 
 
