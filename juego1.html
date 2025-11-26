@@ -61,7 +61,7 @@
 <canvas id="game"></canvas>
 
 <div id="hud">
-    🚀 Vida: <span id="vidas">3</span><br>
+    🚀 Vida: <span id="vidas">5</span><br>
     ⭐ Puntuación: <span id="score">0</span>
 </div>
 
@@ -80,7 +80,7 @@ canvas.height = window.innerHeight;
 let cohete;
 let meteoros = [];
 let satelites = [];
-let vidas = 3;
+let vidas = 5;
 let score = 0;
 let gameOver = false;
 let keys = {};
@@ -148,9 +148,9 @@ function dibujarSatelite(s) {
 function generarMeteorito() {
     meteoros.push({
         x: Math.random() * canvas.width,
-        y: -50,
+        y: -30,
         r: 25 + Math.random() * 25,
-        vel: 3 + Math.random() * 3
+        vel: 2 + Math.random() * 2
     });
 }
 
@@ -158,7 +158,7 @@ function generarSatelite() {
     satelites.push({
         x: Math.random() * canvas.width,
         y: -60,
-        w: 60,
+        w: 40,
         h: 30,
         vel: 2
     });
@@ -194,7 +194,7 @@ function draw() {
 
         if (colisionRectCir(cohete, m)) {
             daño();
-            m.y = canvas.height + 100;
+            m.y = canvas.height + 50;
         }
     });
 
@@ -205,7 +205,7 @@ function draw() {
 
         if (colisionRectRect(cohete, s)) {
             daño();
-            s.y = canvas.height + 100;
+            s.y = canvas.height + 50;
         }
     });
 
@@ -270,7 +270,7 @@ function mostrarMensaje(txt) {
 
 // ==================== REINICIAR ======================
 function init() {
-    vidas = 3;
+    vidas = 5;
     score = 0;
     cohete = crearCohete();
     meteoros = [];
@@ -295,3 +295,4 @@ init();
 </script>
 </body>
 </html>
+
