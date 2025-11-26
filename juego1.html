@@ -290,6 +290,15 @@ function draw(){
   for(let i=0;i<60;i++){
     ctx.fillStyle = 'rgba(255,255,255,'+ (Math.random()*0.25+0.05) +')';
     ctx.fillRect(Math.random()*W, Math.random()*H, Math.random()*1.8, Math.random()*1.8);
+
+    // Marte aparece solo cuando está activado
+if (showMars) {
+    ctx.beginPath();
+    ctx.fillStyle = "#c1440e";   // color tipo Marte
+    ctx.arc(W * 0.85, H * 0.18, 60, 0, Math.PI * 2);
+    ctx.fill();
+}
+
   }
 
   // trajectory guide (distant)
@@ -390,6 +399,12 @@ function loop(now){
     const nozzleX = cohete.x + cohete.w/2;
     const nozzleY = cohete.y + cohete.h + 6; // slightly below rocket image
     spawnExhaust(nozzleX, nozzleY, Math.min(1, p*3));
+
+    // Activar Marte cuando sube lo suficiente y tiene el puntaje requerido
+if (!showMars && score >= puntosParaMarte && cohete.y < H * 0.20) {
+    showMars = true;
+}
+
   }
   if(keys['ArrowLeft'] || keys['a']) cohete.vx -= 0.16 * dt * 60;
   if(keys['ArrowRight'] || keys['d']) cohete.vx += 0.16 * dt * 60;
@@ -458,17 +473,21 @@ function loop(now){
     clearSpawnIntervals();
   }
   // success condition: reach top-right sector near Mars target
-  const dx = (cohete.x + cohete.w/2) - (W*0.88);
-  const dy = (cohete.y + cohete.h/2) - (H*0.55);
-  if(Math.hypot(dx,dy) < 80 && !gameOver){
-    gameOver = true;
-    running = false;
-    centerText.innerHTML = '🏁 ¡ÉXITO! Llegaste a Marte';
-    centerBox.style.display = 'block';
-    resumeBtn.style.display = 'none';
-    startBtn.style.display = 'inline-block';
-    clearSpawnIntervals();
-  }
+ if (showMars) {
+    const dx = (cohete.x + cohete.w/2) - (W*0.85);
+    const dy = (cohete.y + cohete.h/2) - (H*0.18);
+
+    if (Math.hypot(dx, dy) < 80 && !gameOver) {
+        gameOver = true;
+        running = false;
+        centerText.innerHTML = '🏁 ¡ÉXITO! Llegaste a Marte';
+        centerBox.style.display = 'block';
+        resumeBtn.style.display = 'none';
+        startBtn.style.display = 'inline-block';
+        clearSpawnIntervals();
+    }
+}
+
 
   // draw on every frame
   draw();
@@ -488,10 +507,13 @@ backBtn.addEventListener('click', ()=>{ /* returns to index */ });
 
 // safety: prevent multiple intervals if user presses start many times
 // intervals are stored in spawnIntervals[] and cleared in clearSpawnIntervals().
+let showMars = false;
+let puntosParaMarte = 1000;
 
 </script>
 </body>
 </html>
+
 
 
 
