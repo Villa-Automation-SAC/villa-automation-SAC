@@ -312,7 +312,21 @@ function loop(now){
         gameOver = true;
         running = false;
         centerText.innerHTML = '🏆 ¡FELICIDADES! llegaste a Marte, Ganaste un bono de 5s/ (reclama ya !)';
-      <!-- BOTÓN FLOTANTE PROMOCIÓN NAVIDEÑA -->
+        centerBox.style.display = 'block';
+        resumeBtn.style.display = 'none';
+        startBtn.style.display = 'inline-block';
+        clearSpawnIntervals();
+        bgMusic.pause();
+        gameOverSound.play();
+    }
+
+    draw();
+    if(running) requestAnimationFrame(loop);
+}
+
+resetAndStart();
+</script>
+     <!-- BOTÓN FLOTANTE PROMOCIÓN NAVIDEÑA -->
 <a href="mailto:villaautomationeirl@gmail.com?subject=Solicitud%20de%20Bonos%20de%20Navidad&body=Hola,%20quiero%20información%20sobre%20las%20promociones%20y%20bonos%20de%20Navidad."
    class="btn-promo-navidad">
   🎁 Bonos de Navidad
@@ -354,25 +368,11 @@ function loop(now){
     document.querySelector('.btn-promo-navidad').style.display = 'none';
   }
 </script>
-        centerBox.style.display = 'block';
-        resumeBtn.style.display = 'none';
-        startBtn.style.display = 'inline-block';
-        clearSpawnIntervals();
-        bgMusic.pause();
-        gameOverSound.play();
-    }
-
-    draw();
-    if(running) requestAnimationFrame(loop);
-}
-
-resetAndStart();
-</script>
-
 
 
 </body>
 </html>
+
 
 
 
