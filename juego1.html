@@ -290,15 +290,6 @@ function draw(){
   for(let i=0;i<60;i++){
     ctx.fillStyle = 'rgba(255,255,255,'+ (Math.random()*0.25+0.05) +')';
     ctx.fillRect(Math.random()*W, Math.random()*H, Math.random()*1.8, Math.random()*1.8);
-
-    // Marte aparece solo cuando está activado
-if (showMars) {
-    ctx.beginPath();
-    ctx.fillStyle = "#c1440e";   // color tipo Marte
-    ctx.arc(W * 0.85, H * 0.18, 60, 0, Math.PI * 2);
-    ctx.fill();
-}
-
   }
 
   // trajectory guide (distant)
@@ -386,10 +377,6 @@ function loop(now){
   if(dt > 0.05) dt = 0.05;
   last = t;
   
-   // Activar Marte cuando sube lo suficiente y tiene el puntaje requerido
-if (!showMars && score >= puntosParaMarte && cohete.y < H * 0.20) {
-    showMars = true;
-}
   // controls: rotation & thrust simplified (we keep cohete angle fixed vertically for simplicity)
   // thrust actions
   const thrusting = keys['ArrowUp'] || keys['w'] || keys[' '];
@@ -505,13 +492,11 @@ backBtn.addEventListener('click', ()=>{ /* returns to index */ });
 // We added intervals when startMission() is called and we clear them on reset.
 
 // safety: prevent multiple intervals if user presses start many times
-// intervals are stored in spawnIntervals[] and cleared in clearSpawnIntervals().
-let showMars = false;
-let puntosParaMarte = 1000;
 
 </script>
 </body>
 </html>
+
 
 
 
