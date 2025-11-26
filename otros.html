@@ -143,7 +143,16 @@
 
 <!-- SCRIPT DEL CONTADOR GLOBAL -->
 <script>
-fetch("https://api.countapi.xyz/update/villaautomation.demo.1/?amount=1")
+// NAMESPACE y KEY únicas para tu contador global
+const namespace = "villaautomation";
+const key = "jugadores_global";
+
+// 1) Crear contador si no existe
+fetch(`https://api.countapi.xyz/create?namespace=${namespace}&key=${key}&value=0`)
+    .then(() => {
+        // 2) Incrementar contador global
+        return fetch(`https://api.countapi.xyz/update/${namespace}/${key}/?amount=1`);
+    })
     .then(r => r.json())
     .then(data => {
         document.getElementById("contador-jugadores").innerText =
@@ -157,8 +166,10 @@ fetch("https://api.countapi.xyz/update/villaautomation.demo.1/?amount=1")
 
 
 
+
 </body>
 </html>
+
 
 
 
