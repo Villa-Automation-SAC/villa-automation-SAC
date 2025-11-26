@@ -58,8 +58,8 @@
 <script>
 /* -----------------------
    Juego: Mission a Marte
-   - Archivos: index.html + juego.html
-   - Imagen de cohete embebida (SVG data URI)
+   - Añadí un propulsor visual (flama + partículas) sin alterar la estructura HTML
+   - Cambios concentrados en la sección <script>
    ------------------------*/
 
 // canvas
@@ -98,6 +98,39 @@ let gameOver = false;
 let running = false;
 let keys = {};
 let spawnIntervals = [];
+
+// NEW: propulsor / partículas
+let exhaustParticles = [];
+function spawnExhaust(x, y, strength){
+  // strength: 0..1
+  const count = Math.max(2, Math.floor(6 * strength));
+  for(let i=0;i<count;i++){
+    const ang = (Math.PI/2) + (Math.random()-0.5) * 0.6; // spread downward
+    const speed = 1.2 + Math.random()*2.2 + strength*3.0;
+    exhaustParticles.push({
+      x: x + (Math.random()-0.5)*10,
+      y: y + (Math.random()-0.5)*8,
+      vx: Math.cos(ang) * (speed * (0.3 + Math.random()*0.8)),
+      vy: Math.sin(ang) * (speed * (0.6 + Math.random()*1.2)),
+      life: 0.45 + Math.random()*0.6,
+      age: 0,
+      size: 6 + Math.random()*10,
+      hue: 30 + Math.random()*40
+    });
+  }
+}
+function updateExhaust(dt){
+  for(let i=exhaustParticles.length-1;i>=0;i--){
+    const p = exhaustParticles[i];
+    p.age += dt;
+    p.x += p.vx * dt * 60;
+    p.y += p.vy * dt * 60;
+    // apply slight drag and upward buoyancy (to simulate flame streaming)
+    p.vx *= 0.985;
+    p.vy *= 0.992;
+    if(p.age >= p.life) exhaustParticles.splice(i,1);
+  }
+}
 
 // audio (opcional)
 let audioCtx = null;
@@ -290,6 +323,30 @@ function draw(){
     ctx.restore();
   });
 
+  // NEW: draw exhaust particles behind rocket
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for(let i=exhaustParticles.length-1;i>=0;i--){
+    const p = exhaustParticles[i];
+    const alpha = Math.max(0, 1 - (p.age / p.life));
+    const s = p.size * (0.4 + 0.6 * (1 - p.age / p.life));
+    // outer glow
+    ctx.beginPath();
+    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, s*1.4);
+    grad.addColorStop(0, `rgba(255,${180 - (p.hue%60)},0,${alpha*0.7})`);
+    grad.addColorStop(0.5, `rgba(255,140,40,${alpha*0.5})`);
+    grad.addColorStop(1, `rgba(120,40,10,${alpha*0.02})`);
+    ctx.fillStyle = grad;
+    ctx.arc(p.x, p.y, s*1.4, 0, Math.PI*2);
+    ctx.fill();
+    // core
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(255,255,200,${alpha})`;
+    ctx.arc(p.x, p.y, s*0.6, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.restore();
+
   // draw rocket image (centered at cohete.x, cohete.y)
   if(imgCohete.complete){
     ctx.drawImage(imgCohete, cohete.x, cohete.y, cohete.w, cohete.h);
@@ -325,6 +382,10 @@ function loop(now){
     const p = cohete.thrust * (turbo?2.2:1.0);
     cohete.vy -= p * dt * 60;
     fuel = Math.max(0, fuel - 0.08 * (turbo?2.5:1) * dt * 60);
+    // spawn exhaust particles at nozzle position (bottom-center)
+    const nozzleX = cohete.x + cohete.w/2;
+    const nozzleY = cohete.y + cohete.h + 6; // slightly below rocket image
+    spawnExhaust(nozzleX, nozzleY, Math.min(1, p*3));
   }
   if(keys['ArrowLeft'] || keys['a']) cohete.vx -= 0.16 * dt * 60;
   if(keys['ArrowRight'] || keys['d']) cohete.vx += 0.16 * dt * 60;
@@ -338,12 +399,6 @@ function loop(now){
   cohete.x += cohete.vx * dt * 60;
   cohete.y += cohete.vy * dt * 60;
 
-  // bounds
-  if(cohete.x < 0) cohete.x = 0, cohete.vx = 0;
-  if(cohete.x + cohete.w > W) cohete.x = W - cohete.w, cohete.vx = 0;
-  if(cohete.y < 0) cohete.y = 0, cohete.vy = 0;
-  if(cohete.y + cohete.h > H) { cohete.y = H - cohete.h; cohete.vy = 0; }
-
   // update objects
   meteoros.forEach(m=>{
     m.x += (m.vx) * dt * 60;
@@ -353,6 +408,9 @@ function loop(now){
     s.y += s.vy * dt * 60;
     s.x += Math.sin(t/600 + s.x*0.001)*0.6;
   });
+
+  // update exhaust
+  updateExhaust(dt);
 
   // collisions
   meteoros.forEach((m, i)=>{
@@ -430,4 +488,6 @@ backBtn.addEventListener('click', ()=>{ /* returns to index */ });
 </script>
 </body>
 </html>
+
+
 
