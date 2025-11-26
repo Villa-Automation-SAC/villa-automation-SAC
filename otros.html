@@ -172,15 +172,16 @@
 
 <!-- SCRIPT DEL CONTADOR GLOBAL -->
 <script>
-const url = "https://api.npoint.io/9b5e7ed4e4e2c21ee5a0";
+const urlGet = "https://api.npoint.io/9b5e7ed4e4e2c21ee5a0";
+const urlPut = "https://api.npoint.io/9b5e7ed4e4e2c21ee5a0/edit";
 
-fetch(url)
+fetch(urlGet)
   .then(r => r.json())
   .then(data => {
-      let nuevoValor = data.visitas + 1;
+      let nuevoValor = parseInt(data.visitas) + 1;
 
-      // Actualizar contador en NPOINT
-      fetch(url, {
+      // ACTUALIZAR valor
+      fetch(urlPut, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ visitas: nuevoValor })
@@ -200,6 +201,7 @@ fetch(url)
 
 </body>
 </html>
+
 
 
 
