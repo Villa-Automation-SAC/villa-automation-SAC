@@ -55,10 +55,15 @@
   <div class="touchBtn" data-key="Shift">⇧</div>
 </div>
 
+<!-- AUDIO DE FONDO -->
+<audio id="musica-fondo" loop autoplay>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 // --- CONFIGURACIÓN PARA MOSTRAR MARTE POR PUNTAJE ---
-let showMars = false;            // Marte oculto al inicio
-let puntosParaMarte = 1000;      // Cambia el puntaje necesario
+let showMars = false;
+let puntosParaMarte = 1000;
 
 // canvas
 const canvas = document.getElementById('c');
@@ -120,11 +125,10 @@ let audioCtx = null;
 function ensureAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ audioCtx=null; } } }
 
 // --- AUDIO DE FONDO Y GAME OVER ---
-let bgMusic = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"); // música celestial
-bgMusic.loop = true;
+const bgMusic = document.getElementById("musica-fondo");
 bgMusic.volume = 0.35;
 
-let gameOverSound = new Audio("assets/game_over.mp3");
+const gameOverSound = new Audio("assets/game_over.mp3");
 gameOverSound.volume = 0.8;
 
 function checkScoreGameOver() {
@@ -215,7 +219,6 @@ function startMission(){
   spawnIntervals.push(setInterval(generarMeteorito, 900));
   spawnIntervals.push(setInterval(generarSatelite, 2200));
 
-  // reproducir música de fondo
   bgMusic.currentTime = 0;
   bgMusic.play();
 
@@ -328,8 +331,10 @@ function loop(now){
 resetAndStart();
 </script>
 
+
 </body>
 </html>
+
 
 
 
