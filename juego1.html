@@ -152,6 +152,44 @@ function colisionRectRect(a, b) {
              a.y + a.h < b.y ||
              a.y > b.y + b.h);
 }
+    
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Dibujar cohete
+    dibujarCohete();
+
+    // Dibujar meteoros
+    meteoros.forEach(m => {
+        m.y += m.vel;
+        dibujarMeteorito(m);
+
+        // Colisión
+        if (colisionRectCir(cohete, m)) {
+            daño();
+            m.y = canvas.height + 100; 
+        }
+    });
+
+    // Dibujar satélites
+    satelites.forEach(s => {
+        s.y += s.vel;
+        dibujarSatelite(s);
+
+        // Colisión
+        if (colisionRectRect(cohete, s)) {
+            daño();
+            s.y = canvas.height + 100;
+        }
+    });
+
+    // Puntaje
+    score++;
+    document.getElementById("score").innerText = score;
+
+    // Condición de victoria
+    if (score > 15000 && !gameOver) victoria();
+}
 
 // ==================== LOOP DEL JUEGO ======================
 function update() {
@@ -270,4 +308,5 @@ init();
 
 </body>
 </html>
+
 
