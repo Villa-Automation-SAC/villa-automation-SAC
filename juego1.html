@@ -113,6 +113,69 @@
     font-weight: bold;
     border: none;
 }
+
+  /* --- SOLO APARECE EN TELEFONO Y TABLET --- */
+@media (max-width: 900px) {
+
+    #touch-control-zone {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 260px;
+        display: flex;
+        gap: 25px;
+        z-index: 999999;
+        pointer-events: none;
+    }
+
+    #touch-joystick {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.12);
+        backdrop-filter: blur(3px);
+        position: relative;
+        pointer-events: auto;
+    }
+
+    #touch-stick {
+        width: 55px;
+        height: 55px;
+        background: rgba(255,255,255,0.45);
+        border-radius: 50%;
+        position: absolute;
+        top: calc(50% - 28px);
+        left: calc(50% - 28px);
+        transition: 0.06s linear;
+    }
+
+    #touch-buttons-area {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        pointer-events: auto;
+    }
+
+    .tbtn {
+        padding: 18px 22px;
+        background: rgba(255,255,255,0.25);
+        backdrop-filter: blur(3px);
+        border-radius: 10px;
+        font-size: 18px;
+        border: 2px solid rgba(255,255,255,0.35);
+        color: white;
+        text-shadow: 0 0 5px black;
+    }
+}
+
+/* --- EN PC DESAPARECEN --- */
+@media (min-width: 901px) {
+    #touch-control-zone {
+        display: none !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -558,6 +621,7 @@ resetAndStart();
 
 </body>
 </html>
+
 
 
 
