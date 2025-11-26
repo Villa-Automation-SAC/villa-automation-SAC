@@ -387,8 +387,8 @@ function clearScheduled(){
 /* scheduleLoop: maneja pasos según BPM con un pequeño lookahead */
 function scheduleLoop(){
   clearScheduled();
-  const lookaheadMs = 50; // lookahead en ms
-  const scheduleAhead = 0.1; // schedule 100ms ahead
+  const lookaheadMs = 20; // lookahead en ms
+  const scheduleAhead = 0.30; // schedule 100ms ahead
   const beat = 60 / state.bpm;      // duración negra
   const stepTime = beat/4;          // 16 pasos por compás
 
@@ -785,6 +785,7 @@ randomizePattern();
 </script>
 </body>
 </html>
+
 
 
 
