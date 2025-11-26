@@ -58,7 +58,54 @@
     word-wrap: break-word;
   }
 }
+    /* control en movil */
+#touch-control-zone {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    width: 160px;
+    display: flex;
+    gap: 15px;
+    z-index: 999999;
+    pointer-events: none;
+}
 
+#touch-joystick {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(5px);
+    position: relative;
+    pointer-events: auto;
+}
+
+#touch-stick {
+    width: 55px;
+    height: 55px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    position: absolute;
+    top: calc(50% - 28px);
+    left: calc(50% - 28px);
+    transition: 0.06s linear;
+}
+
+#touch-buttons-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: auto;
+}
+
+.tbtn {
+    padding: 10px 16px;
+    background: white;
+    color: black;
+    border-radius: 10px;
+    font-weight: bold;
+    border: none;
+}
 </style>
 </head>
 <body>
@@ -410,10 +457,101 @@ resetAndStart();
     document.querySelector('.btn-promo-navidad').style.display = 'none';
   }
 </script>
+  
+<!-- === CONTROLES TÁCTILES EXTRA PARA MÓVILES === -->
+<div id="touch-control-zone">
+    <div id="touch-joystick">
+        <div id="touch-stick"></div>
+    </div>
 
+    <div id="touch-buttons-area">
+        <button class="tbtn" id="tbtn-thrust">THRUST</button>
+        <button class="tbtn" id="tbtn-cut">CUT</button>
+    </div>
+</div>
+
+<script>
+(function(){
+
+    const joy = document.getElementById("touch-joystick");
+    const stick = document.getElementById("touch-stick");
+
+    const max = 40;
+    let active = false;
+    let origin = {x:0, y:0};
+    let pid = null;
+
+    function centerStick() {
+        stick.style.top = "calc(50% - 28px)";
+        stick.style.left = "calc(50% - 28px)";
+        window.dispatchEvent(new CustomEvent("rocket-joystick", {
+            detail: { x:0, y:0 }
+        }));
+    }
+
+    function start(e) {
+        active = true;
+        const rect = joy.getBoundingClientRect();
+        origin.x = rect.left + rect.width/2;
+        origin.y = rect.top + rect.height/2;
+        pid = (e.changedTouches ? e.changedTouches[0].identifier : "mouse");
+        move(e);
+    }
+
+    function move(e) {
+        if (!active) return;
+        const t = (e.changedTouches ? [...e.changedTouches].find(x=>x.identifier===pid) : e);
+        if (!t) return;
+
+        let dx = t.clientX - origin.x;
+        let dy = t.clientY - origin.y;
+
+        let dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist > max) {
+            dx = dx * (max/dist);
+            dy = dy * (max/dist);
+        }
+
+        stick.style.left = (dx + max - 28) + "px";
+        stick.style.top  = (dy + max - 28) + "px";
+
+        window.dispatchEvent(new CustomEvent("rocket-joystick", {
+            detail: {
+                x: dx/max,
+                y: dy/max
+            }
+        }));
+    }
+
+    function end(e) {
+        active = false;
+        centerStick();
+    }
+
+    joy.addEventListener("touchstart", start, {passive:false});
+    joy.addEventListener("touchmove", move, {passive:false});
+    joy.addEventListener("touchend", end, {passive:false});
+    joy.addEventListener("touchcancel", end, {passive:false});
+
+    joy.addEventListener("mousedown", start);
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", end);
+
+    // Botones táctiles
+    document.getElementById("tbtn-thrust").addEventListener("touchstart", ()=>{
+        window.dispatchEvent(new CustomEvent("rocket-buttons", { detail:{ thrust:true }}));
+    });
+
+    document.getElementById("tbtn-cut").addEventListener("touchstart", ()=>{
+        window.dispatchEvent(new CustomEvent("rocket-buttons", { detail:{ cut:true }}));
+    });
+
+})();
+</script>
 
 </body>
 </html>
+
 
 
 
