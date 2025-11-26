@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Camino a la Corona — Juego Bíblico</title>
+  <title>Camino a la Corona â€” Juego BÃ­blico</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -63,9 +63,51 @@
 
     /* responsive */
     @media(max-width:900px){main{grid-template-columns:1fr} .right-column{order:-1}}
-  </style>
+    /* ESCALERA DE NIVELES */
+  .stairway {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 25px auto;
+    width: 260px;
+  }
+
+  .step {
+    padding: 12px;
+    border-radius: 10px;
+    background: #1e2a49;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    opacity: 0.4;
+    transition: 0.3s;
+  }
+
+  .step.active {
+    background: #00c3ff;
+    color: #000;
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  /* MEJORA DE TIPOGRAFÃA GENERAL */
+  body, button, .question-box {
+    font-family: "Poppins", Arial, sans-serif;
+    letter-spacing: 0.4px;
+  }
+</style>
 </head>
 <body>
+
+  <!-- ESCALERA DE NIVELES -->
+  <div class="stairway" id="stairway">
+    <div class="step" id="step1">Nivel 1</div>
+    <div class="step" id="step2">Nivel 2</div>
+    <div class="step" id="step3">Nivel 3</div>
+    <div class="step" id="step4">Nivel 4</div>
+    <div class="step" id="step5">Nivel 5</div>
+  </div>
   <div class="container">
     <header>
       <div class="brand">
@@ -75,7 +117,7 @@
         </div>
         <div>
           <h1>Camino a la Corona</h1>
-          <p class="lead">Responde preguntas bíblicas, sube niveles y gana la corona ??</p>
+          <p class="lead">Responde preguntas bÃ­blicas, sube niveles y gana la corona ğŸ‘‘</p>
         </div>
       </div>
 
@@ -122,17 +164,17 @@
           <h3 style="margin:0 0 8px 0">Progreso</h3>
           <div class="levels" id="levelsWrap"></div>
           <div style="margin-top:12px">
-            <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted)"><span>Compleción</span><span id="pct">0%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted)"><span>CompleciÃ³n</span><span id="pct">0%</span></div>
             <div class="progress-bar" aria-hidden="true"><i id="progressInner"></i></div>
           </div>
         </div>
 
         <div class="card">
-          <h3 style="margin:0 0 8px 0">Cómo jugar</h3>
+          <h3 style="margin:0 0 8px 0">CÃ³mo jugar</h3>
           <ul style="color:var(--muted);margin:0;padding-left:18px">
             <li>Acierta las 3 preguntas de cada nivel para avanzar.</li>
             <li>Cada nivel completado: <strong>+100 monedas</strong>.</li>
-            <li>Al completar 5 niveles: ¡gana la corona! ??</li>
+            <li>Al completar 5 niveles: Â¡gana la corona! ğŸ‘‘</li>
           </ul>
           <div style="margin-top:12px;display:flex;gap:8px">
             <button class="btn" id="btnReset">Resetear Juego</button>
@@ -141,14 +183,14 @@
         </div>
 
         <div class="card">
-          <h3 style="margin:0 0 8px 0">Información</h3>
-          <p style="margin:0;color:var(--muted);font-size:13px">Diseño moderno responsive. Puedes añadir música de fondo, más preguntas o integrar en una app.</p>
+          <h3 style="margin:0 0 8px 0">InformaciÃ³n</h3>
+          <p style="margin:0;color:var(--muted);font-size:13px">DiseÃ±o moderno responsive. Puedes aÃ±adir mÃºsica de fondo, mÃ¡s preguntas o integrar en una app.</p>
         </div>
       </aside>
     </main>
 
     <footer>
-      Hecho con ?? — ¡Que gane el más sabio!
+      Hecho con â¤ï¸ â€” Â¡Que gane el mÃ¡s sabio!
     </footer>
   </div>
 
@@ -156,8 +198,8 @@
   <div class="overlay" aria-hidden="true">
     <div class="crown-wrap" id="crownWrap" role="dialog" aria-modal="true">
       <svg width="96" height="96" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 17l2-6 4 4 3-8 4 6 3-5 0 10H3z" fill="#FFD166" stroke="#F59E0B" stroke-width="0.5"/></svg>
-      <h2 style="margin:0">¡Felicidades!</h2>
-      <p style="margin:0;color:var(--muted)">Has completado los 5 niveles y ganado la Corona Celestial ??</p>
+      <h2 style="margin:0">Â¡Felicidades!</h2>
+      <p style="margin:0;color:var(--muted)">Has completado los 5 niveles y ganado la Corona Celestial ğŸ‘‘</p>
       <div style="display:flex;gap:8px;margin-top:8px">
         <button class="btn" id="btnClaim">Reclamar Corona</button>
         <button class="btn ghost" id="btnCloseCrown">Cerrar</button>
@@ -169,29 +211,29 @@
     // Preguntas: 5 niveles x 3 preguntas cada uno
     const levels = [
       {name:'Principiante', questions:[
-        {q:'¿Quién construyó el arca?', a:['Moisés','Noé','Abraham'], correct:1},
-        {q:'¿Quién fue tragado por un gran pez?', a:['Jonás','Elías','Pablo'], correct:0},
-        {q:'¿Dónde nació Jesús?', a:['Nazaret','Belén','Jerusalén'], correct:1}
+        {q:'Â¿QuiÃ©n construyÃ³ el arca?', a:['MoisÃ©s','NoÃ©','Abraham'], correct:1},
+        {q:'Â¿QuiÃ©n fue tragado por un gran pez?', a:['JonÃ¡s','ElÃ­as','Pablo'], correct:0},
+        {q:'Â¿DÃ³nde naciÃ³ JesÃºs?', a:['Nazaret','BelÃ©n','JerusalÃ©n'], correct:1}
       ]},
-      {name:'Discípulo', questions:[
-        {q:'¿Quién recibió los 10 mandamientos?', a:['Moisés','David','Daniel'], correct:0},
-        {q:'¿Qué símbolo dejó Dios como promesa después del diluvio?', a:['La estrella','El arco iris','La luna'], correct:1},
-        {q:'¿Quién negó a Jesús tres veces?', a:['Juan','Pedro','Judas'], correct:1}
+      {name:'DiscÃ­pulo', questions:[
+        {q:'Â¿QuiÃ©n recibiÃ³ los 10 mandamientos?', a:['MoisÃ©s','David','Daniel'], correct:0},
+        {q:'Â¿QuÃ© sÃ­mbolo dejÃ³ Dios como promesa despuÃ©s del diluvio?', a:['La estrella','El arco iris','La luna'], correct:1},
+        {q:'Â¿QuiÃ©n negÃ³ a JesÃºs tres veces?', a:['Juan','Pedro','Judas'], correct:1}
       ]},
       {name:'Servidor', questions:[
-        {q:'¿Cuál fue el primer milagro de Jesús?', a:['Sanar a un ciego','Caminar sobre el agua','Convertir agua en vino'], correct:2},
-        {q:'¿Cuál era la profesión de Pedro?', a:['Carpintero','Pescador','Pastor'], correct:1},
-        {q:'¿Qué libro contiene 150 salmos?', a:['Proverbios','Isaías','Salmos'], correct:2}
+        {q:'Â¿CuÃ¡l fue el primer milagro de JesÃºs?', a:['Sanar a un ciego','Caminar sobre el agua','Convertir agua en vino'], correct:2},
+        {q:'Â¿CuÃ¡l era la profesiÃ³n de Pedro?', a:['Carpintero','Pescador','Pastor'], correct:1},
+        {q:'Â¿QuÃ© libro contiene 150 salmos?', a:['Proverbios','IsaÃ­as','Salmos'], correct:2}
       ]},
       {name:'Guerrero de Fe', questions:[
-        {q:'¿Quién derribó a Goliat?', a:['Saúl','David','Samuel'], correct:1},
-        {q:'¿Quién interpretó los sueños del faraón en Egipto?', a:['José','Daniel','Jeremías'], correct:0},
-        {q:'¿Quién fue desobediente y miró atrás convirtiéndose en estatua de sal?', a:['Eva','La esposa de Lot','Raquel'], correct:1}
+        {q:'Â¿QuiÃ©n derribÃ³ a Goliat?', a:['SaÃºl','David','Samuel'], correct:1},
+        {q:'Â¿QuiÃ©n interpretÃ³ los sueÃ±os del faraÃ³n en Egipto?', a:['JosÃ©','Daniel','JeremÃ­as'], correct:0},
+        {q:'Â¿QuiÃ©n fue desobediente y mirÃ³ atrÃ¡s convirtiÃ©ndose en estatua de sal?', a:['Eva','La esposa de Lot','Raquel'], correct:1}
       ]},
       {name:'Victorioso', questions:[
-        {q:'¿Cuántos días ayunó Jesús en el desierto?', a:['20','40','15'], correct:1},
-        {q:'¿Cuál es el último libro de la Biblia?', a:['Judas','Apocalipsis','Hebreos'], correct:1},
-        {q:'¿Quién bautizó a Jesús?', a:['Pedro','Juan el Bautista','Mateo'], correct:1}
+        {q:'Â¿CuÃ¡ntos dÃ­as ayunÃ³ JesÃºs en el desierto?', a:['20','40','15'], correct:1},
+        {q:'Â¿CuÃ¡l es el Ãºltimo libro de la Biblia?', a:['Judas','Apocalipsis','Hebreos'], correct:1},
+        {q:'Â¿QuiÃ©n bautizÃ³ a JesÃºs?', a:['Pedro','Juan el Bautista','Mateo'], correct:1}
       ]}
     ];
 
@@ -317,7 +359,7 @@
       if(state.levelIndex < levels.length -1){
         state.levelIndex++;
         state.qIndex = 0;
-        alert('¡Nivel completado! Avanzas al siguiente nivel. +100 monedas');
+        alert('Â¡Nivel completado! Avanzas al siguiente nivel. +100 monedas');
         renderLevels();
         render();
       } else {
@@ -335,11 +377,11 @@
     }
 
     btnSkip.addEventListener('click', ()=>{
-      if(confirm('¿Deseas reiniciar el nivel actual?')) resetLevel();
+      if(confirm('Â¿Deseas reiniciar el nivel actual?')) resetLevel();
     });
 
     btnHelp.addEventListener('click', ()=>{
-      alert('Pistas: medita en la Escritura y recuerda historias clave: Noé, Jonás, Jesús, Moisés, David.');
+      alert('Pistas: medita en la Escritura y recuerda historias clave: NoÃ©, JonÃ¡s, JesÃºs, MoisÃ©s, David.');
     });
 
     btnReset.addEventListener('click', ()=>{
@@ -363,7 +405,7 @@
     }
 
     btnClaim.addEventListener('click', ()=>{
-      alert('Has reclamado la Corona ??. ¡Gloria!');
+      alert('Has reclamado la Corona ğŸ‘‘. Â¡Gloria!');
       crownWrap.classList.remove('show');
     });
     btnCloseCrown.addEventListener('click', ()=>{crownWrap.classList.remove('show');});
@@ -389,6 +431,22 @@
 
     // inicializar
     load();
-  </script>
+    // ACTIVAR ESCALERA
+  function updateStairway(level) {
+    for (let i = 1; i <= 5; i++) {
+      const step = document.getElementById(`step${i}`);
+      if (i <= level) step.classList.add("active");
+      else step.classList.remove("active");
+    }
+  }
+
+  // INTEGRAR CON SISTEMA DE PREGUNTAS
+  function goToNextLevel() {
+    currentLevel++;
+    if (currentLevel > 5) currentLevel = 5;
+    updateStairway(currentLevel);
+  }
+</script>
 </body>
 </html>
+
