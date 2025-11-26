@@ -61,14 +61,21 @@
     /* control en movil */
 #touch-control-zone {
     position: fixed;
-    bottom: 15px;
-    left: 15px;
-    width: 160px;
+    bottom: 140px;   /* antes 15px → ahora mucho más arriba */
+    left: 50%;       /* centrado */
+    transform: translateX(-50%);
+    width: 200px;
     display: flex;
-    gap: 15px;
-    z-index: 997;
+    gap: 20px;
+    z-index: 500;    /* por debajo de las flechas */
     pointer-events: none;
 }
+
+#touch-joystick,
+#touch-buttons-area {
+    pointer-events: auto;
+}
+
 
 #touch-joystick {
     width: 120px;
@@ -551,6 +558,7 @@ resetAndStart();
 
 </body>
 </html>
+
 
 
 
