@@ -1,44 +1,226 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<title>Cursos y Capacitaciones — Villa Automation</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Librería y Artículos Científicos</title>
+
 <style>
-body { font-family: Arial; background:#081b2d; color:white; padding:20px; margin:0; }
-img { width:100%; border-radius:12px; margin-bottom:15px; }
-.container { max-width:800px; margin:auto; }
-a { color:lightgreen; text-decoration:none; }
-.back-btn { margin-top:20px; display:inline-block; }
+    body{
+        margin:0;
+        font-family: "Segoe UI", Arial;
+        background:#f5f7fa;
+        color:#222;
+    }
+
+    /* BANNER SUPERIOR */
+    .banner{
+        background:#000;
+        color:white;
+        text-align:center;
+        padding:18px;
+        font-size:22px;
+        font-weight:600;
+    }
+    .banner span{
+        background:#ffd700;
+        padding:8px 16px;
+        border-radius:8px;
+        margin-left:10px;
+    }
+
+    /* CONTENEDOR */
+    .container{
+        width:90%;
+        margin:auto;
+        margin-top:25px;
+    }
+
+    /* TARJETAS GRANDES */
+    .cards{
+        display:flex;
+        gap:20px;
+        flex-wrap:wrap;
+    }
+    .card{
+        background:white;
+        flex:1;
+        min-width:280px;
+        border-radius:10px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        overflow:hidden;
+        transition:transform .3s;
+    }
+    .card:hover{
+        transform:translateY(-6px);
+    }
+    .card img{
+        width:100%;
+        height:170px;
+        object-fit:cover;
+    }
+    .card .info{
+        padding:15px;
+    }
+    .card h3{
+        margin:0;
+        font-size:18px;
+        margin-bottom:10px;
+    }
+    .btn{
+        background:#ffb400;
+        color:#000;
+        padding:8px 15px;
+        display:inline-block;
+        border-radius:6px;
+        text-decoration:none;
+        font-weight:600;
+    }
+
+    /* SECCIÓN DE LIBROS */
+    .section-title{
+        margin-top:40px;
+        font-size:26px;
+        font-weight:600;
+        border-left:6px solid #ffb400;
+        padding-left:10px;
+    }
+
+    .books{
+        display:flex;
+        gap:20px;
+        margin-top:15px;
+        overflow-x:auto;
+        padding-bottom:20px;
+    }
+    .book{
+        min-width:160px;
+        background:white;
+        border-radius:10px;
+        padding:10px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        text-align:center;
+        transition:.3s;
+    }
+    .book:hover{
+        transform:scale(1.05);
+    }
+    .book img{
+        width:100%;
+        height:220px;
+        object-fit:cover;
+        border-radius:6px;
+    }
+    .book-title{
+        margin-top:10px;
+        font-size:16px;
+        font-weight:600;
+    }
+    .book-author{
+        font-size:14px;
+        color:#555;
+    }
+
+    /* FOOTER */
+    footer{
+        margin-top:60px;
+        background:#111;
+        color:white;
+        padding:30px;
+        text-align:center;
+    }
 </style>
 </head>
+
 <body>
-<div class="container">
-<h1>Cursos y Capacitaciones</h1>
-<p>Programas de formación profesional en automatización, robótica, IA y control.</p>
 
-<!-- Imagen referenciada -->
-<img src="assets/revistas.jpg" alt="Vehiculos Aeroespaciales">
-
-<p>
-Nuestros cursos están orientados a brindar habilidades técnicas avanzadas en:
-</p>
-<ul>
-<li>Automatización y Control</li>
-<li>Robótica Industrial y Colaborativa</li>
-<li>Programación Arduino, Python y SCILAB</li>
-<li>Visión Artificial y Sistemas Inteligentes</li>
-<li>Sensores, PLC, IoT e Industria 4.0</li>
-</ul>
-
-<p>
-Formamos profesionales capaces de diseñar, construir e implementar sistemas automatizados para la industria,
-la investigación y la agricultura tecnificada.
-</p>
-<p>Teoria fundamental de los robots colaborativos, diseño y construcción
-<img src="assets/revistas1.jpg" alt="Vehiculos Aeroespaciales">
-<p>
-<a href="index.html" class="back-btn">? Volver a la página principal</a>
+<!-- BANNER -->
+<div class="banner">
+    📚 Black Friday en Librería Científica <span>VER DESCUENTOS</span>
 </div>
+
+<div class="container">
+
+    <!-- TARJETAS PRINCIPALES -->
+    <div class="cards">
+        <div class="card">
+            <img src="https://images.pexels.com/photos/1370296/pexels-photo-1370296.jpeg" />
+            <div class="info">
+                <h3>Compra online y recoge en tienda</h3>
+                <a href="#" class="btn">VER MÁS</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://images.pexels.com/photos/159711/books-book-pages-read-literature-159711.jpeg" />
+            <div class="info">
+                <h3>Libros científicos recomendados</h3>
+                <a href="#" class="btn">VER LIBROS</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://images.pexels.com/photos/1350560/pexels-photo-1350560.jpeg" />
+            <div class="info">
+                <h3>Hazte socio y obtén beneficios</h3>
+                <a href="#" class="btn">UNIRME</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECOMENDACIONES -->
+    <h2 class="section-title">Recomendados de esta semana</h2>
+    <div class="books">
+        <div class="book">
+            <img src="https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg" />
+            <p class="book-title">Física Cuántica para Todos</p>
+            <p class="book-author">Dr. Ramírez</p>
+        </div>
+        <div class="book">
+            <img src="https://images.pexels.com/photos/33283/stack-of-books-vintage-books-book-books.jpg" />
+            <p class="book-title">Misterios del Universo</p>
+            <p class="book-author">A. Martínez</p>
+        </div>
+        <div class="book">
+            <img src="https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg" />
+            <p class="book-title">Biología Moderna</p>
+            <p class="book-author">L. Medina</p>
+        </div>
+        <div class="book">
+            <img src="https://images.pexels.com/photos/356133/pexels-photo-356133.jpeg" />
+            <p class="book-title">Matemática Avanzada</p>
+            <p class="book-author">K. Torres</p>
+        </div>
+    </div>
+
+    <!-- MÁS VENDIDOS -->
+    <h2 class="section-title">Más vendidos</h2>
+    <div class="books">
+        <div class="book">
+            <img src="https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg" />
+            <p class="book-title">El Cerebro Humano</p>
+            <p class="book-author">Juan Solís</p>
+        </div>
+        <div class="book">
+            <img src="https://images.pexels.com/photos/3747437/pexels-photo-3747437.jpeg" />
+            <p class="book-title">Relatividad Fácil</p>
+            <p class="book-author">E. Delgado</p>
+        </div>
+        <div class="book">
+            <img src="https://images.pexels.com/photos/261909/pexels-photo-261909.jpeg" />
+            <p class="book-title">Tecnologías del Futuro</p>
+            <p class="book-author">C. Vega</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    © 2025 Librería Científica — Todos los derechos reservados
+</footer>
+<a href="index.html" class="back-btn">? Volver a la página principal</a>
 </body>
 </html>
+
+
