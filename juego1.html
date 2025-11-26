@@ -120,7 +120,7 @@ let audioCtx = null;
 function ensureAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ audioCtx=null; } } }
 
 // --- AUDIO DE FONDO Y GAME OVER ---
-let bgMusic = new Audio("assets/space_ambient.mp3"); // música celestial
+let bgMusic = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"); // música celestial
 bgMusic.loop = true;
 bgMusic.volume = 0.35;
 
@@ -330,6 +330,7 @@ resetAndStart();
 
 </body>
 </html>
+
 
 
 
