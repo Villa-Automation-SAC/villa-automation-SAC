@@ -5,143 +5,164 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ruleta Bíblica Covadonga</title>
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: url('https://villa-automation-sac.github.io/villa-automation/assets/biblia.png') no-repeat center center fixed;
-        background-size: cover;
-        color: white;
-        text-align: center;
-    }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('https://villa-automation-sac.github.io/villa-automation/assets/biblia.png') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    text-align: center;
+}
 
-    h1 {
-        margin-top: 20px;
-        font-size: 2.5em;
-        text-shadow: 2px 2px 8px #000;
-    }
+h1 {
+    margin-top: 20px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 8px #000;
+}
 
-    #ruleta-container {
-        position: relative;
-        width: 400px;
-        height: 400px;
-        margin: 30px auto;
-    }
+#ruleta-container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    margin: 30px auto;
+}
 
-    /* Contenedor del pulso para la ruleta */
-    #ruleta-pulse {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        animation: pulse-ruleta 2s infinite;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+#ruleta-pulse {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    animation: pulse-ruleta 2s infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    @keyframes pulse-ruleta {
-        0% { box-shadow: 0 0 20px rgba(255,255,255,0.5); transform: scale(1); }
-        50% { box-shadow: 0 0 35px rgba(255,255,255,0.8); transform: scale(1.02); }
-        100% { box-shadow: 0 0 20px rgba(255,255,255,0.5); transform: scale(1); }
-    }
+@keyframes pulse-ruleta {
+    0% { box-shadow: 0 0 20px rgba(255,255,255,0.5); transform: scale(1); }
+    50% { box-shadow: 0 0 35px rgba(255,255,255,0.8); transform: scale(1.02); }
+    100% { box-shadow: 0 0 20px rgba(255,255,255,0.5); transform: scale(1); }
+}
 
-    #ruleta {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        border: 10px solid rgba(255,255,255,0.8);
-        box-shadow: 0 0 20px rgba(255,255,255,0.5);
-        background: conic-gradient(
-            #ff9999 0deg 36deg,
-            #99ccff 36deg 72deg,
-            #ffcc99 72deg 108deg,
-            #99ff99 108deg 144deg,
-            #cc99ff 144deg 180deg,
-            #ff9966 180deg 216deg,
-            #66ccff 216deg 252deg,
-            #ff66cc 252deg 288deg,
-            #66ffcc 288deg 324deg,
-            #ffcc66 324deg 360deg
-        );
-        transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
-    }
+#ruleta {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 10px solid rgba(255,255,255,0.8);
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+    transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative;
+    overflow: hidden;
+}
 
-    #pointer {
-        width: 0; 
-        height: 0; 
-        border-left: 20px solid transparent;
-        border-right: 20px solid transparent;
-        border-bottom: 40px solid yellow;
-        position: absolute;
-        top: -40px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
+.segmento {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0% 0%;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    color: black;
+}
 
-    /* Botón girar grande con pulso */
-    #girar-btn {
-        padding: 20px 40px;
-        font-size: 2em;
-        margin-top: 30px;
-        cursor: pointer;
-        border-radius: 15px;
-        border: none;
-        background: gold;
-        color: #000;
-        box-shadow: 2px 2px 15px #000;
-        animation: pulse-btn 1.5s infinite;
-    }
+#pointer {
+    width: 0; 
+    height: 0; 
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 50px solid yellow;
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
 
-    @keyframes pulse-btn {
-        0% { transform: scale(1); box-shadow: 0 0 15px gold; }
-        50% { transform: scale(1.1); box-shadow: 0 0 25px gold; }
-        100% { transform: scale(1); box-shadow: 0 0 15px gold; }
-    }
+/* Botón girar grande con pulso */
+#girar-btn {
+    padding: 20px 40px;
+    font-size: 2em;
+    margin-top: 30px;
+    cursor: pointer;
+    border-radius: 15px;
+    border: none;
+    background: gold;
+    color: #000;
+    box-shadow: 2px 2px 15px #000;
+    animation: pulse-btn 1.5s infinite;
+}
 
-    #pregunta-box {
-        margin-top: 20px;
-        padding: 20px;
-        background: rgba(0,0,0,0.6);
-        border-radius: 15px;
-        display: none;
-    }
+@keyframes pulse-btn {
+    0% { transform: scale(1); box-shadow: 0 0 15px gold; }
+    50% { transform: scale(1.1); box-shadow: 0 0 25px gold; }
+    100% { transform: scale(1); box-shadow: 0 0 15px gold; }
+}
 
-    /* Opciones de preguntas con pulso y hover */
-    .opcion {
-        display: block;
-        margin: 10px 0;
-        padding: 15px;
-        background: rgba(255,255,255,0.2);
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 1.2em;
-        transition: transform 0.2s, background 0.2s;
-        animation: pulse-opcion 2s infinite;
-    }
+#pregunta-box {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 15px;
+    display: none;
+}
 
-    .opcion:hover {
-        background: rgba(255,255,255,0.4);
-        transform: scale(1.05);
-    }
+.opcion {
+    display: block;
+    margin: 10px 0;
+    padding: 15px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: transform 0.2s, background 0.2s;
+    animation: pulse-opcion 2s infinite;
+}
 
-    @keyframes pulse-opcion {
-        0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.3); }
-        50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.5); }
-        100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.3); }
-    }
+.opcion:hover {
+    background: rgba(255,255,255,0.4);
+    transform: scale(1.05);
+}
 
-    #score {
-        margin-top: 20px;
-        font-size: 1.5em;
-        text-shadow: 1px 1px 5px #000;
-    }
+@keyframes pulse-opcion {
+    0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.5); }
+    100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+}
 
-    #corona {
-        display: none;
-        margin-top: 20px;
-        font-size: 2em;
-        color: gold;
-        text-shadow: 2px 2px 10px #000;
-    }
+#score {
+    margin-top: 20px;
+    font-size: 1.5em;
+    text-shadow: 1px 1px 5px #000;
+}
+
+#progreso {
+    margin-top: 10px;
+    height: 25px;
+    width: 80%;
+    background: rgba(255,255,255,0.3);
+    border-radius: 12px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#barra-progreso {
+    height: 100%;
+    width: 0%;
+    background: gold;
+    border-radius: 12px;
+    transition: width 0.5s;
+}
+
+#corona {
+    display: none;
+    margin-top: 20px;
+    font-size: 2em;
+    color: gold;
+    text-shadow: 2px 2px 10px #000;
+}
 </style>
 </head>
 <body>
@@ -160,6 +181,9 @@
 </div>
 
 <div id="score">Monedas: 0 s/</div>
+<div id="progreso">
+    <div id="barra-progreso"></div>
+</div>
 <div id="corona">🎉 ¡Felicidades! Has completado todas las casillas y ganado la corona 🎉</div>
 
 <audio id="musica-fondo" loop autoplay>
@@ -167,6 +191,7 @@
 </audio>
 
 <script>
+// Preguntas y temas
 const preguntas = [
     { tema: "Creación", pregunta: "¿Cuántos días tardó Dios en crear el mundo?", opciones: ["6 días", "7 días", "5 días"], correcta: 0 },
     { tema: "Éxodo", pregunta: "¿Quién lideró a los israelitas fuera de Egipto?", opciones: ["Moisés", "Abraham", "David"], correcta: 0 },
@@ -182,6 +207,7 @@ const preguntas = [
 
 let score = 0;
 let casillasCompletadas = 0;
+
 let ruleta = document.getElementById('ruleta');
 let girarBtn = document.getElementById('girar-btn');
 let preguntaBox = document.getElementById('pregunta-box');
@@ -189,19 +215,31 @@ let preguntaText = document.getElementById('pregunta-text');
 let opcionesDiv = document.getElementById('opciones');
 let scoreDiv = document.getElementById('score');
 let coronaDiv = document.getElementById('corona');
+let barraProgreso = document.getElementById('barra-progreso');
+
+// Crear segmentos de la ruleta con los temas
+const colores = ['#ff9999','#99ccff','#ffcc99','#99ff99','#cc99ff','#ff9966','#66ccff','#ff66cc','#66ffcc','#ffcc66'];
+preguntas.forEach((p, i) => {
+    let div = document.createElement('div');
+    div.className = 'segmento';
+    div.style.transform = `rotate(${i*36}deg) skewY(-54deg)`; // 360/10 = 36
+    div.style.background = colores[i];
+    div.textContent = p.tema;
+    ruleta.appendChild(div);
+});
 
 girarBtn.addEventListener('click', girarRuleta);
 
 function girarRuleta() {
     girarBtn.disabled = true;
 
-    let giro = Math.floor(Math.random() * 360) + 720; // Al menos 2 vueltas
+    let giro = Math.floor(Math.random() * 360) + 720; 
     ruleta.style.transition = 'transform 4s cubic-bezier(0.25, 1, 0.5, 1)';
     ruleta.style.transform = `rotate(${giro}deg)`;
 
     setTimeout(() => {
         let anguloFinal = giro % 360;
-        let casilla = Math.floor(anguloFinal / 36); // 10 casillas
+        let casilla = Math.floor(anguloFinal / 36);
         mostrarPregunta(casilla);
     }, 4000);
 }
@@ -227,6 +265,7 @@ function verificarRespuesta(elegida, correcta) {
         score += 1000;
         casillasCompletadas++;
         scoreDiv.textContent = `Monedas: ${score} s/`;
+        barraProgreso.style.width = `${casillasCompletadas*10}%`;
         preguntaBox.style.display = 'none';
         if (casillasCompletadas >= 10) {
             coronaDiv.style.display = 'block';
