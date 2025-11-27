@@ -203,6 +203,90 @@ iframe {
   background: #3b82f6;
   box-shadow: 0 0 15px rgba(80, 150, 255, 0.55);
 }
+  
+/* BOTÓN FLOTANTE */
+#btn-cotizar {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  background: #00eaff;
+  color: #000;
+  padding: 15px 25px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00eaff;
+  animation: pulso 1.5s infinite;
+  z-index: 9999;
+}
+@keyframes pulso {
+  0% { box-shadow: 0 0 15px #00eaff; }
+  50% { box-shadow: 0 0 30px #00eaff; }
+  100% { box-shadow: 0 0 15px #00eaff; }
+}
+
+/* MODAL */
+#modal-cotizar {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+/* CONTENIDO DEL FORMULARIO */
+.modal-content {
+  background: white;
+  color: black;
+  padding: 25px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 12px;
+  position: relative;
+  animation: aparecer 0.3s ease;
+}
+@keyframes aparecer {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* X DE CERRAR */
+#cerrar {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* FORMULARIO */
+#form-cotizar input,
+#form-cotizar textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#form-cotizar button {
+  width: 100%;
+  padding: 12px;
+  background: #00eaff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#form-cotizar button:hover {
+  background: #00cfff;
+}
 
 </style>
 </head>
@@ -227,7 +311,7 @@ iframe {
 </div>
 
 <div class="container">
-
+<a href="index.html" class="back-btn">← Volver a la página principal</a>
 <p>En el presente espacio les presentamos los mejores robots desarrollados por nuestra empresa Villa Automation S.A.C</p>
 
 <p>
@@ -296,7 +380,7 @@ Puede realizar tareas repetitivas, pesadas o de alta precisión, mejorando la ef
 <a class="btn-google" target="_blank"
 href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil">📲 Descargar en Google Play</a>
 
-<img src="assets/robotagricola6.jpeg">
+<img src="assets/robotagricola.jpeg">
 
 <!-- -------------------- CAPACIDADES -------------------- -->
 <h1 id="capacidades">Capacidades y Funciones</h1>
@@ -380,12 +464,54 @@ La Unidad de Cosecha es el módulo especializado del robot colaborativo agrícol
 
 <br><br>
 
+  
 <a href="index.html" class="back-btn">← Volver a la página principal</a>
 
 </div>
+<!-- BOTÓN FLOTANTE -->
+<div id="btn-cotizar">💬 Cotizar</div>
+
+<!-- FORMULARIO EMERGENTE -->
+<div id="modal-cotizar">
+  <div class="modal-content">
+    <span id="cerrar">&times;</span>
+    <h2>Solicitar Cotización</h2>
+
+    <form id="form-cotizar">
+      <label>Nombre:</label>
+      <input type="text" required>
+
+      <label>Correo:</label>
+      <input type="email" required>
+
+      <label>Detalles:</label>
+      <textarea rows="4" required></textarea>
+
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</div>
+
+<script>
+// ABRIR
+document.getElementById("btn-cotizar").onclick = () => {
+  document.getElementById("modal-cotizar").style.display = "flex";
+};
+// CERRAR
+document.getElementById("cerrar").onclick = () => {
+  document.getElementById("modal-cotizar").style.display = "none";
+};
+// CERRAR AL HACER CLICK FUERA
+document.getElementById("modal-cotizar").onclick = (e) => {
+  if(e.target.id === "modal-cotizar"){
+    document.getElementById("modal-cotizar").style.display = "none";
+  }
+};
+</script>
 
 </body>
 </html>
+
 
 
 
