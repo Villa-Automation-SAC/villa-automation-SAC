@@ -250,6 +250,7 @@
     </div>
 </div>
 
+    
 
     <!-- RECOMENDADOS -->
     <h2 class="section-title">Articulos Cientificos</h2>
@@ -260,14 +261,18 @@
     <img src="assets/articulo1.png" alt="Riego inteligente">
     <p class="book-title">Diseño y construcción</p>
     <p class="book-author">Villa Automation</p>
+
     <div class="btn-group">
-        <a class="btn-download" href="assets/articulo1.pdf" download onclick="registrarDescarga('Riego inteligente')">
+        <a class="btn-download" 
+           href="assets/articulo1.pdf" 
+           download 
+           onclick="registrarDescarga('riego_inteligente')">
             📥 Descargar PDF
         </a>
     </div>
-    <p>Descargas: <span id="Riego inteligente">0</span></p>
-</div>
 
+    <p>Descargas: <span id="riego_inteligente">0</span></p>
+</div>
 
         <!-- Otro libro -->
         <div class="book">
@@ -336,32 +341,34 @@
 </script>
 
     <!-- scrib contador -->
- <script>
-function sumarDescarga() {
-    let total = localStorage.getItem("total_descargas");
+<script>
+function registrarDescarga(id) {
+    let contador = localStorage.getItem("descargas_" + id);
 
-    // Si no existe poner a cero
-    if (!total) total = 0;
+    if (!contador) contador = 0;
 
-    total = parseInt(total) + 1;
+    contador = parseInt(contador) + 1;
+    localStorage.setItem("descargas_" + id, contador);
 
-    localStorage.setItem("total_descargas", total);
-
-    // Actualizar en pantalla
-    document.getElementById("contador").textContent = total;
+    document.getElementById(id).textContent = contador;
 }
 
-// Cargar el valor al iniciar
-window.addEventListener("DOMContentLoaded", () => {
-    let total = localStorage.getItem("total_descargas");
-    if (!total) total = 0;
-    document.getElementById("contador").textContent = total;
-});
+// Cargar contadores al iniciar
+window.onload = () => {
+    const ids = ["riego_inteligente"]; // lista de libros
+    ids.forEach(id => {
+        let contador = localStorage.getItem("descargas_" + id);
+        if (!contador) contador = 0;
+        document.getElementById(id).textContent = contador;
+    });
+};
 </script>
+
 
 
 </body>
 </html>
+
 
 
 
