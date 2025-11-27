@@ -318,7 +318,8 @@ iframe {
 En Villa Automation SAC desarrollamos robots colaborativos agrícolas diseñados para trabajar junto al agricultor, optimizando tareas, reduciendo costos laborales
 y aumentando la productividad en el campo. Nuestros robots integran electrónica avanzada, sensores inteligentes y algoritmos de control que permiten operar de manera
 precisa, segura y autónoma.
-  
+  <!-- BOTÓN FLOTANTE -->
+<div id="btn-cotizar">💬 Cotizar</div>
   <h1>Modelos de Robots Agrícolas</h1>
 
 <div class="card-grid">
@@ -468,29 +469,27 @@ La Unidad de Cosecha es el módulo especializado del robot colaborativo agrícol
 <a href="index.html" class="back-btn">← Volver a la página principal</a>
 
 </div>
-<!-- BOTÓN FLOTANTE -->
-<div id="btn-cotizar">💬 Cotizar</div>
 
 <!-- FORMULARIO EMERGENTE -->
-<div id="modal-cotizar">
-  <div class="modal-content">
-    <span id="cerrar">&times;</span>
-    <h2>Solicitar Cotización</h2>
+<form id="form-cotizar" action="https://formsubmit.co/villaautomationeirl@gmail.com" method="POST">
 
-    <form id="form-cotizar">
-      <label>Nombre:</label>
-      <input type="text" required>
+  <!-- Protecciones opcionales -->
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://villaautomation.com/gracias.html">
 
-      <label>Correo:</label>
-      <input type="email" required>
+  <label>Nombre:</label>
+  <input type="text" name="Nombre" required>
 
-      <label>Detalles:</label>
-      <textarea rows="4" required></textarea>
+  <label>Correo:</label>
+  <input type="email" name="Correo" required>
 
-      <button type="submit">Enviar</button>
-    </form>
-  </div>
-</div>
+  <label>Detalles:</label>
+  <textarea rows="4" name="Detalles" required></textarea>
+
+  <button type="submit">Enviar</button>
+</form>
+
 
 <script>
 // ABRIR
@@ -511,6 +510,7 @@ document.getElementById("modal-cotizar").onclick = (e) => {
 
 </body>
 </html>
+
 
 
 
