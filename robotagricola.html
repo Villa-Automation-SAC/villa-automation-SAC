@@ -135,6 +135,75 @@ iframe {
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
+  /* --- TARJETAS CORPORATIVAS TIPO SEER ROBOTICS --- */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin: 40px 0;
+}
+
+.card {
+  background: linear-gradient(160deg, #0f1724, #0b111c);
+  border: 1px solid rgba(80, 150, 255, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 14px rgba(0,0,0,0.6);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  position: relative;
+}
+
+/* Luz azul cuando pasa el mouse */
+.card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(80,150,255,0.55);
+  box-shadow: 0 0 30px rgba(80,150,255,0.35);
+}
+
+/* Imagen */
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Contenido */
+.card-content {
+  padding: 20px;
+}
+
+.card-title {
+  color: #62a8ff;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-text {
+  color: #cdd9f5;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Botón moderno */
+.card-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 18px;
+  background: #1d4ed8;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-btn:hover {
+  background: #3b82f6;
+  box-shadow: 0 0 15px rgba(80, 150, 255, 0.55);
+}
+
 </style>
 </head>
 
@@ -150,6 +219,44 @@ iframe {
     <a href="#videos">Videos</a>
     <a href="#precios">Precios</a>
   </div>
+</div>
+<h1>Modelos de Robots Agrícolas</h1>
+
+<div class="card-grid">
+
+  <div class="card">
+    <img src="assets/robotagricola.jpeg" alt="Modelo A">
+    <div class="card-content">
+      <div class="card-title">Robot Agrícola - Modelo A</div>
+      <div class="card-text">
+        Ideal para siembra de precisión y análisis de suelo.
+      </div>
+      <a href="#" class="card-btn">Ver detalles</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="assets/robotagricola5.jpeg" alt="Modelo B">
+    <div class="card-content">
+      <div class="card-title">Unidad de Cosecha</div>
+      <div class="card-text">
+        Especial para recolección automática y transporte interno.
+      </div>
+      <a href="#" class="card-btn">Ver detalles</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="assets/robotagricola7.jpeg" alt="Modelo C">
+    <div class="card-content">
+      <div class="card-title">Robot Multisensor</div>
+      <div class="card-text">
+        Equipado con LiDAR, cámaras y sensores ambientales para monitoreo avanzado.
+      </div>
+      <a href="#" class="card-btn">Ver detalles</a>
+    </div>
+  </div>
+
 </div>
 
 <!-- -------------------- HERO IMAGE -------------------- -->
@@ -268,6 +375,7 @@ href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil">�
 
 </body>
 </html>
+
 
 
 
