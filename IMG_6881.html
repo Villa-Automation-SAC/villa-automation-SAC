@@ -20,28 +20,70 @@ body {
   padding: 40px 20px;
 }
 
-/* HERO */
-.hero {
-  background: linear-gradient(to right, #0b0f19, #112233);
-  padding: 80px 20px;
+/* --- HERO ESTILO ROBOTEAM --- */
+.hero-rt {
+  background: #0b0f19;
+  padding: 120px 40px;
+  display: flex;
+  justify-content: center;
 }
 
-.hero-flex {
+.hero-rt-container {
+  max-width: 1300px;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 40px;
+  justify-content: space-between;
+  gap: 60px;
 }
 
-.hero-text h1 {
-  font-size: 42px;
-  margin-bottom: 20px;
+.hero-rt-text {
+  flex: 1 1 520px;
 }
 
-.hero-img img {
-  width: 100%;
+.hero-rt-text h1 {
+  font-size: 55px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.hero-rt-text p {
+  font-size: 18px;
+  color: #cfd3da;
+  line-height: 1.7;
+  margin-bottom: 35px;
+}
+
+.hero-rt-btn {
+  padding: 12px 28px;
+  text-decoration: none;
+  border: 2px solid white;
+  color: white;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.hero-rt-btn:hover {
+  background: white;
+  color: #0b0f19;
+}
+
+/* CARD ESTILO ROBOTEAM */
+.hero-rt-card {
+  flex: 1 1 450px;
+  background: #ffffff;
   border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
+
+.hero-rt-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
 
 /* BOTONES */
 .btn {
@@ -121,26 +163,32 @@ body {
 <body>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="container hero-flex">
+<!-- HERO ROBOTEAM STYLE -->
+<section class="hero-rt">
 
-    <div class="hero-text">
+  <div class="hero-rt-container">
+
+    <!-- Texto -->
+    <div class="hero-rt-text">
       <h1>Robot Colaborativos de Defensa y Aplicaciones Militares</h1>
       <p>
-         Presentamos nuestra línea de robots tácticos para defensa, vigilancia,
-        reconocimiento y operaciones en zonas de riesgo. Tecnología peruana desarrollada por
-        Villa Automation S.A.C.
+        Presentamos nuestra línea de robots tácticos para defensa, vigilancia,
+        reconocimiento y operaciones en zonas de riesgo. Tecnología peruana desarrollada
+        por Villa Automation S.A.C.
       </p>
 
-      <a href="index.html" class="btn btn-back">← Volver</a>
+      <a href="index.html" class="hero-rt-btn">← Volver</a>
     </div>
 
-    <div class="hero-img">
-      <img src="assets/IMG_6881.JPG">
+    <!-- Card tipo RoboTeam -->
+    <div class="hero-rt-card">
+      <img src="assets/IMG_6881.JPG" alt="Robot Defensa">
     </div>
 
   </div>
+
 </section>
+
 
 <div class="container">
 
@@ -300,6 +348,7 @@ Su diseño robusto y su arquitectura modular permiten que cumpla operaciones cr�
 
 </body>
 </html>
+
 
 
 
