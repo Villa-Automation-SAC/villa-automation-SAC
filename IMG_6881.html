@@ -177,8 +177,7 @@ El proyecto Sentinel-XVA constituye una contribución significativa al desarroll
     <h2 class="section-title">Inicio Operacional y Calibración</h2>
 
     <p>
-      El robot Sentinel-XVA comienza con la inicialización de sensores, sincronización de actuadores
-      y calibración de posición...
+      El robot se encuentra en movimiento hacia un punto de interés, mientras el operador monitorea su avance. Luego el brazo comienza a moverse simultáneamente, ajustando su orientación respecto al entorno, lo que indica una coordinación entre la locomoción y la manipulación. El sistema de control emplea un modelo cinemático acoplado, donde el movimiento del vehículo (plataforma diferencial o 4WD) y el del brazo se sincronizan para mantener el equilibrio y la orientación
     </p>
 
     <img src="assets/defensa0.png">
@@ -192,7 +191,8 @@ El proyecto Sentinel-XVA constituye una contribución significativa al desarroll
     <h2 class="section-title">Control, Sensores y Funciones Inteligentes</h2>
 
     <p>
-      El robot mide temperatura, humedad y utiliza control PID avanzado...
+      El robot en esta escena mide temperatura y humedad con un sensor tipo DHT22. Si detecta condiciones de riesgo (por ejemplo, T° > 45°C o humedad < 30%), el brazo activa la pinza para “agarrar” o “retirar” el objeto peligroso Fig . Todo el proceso se visualiza en el Plotter Serial en tiempo real con: Posiciones del brazo (Hombro, Codo). Señales PID (U1, U2). Estado de la pinza. Temperatura y humedad. Curvas Hombro y Codo (rojo y azul): Las señales oscilan al inicio y luego se estabilizan, lo que indica que el control PID está corrigiendo el error de posición. Luego las pequeñas oscilaciones residuales son normales en sistemas simulados con ruido o desratización (Ts=0.1 s). 
+        Esto significa que el control logra estabilidad, pero todavía hay margen para afinar Kp, Ki, Kd si quieres una respuesta más suave..
     </p>
 
     <img src="assets/robotdefensa2.jpg">
@@ -283,6 +283,7 @@ Su diseño robusto y su arquitectura modular permiten que cumpla operaciones cr�
 
 </body>
 </html>
+
 
 
 
