@@ -207,6 +207,23 @@
         padding:30px;
         text-align:center;
     }
+ 
+.book img {
+    width: 180px;      /* ajusta según necesites */
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.books {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.book {
+    width: 200px;
+    text-align: center;
+}
+
 </style>
 </head>
 
@@ -521,57 +538,47 @@
 </div>
 
  <!-- periodicosss -->
-  <h2 class="section-title">Folletos y Periodicos</h2>
-    <div class="books">
+ <h2 class="section-title">Folletos y Periódicos</h2>
 
-        <!-- periodico 1-->
-<div class="book">
-    <img src="assets/periodico.png" alt="jornada">
-    <p class="book-title">Robot-prensa jornada</p>
-    <p class="book-author">Villa Automation</p>
-</div>
+<div class="books">
 
-                <!-- periodico 2-->
-<div class="book">
-    <img src="assets/periodico1.png" alt="Robot">
-    <p class="book-title">Robot-prensa ayacucho</p>
-    <p class="book-author">Villa Automation</p>
+    <!-- periodico 1-->
+    <div class="book">
+        <img src="assets/periodico.png" alt="jornada">
+        <p class="book-title">Robot-prensa jornada</p>
+        <p class="book-author">Villa Automation</p>
     </div>
 
-</div>     
-
-                <!-- periodico 3-->
-<div class="book">
-    <img src="assets/periodico2.png" alt="Robot">
-    <p class="book-title">Robot-Agroperu1</p>
-    
-    <p class="book-author">Villa Automation</p>
+    <!-- periodico 2-->
+    <div class="book">
+        <img src="assets/periodico1.png" alt="Robot">
+        <p class="book-title">Robot-prensa Ayacucho</p>
+        <p class="book-author">Villa Automation</p>
     </div>
 
-</div>     
-
-                    <!-- periodico 4-->
-<div class="book">
-    <img src="assets/periodico3.png" alt="Robot">
-    <p class="book-title">Robot-Agroperu2</p>
-    
-    <p class="book-author">Villa Automation</p>
-   </div>
-
-</div>     
-
-                        <!-- periodico 5-->
-<div class="book">
-    <img src="assets/periodico4.png" alt="Robot">
-    <p class="book-title">Robot-Agroperu3</p>
-    
-    <p class="book-author">Villa Automation</p>
+    <!-- periodico 3-->
+    <div class="book">
+        <img src="assets/periodico2.png" alt="Robot">
+        <p class="book-title">Robot-Agroperu1</p>
+        <p class="book-author">Villa Automation</p>
     </div>
 
-</div>      
+    <!-- periodico 4-->
+    <div class="book">
+        <img src="assets/periodico3.png" alt="Robot">
+        <p class="book-title">Robot-Agroperu2</p>
+        <p class="book-author">Villa Automation</p>
+    </div>
+
+    <!-- periodico 5-->
+    <div class="book">
+        <img src="assets/periodico4.png" alt="Robot">
+        <p class="book-title">Robot-Agroperu3</p>
+        <p class="book-author">Villa Automation</p>
+    </div>
+
 </div>
-    
-</div>
+
 
     
 <!-- MODAL FORMULARIO DE COMPRA -->
@@ -643,6 +650,7 @@ window.onload = () => {
 
 </body>
 </html>
+
 
 
 
