@@ -14,14 +14,13 @@ body {
   color: white;
 }
 
-/* --- CONTENEDOR CENTRAL --- */
 .container {
   max-width: 1200px;
   margin: auto;
   padding: 40px 20px;
 }
 
-/* --- HERO --- */
+/* HERO */
 .hero {
   background: linear-gradient(to right, #0b0f19, #112233);
   padding: 80px 20px;
@@ -34,32 +33,17 @@ body {
   gap: 40px;
 }
 
-.hero-text {
-  flex: 1;
-}
-
 .hero-text h1 {
   font-size: 42px;
-  font-weight: bold;
   margin-bottom: 20px;
-}
-
-.hero-text p {
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-.hero-img {
-  flex: 1;
 }
 
 .hero-img img {
   width: 100%;
   border-radius: 14px;
-  box-shadow: 0px 4px 20px rgba(0,0,0,0.35);
 }
 
-/* --- BOTONES --- */
+/* BOTONES */
 .btn {
   display: inline-block;
   padding: 12px 25px;
@@ -68,59 +52,62 @@ body {
   text-decoration: none;
 }
 
-.btn-back {
-  background: #0073ff;
-  color: white;
-}
+.btn-back { background: #0073ff; color: white; }
+.btn-play { background:#34A853; color:white; }
 
-.btn-play {
-  background:#34A853;
-  color:white;
-}
-
-/* --- TITULOS SECCIONES --- */
-.section-title {
-  font-size: 32px;
-  margin-bottom: 20px;
-  border-left: 6px solid #0073ff;
-  padding-left: 12px;
-}
-
-/* --- TARJETAS ELEGANTES TIPO ROBOTEAM --- */
+/* --- TARJETAS AL ESTILO RTX (lado a lado) --- */
 .card {
   background: #ffffff;
   color: #111;
   border-radius: 14px;
-  padding: 25px;
-  margin-bottom: 35px;
-  box-shadow: 0px 4px 20px rgba(0,0,0,0.08);
-  transition: transform .2s;
+  padding: 30px;
+  margin-bottom: 60px;
+  box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
 }
 
-.card:hover {
-  transform: translateY(-4px);
+.card-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: center;
 }
 
-.card img {
+.card-text {
+  flex: 1 1 500px;
+}
+
+.card-img {
+  flex: 1 1 400px;
+}
+
+.card-img img {
   width: 100%;
-  border-radius: 10px;
-  margin: 20px 0;
+  border-radius: 14px;
+  margin-bottom: 20px;
 }
 
-.card video,
-.card iframe {
+.card-img iframe,
+.card-img video {
   width: 100%;
-  border-radius: 10px;
-  margin-top: 20px;
+  border-radius: 14px;
+  margin-bottom: 20px;
 }
 
-/* --- LISTAS --- */
+/* TITULOS */
+.section-title {
+  font-size: 28px;
+  margin-bottom: 10px;
+  border-left: 6px solid #0073ff;
+  padding-left: 12px;
+}
+
+/* LISTAS */
 .card ul {
   padding-left: 22px;
   line-height: 1.7;
 }
 
-/* --- FOOTER --- */
+/* FOOTER */
 .footer {
   background: #0b0f19;
   padding: 40px;
@@ -133,72 +120,83 @@ body {
 
 <body>
 
-<!-- ===================== HERO ===================== -->
+<!-- HERO -->
 <section class="hero">
   <div class="container hero-flex">
 
     <div class="hero-text">
       <h1>Robot Colaborativos de Defensa y Aplicaciones Militares</h1>
       <p>
-        Presentamos nuestra línea de robots tácticos para defensa, vigilancia,
+         Presentamos nuestra línea de robots tácticos para defensa, vigilancia,
         reconocimiento y operaciones en zonas de riesgo. Tecnología peruana desarrollada por
         Villa Automation S.A.C.
       </p>
-      <br>
-      <a href="index.html" class="btn btn-back">← Volver a la Página Principal</a>
+
+      <a href="index.html" class="btn btn-back">← Volver</a>
     </div>
 
     <div class="hero-img">
-      <img src="assets/IMG_6881.JPG" alt="Robot Defensa">
+      <img src="assets/IMG_6881.JPG">
     </div>
 
   </div>
 </section>
 
-<!-- ===================== CONTENIDO EN TARJETAS ===================== -->
 <div class="container">
 
-  <!-- TARJETA 1 -->
-  <div class="card">
-    <h2 class="section-title">Descripción General del Sistema</h2>
+<!-- TARJETA 1 -->
+<div class="card">
+  <div class="card-flex">
 
-    <p>
-      En los sistemas de defensa y operaciones militares en nuestro país como Perú, los soldados y operarios están expuestos constantemente a altos niveles de riesgo en tareas como reconocimiento de terreno, desactivación de explosivos, transporte de material en zonas hostiles o vigilancia en tiempo real. El presente proyecto es modelar, desarrollar e implementar un prototipo de robot colaborativo con navegación autónoma,
+    <div class="card-text">
+      <h2 class="section-title">Descripción General del Sistema</h2>
+      <p>
+        En los sistemas de defensa y operaciones militares en nuestro país como Perú, los soldados y operarios están expuestos constantemente a altos niveles de riesgo en tareas como reconocimiento de terreno, desactivación de explosivos, transporte de material en zonas hostiles o vigilancia en tiempo real. El presente proyecto es modelar, desarrollar e implementar un prototipo de robot colaborativo con navegación autónoma,
 sensores avanzados y comunicación segura. asimismo, los modelos de control y fusión sensorial aplicados a entornos hostiles reduzcan el riesgo humano en operaciones críticas y apoyo en misiones de vigilancia y logística. Innovador: Introducción de la robótica colaborativa en defensa en el contexto peruano, con potencial de aplicación en otros sectores. Académico y Social: Generación de conocimientos, metodologías y capacidades locales en robótica avanzada. El modelamiento eléctrico y mecánico de los motores de tracción permitió representar con precisión el comportamiento dinámico del sistema. La respuesta simulada de velocidad, corriente y posición mostró una alta correlación con los resultados experimentales. El acoplamiento del sistema de tracción con el brazo robótico demostró un funcionamiento coordinado, permitiendo que el robot ejecute movimientos de aproximación y manipulación de objetos sin comprometer la estabilidad global. Este comportamiento evidencia la correcta distribución de pesos, el equilibrio de los actuadores y la eficiencia de la arquitectura de control distribuido.
 El proyecto Sentinel-XVA constituye una contribución significativa al desarrollo de robots colaborativos de aplicación militar y de defensa, integrando principios de automatización, control avanzado y diseño mecatrónico. Los resultados demuestran que la plataforma es capaz de operar de forma autónoma y estable bajo condiciones reales, consolidándose como una base experimental para futuras investigaciones orientadas a control predictivo, percepción inteligente y cooperación multi-robot. 
     </p>
+    </div>
 
-    <img src="assets/robotdefensa1.jpg">
+    <div class="card-img">
+      <img src="assets/robotdefensa1.jpg">
+    </div>
+
   </div>
+</div>
 
+<!-- TARJETA 2 -->
+<div class="card">
+  <div class="card-flex">
 
-  <!-- TARJETA 2 -->
-  <div class="card">
-    <h2 class="section-title">Inicio Operacional y Calibración</h2>
-
-    <p>
-      El robot se encuentra en movimiento hacia un punto de interés, mientras el operador monitorea su avance. Luego el brazo comienza a moverse simultáneamente, ajustando su orientación respecto al entorno, lo que indica una coordinación entre la locomoción y la manipulación. El sistema de control emplea un modelo cinemático acoplado, donde el movimiento del vehículo (plataforma diferencial o 4WD) y el del brazo se sincronizan para mantener el equilibrio y la orientación
+    <div class="card-text">
+      <h2 class="section-title">Inicio Operacional y Calibración</h2>
+      <p>
+       El robot se encuentra en movimiento hacia un punto de interés, mientras el operador monitorea su avance. Luego el brazo comienza a moverse simultáneamente, ajustando su orientación respecto al entorno, lo que indica una coordinación entre la locomoción y la manipulación. El sistema de control emplea un modelo cinemático acoplado, donde el movimiento del vehículo (plataforma diferencial o 4WD) y el del brazo se sincronizan para mantener el equilibrio y la orientación
     </p>
+    </div>
 
-    <img src="assets/defensa0.png">
-    <img src="assets/IMG_6888.JPG">
-    <img src="assets/IMG_6891.JPG">
+    <div class="card-img">
+      <img src="assets/defensa0.png">
+      <img src="assets/IMG_6888.JPG">
+      <img src="assets/IMG_6891.JPG">
+    </div>
+
   </div>
+</div>
 
+<!-- TARJETA 3 -->
+<div class="card">
+  <div class="card-flex">
 
-  <!-- TARJETA 3 -->
-  <div class="card">
-    <h2 class="section-title">Control, Sensores y Funciones Inteligentes</h2>
+    <div class="card-text">
+      <h2 class="section-title">Control, Sensores y Funciones Inteligentes</h2>
 
-    <p>
+     <p>
       El robot en esta escena mide temperatura y humedad con un sensor tipo DHT22. Si detecta condiciones de riesgo (por ejemplo, T° > 45°C o humedad < 30%), el brazo activa la pinza para “agarrar” o “retirar” el objeto peligroso Fig . Todo el proceso se visualiza en el Plotter Serial en tiempo real con: Posiciones del brazo (Hombro, Codo). Señales PID (U1, U2). Estado de la pinza. Temperatura y humedad. Curvas Hombro y Codo (rojo y azul): Las señales oscilan al inicio y luego se estabilizan, lo que indica que el control PID está corrigiendo el error de posición. Luego las pequeñas oscilaciones residuales son normales en sistemas simulados con ruido o desratización (Ts=0.1 s). 
         Esto significa que el control logra estabilidad, pero todavía hay margen para afinar Kp, Ki, Kd si quieres una respuesta más suave..
     </p>
 
-    <img src="assets/robotdefensa2.jpg">
-    <img src="assets/defensa1.jpeg">
-
-    <ul>
+      <ul>
  <li>Movilidad autónoma (o semiautónoma) en entornos operativos.</li>
 <li>Brazo robótico con sensores y actuadores: permite manipulación,detección, carga y trabajo colaborativo.</li>
 <li>Inteligencia artificial que permite “aprender y optimizar desempeño conforme trabaja”.</li>
@@ -207,15 +205,26 @@ El proyecto Sentinel-XVA constituye una contribución significativa al desarroll
 <li>Interfaces de comunicación remota: Wi‑Fi, LTE/4G, LoRa, blothoo midiante nuestro app: villa automation: </li>
     </ul>
 
-    <a href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil" target="_blank" class="btn btn-play">📲 Descargar en Google Play</a>
+      <a href="https://play.google.com/store/apps/details?id=com.villa.app_villa_mobil"
+         target="_blank"
+         class="btn btn-play">📲 Descargar en Google Play</a>
+    </div>
+
+    <div class="card-img">
+      <img src="assets/robotdefensa2.jpg">
+      <img src="assets/defensa1.jpeg">
+    </div>
+
   </div>
+</div>
 
+<!-- TARJETA 4 -->
+<div class="card">
+  <div class="card-flex">
 
-  <!-- TARJETA 4 -->
-  <div class="card">
-    <h2 class="section-title">Reconocimiento y Participación en Eventos</h2>
-
-    <p>
+    <div class="card-text">
+      <h2 class="section-title">Reconocimiento y Participación en Eventos</h2>
+      <p>
       En el ámbito de la defensa moderna, los robots colaborativos se han convertido en una extensión indispensable de las capacidades humanas. Ya no se trata únicamente de máquinas que ejecutan órdenes, sino de sistemas inteligentes capaces de trabajar junto al personal militar, proteger vidas, reducir riesgos y multiplicar la eficiencia en operaciones críticas. En Villa Automation SAC entendemos que la tecnología destinada al sector defensa exige un nivel de precisión, confiabilidad y robustez que va más allá de lo convencional. Por ello, cada paso que damos, cada prototipo que construimos y cada avance que alcanzamos tiene como base un compromiso absoluto con la seguridad, la innovación y la excelencia técnica.
 La decisión de invertir en robots colaborativos no es una apuesta limitada al futuro: es una necesidad urgente del presente. Los escenarios actuales —ya sean zonas de riesgo, misiones tácticas, operaciones de reconocimiento o intervenciones en espacios hostiles— exigen herramientas que puedan acompañar al personal militar con resistencia, inteligencia y capacidad de respuesta inmediata. Un robot colaborativo bien diseñado es capaz de ingresar donde un soldado no puede hacerlo sin exponerse, de analizar información en tiempo real, de asistir en la toma de decisiones y de ejecutar tareas críticas sin interrupciones. Es, en esencia, un compañero que opera con la precisión de la ingeniería y el propósito de preservar la vida humana.
 Por esta razón seguimos invirtiendo de manera constante en el diseño, la electrónica, la mecánica y el software que dan vida a nuestros robots. Sabemos que cada sensor integrado, cada algoritmo optimizado, cada actuador calibrado y cada estructura reforzada no es solo una pieza tecnológica: es un eslabón más en la cadena de seguridad que entregamos a nuestros clientes. Entendemos que el sector defensa no puede trabajar con promesas, sino con resultados. Y resultados es lo que hemos demostrado a través de nuestros desarrollos, presentaciones y reconocimientos
@@ -225,17 +234,23 @@ A nuestros clientes, instituciones aliadas y profesionales del sector defensa qu
 Los robots colaborativos representan el puente entre la ingeniería y la seguridad, entre la innovación y la protección, entre la tecnología y la misión. Por eso seguiremos avanzando, investigando, mejorando y construyendo soluciones que no solo resuelvan problemas, sino que anticipen los desafíos del mañana. Porque en defensa, quedarse quieto es retroceder; y en Villa Automation SAC elegimos avanzar, crear, transformar y aportar. Sabemos que cada inversión realizada hoy será un beneficio para la seguridad del mañana. Y sabemos también que nuestra labor solo tiene sentido cuando nuestros clientes sienten la tranquilidad de que trabajan con un equipo dedicado, profesional y comprometido con su misión.
 Seguiremos perfeccionando cada sistema, ampliando nuestras capacidades, integrando nuevas tecnologías y elevando el nivel de nuestros robots colaborativos. Porque nuestra meta no es solo construir robots: es construir confianza, construir seguridad y construir futuro. Y ese futuro empieza con cada proyecto que aceptamos y cada compromiso que honramos. Villa Automation SAC está preparada para los desafíos del sector defensa, y nuestros clientes pueden estar seguros de que seguiremos trabajando con la misma pasión, responsabilidad y visión estratégica que nos caracteriza.
     </p>
+    </div>
 
-    <img src="assets/defensa4.jpeg">
-    <img src="assets/defensa2.jpeg">
+    <div class="card-img">
+      <img src="assets/defensa4.jpeg">
+      <img src="assets/defensa2.jpeg">
+    </div>
+
   </div>
+</div>
 
+<!-- TARJETA 5 -->
+<div class="card">
+  <div class="card-flex">
 
-  <!-- TARJETA 5 -->
-  <div class="card">
-    <h2 class="section-title">Nuevo Robot Todo Terreno Rueda-Oruga</h2>
-
-    <p>
+    <div class="card-text">
+      <h2 class="section-title">Nuevo Robot Todo Terreno Rueda-Oruga</h2>
+      <p>
       En Villa Automation seguimos avanzando en el desarrollo de soluciones robóticas de alto rendimiento para aplicaciones en defensa, seguridad y operaciones en terrenos complejos. Actualmente trabajamos en una nueva versión de nuestro robot colaborativo táctico, 
 diseñado especialmente para misiones en territorios accidentados, áreas con obstáculos y entornos donde se requiere movilidad extrema y alta estabilidad.
 La nueva plataforma incorpora un sistema híbrido de ruedas y orugas, que permite:
@@ -255,24 +270,26 @@ Exploración en entornos mineros o agrícolas avanzados.
 de igual manera ideal para aplicaciones civiles como exploración minera
 Su diseño robusto y su arquitectura modular permiten que cumpla operaciones críticas con alto nivel de fiabilidad.</p>
 
-    <img src="assets/oruga.png">
+      <ul>
+        <li>Versión Básica: 2000 USD</li>
+        <li>Versión Avanzada: 5000 USD</li>
+      </ul>
+    </div>
 
-    <video controls>
-      <source src="assets/robotdefensa1.mp4" type="video/mp4">
-    </video>
+    <div class="card-img">
+      <img src="assets/oruga.png">
 
-    <h3>Videos Relacionados</h3>
+      <video controls>
+        <source src="assets/robotdefensa1.mp4" type="video/mp4">
+      </video>
 
-    <iframe height="315" src="https://www.youtube.com/embed/kMeWOJvdQnE" allowfullscreen></iframe>
-    <iframe height="315" src="https://www.youtube.com/embed/0FV7ndIgOro" allowfullscreen></iframe>
-    <iframe height="315" src="https://www.youtube.com/embed/AXwTznM3Fd8" allowfullscreen></iframe>
+      <iframe height="260" src="https://www.youtube.com/embed/kMeWOJvdQnE"></iframe>
+      <iframe height="260" src="https://www.youtube.com/embed/0FV7ndIgOro"></iframe>
+      <iframe height="260" src="https://www.youtube.com/embed/AXwTznM3Fd8"></iframe>
+    </div>
 
-    <h3>Precios</h3>
-    <ul>
-      <li>Básico: 2000 USD</li>
-      <li>Avanzado: 5000 USD</li>
-    </ul>
   </div>
+</div>
 
 </div>
 
@@ -283,7 +300,6 @@ Su diseño robusto y su arquitectura modular permiten que cumpla operaciones cr�
 
 </body>
 </html>
-
 
 
 
