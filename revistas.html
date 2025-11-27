@@ -322,7 +322,8 @@
 <footer>
     © 2025 Librería Científica — Todos los derechos reservados
 </footer>
-
+    
+<!-- descargas -->
 <script>
     function openForm(book) {
         document.getElementById("modalBg").style.display = "flex";
@@ -334,28 +335,34 @@
     }
 </script>
 
-    <script>
+    <!-- scrib contador -->
+ <script>
 function sumarDescarga() {
     let total = localStorage.getItem("total_descargas");
 
+    // Si no existe poner a cero
     if (!total) total = 0;
 
     total = parseInt(total) + 1;
+
     localStorage.setItem("total_descargas", total);
 
+    // Actualizar en pantalla
     document.getElementById("contador").textContent = total;
 }
 
-// Mostrar contador al cargar
-window.onload = () => {
+// Cargar el valor al iniciar
+window.addEventListener("DOMContentLoaded", () => {
     let total = localStorage.getItem("total_descargas");
     if (!total) total = 0;
     document.getElementById("contador").textContent = total;
-};
+});
 </script>
+
 
 </body>
 </html>
+
 
 
 
