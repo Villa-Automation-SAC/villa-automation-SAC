@@ -244,7 +244,7 @@
     <div class="card">
         <img src="assets/articulo3.jpg" alt="Artículo">
         <div class="info">
-            <h3>tutorial, folletos y periodicos</h3>
+            <h3>Tutorial, Folletos y Periodicos</h3>
             <a  class="btn">VER MÁS</a>
         </div>
     </div>
@@ -252,27 +252,28 @@
 
 
     <!-- RECOMENDADOS -->
-    <h2 class="section-title">Recomendados Especiales</h2>
+    <h2 class="section-title">Articulos Cientificos</h2>
     <div class="books">
 
         <!-- LIBRO ESPECIAL -->
-        <div class="book">
-            <img src="https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg">
-            <p class="book-title">Física Cuántica Avanzada</p>
-            <p class="book-author">Dr. Ramírez</p>
+<div class="book">
+    <img src="assets/articulo1.png" alt="Riego inteligente">
+    <p class="book-title">Diseño y construcción de un sistema automatizado de control de bombas</p>
+    <p class="book-author">Villa Automation</p>
+    <div class="btn-group">
+        <a class="btn-download" href="assets/pdf/articulo1.pdf" download onclick="registrarDescarga('Riego inteligente')">
+            📥 Descargar PDF
+        </a>
+    </div>
+    <p>Descargas: <span id="Riego inteligente">0</span></p>
+</div>
 
-            <div class="btn-group">
-                <a class="btn-download" href="#">📥 Descargar PDF</a>
-                <button class="btn-buy" onclick="openForm('Física Cuántica Avanzada')">🛒 Comprar Ahora</button>
-            </div>
-        </div>
 
         <!-- Otro libro -->
         <div class="book">
-            <img src="https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg">
+            <img src="assets/articulo1.png" alt="Riego inteligente">
             <p class="book-title">Biología Molecular</p>
             <p class="book-author">Dra. Medina</p>
-
             <div class="btn-group">
                 <a class="btn-download" href="#">📥 Descargar PDF</a>
                 <button class="btn-buy" onclick="openForm('Biología Molecular')">🛒 Comprar Ahora</button>
@@ -283,6 +284,16 @@
 
 </div>
 
+
+
+
+
+
+
+    
+
+
+    
 <!-- MODAL FORMULARIO DE COMPRA -->
 <div class="modal-bg" id="modalBg">
     <div class="modal">
@@ -323,8 +334,29 @@
     }
 </script>
 
+    <script>
+function sumarDescarga() {
+    let total = localStorage.getItem("total_descargas");
+
+    if (!total) total = 0;
+
+    total = parseInt(total) + 1;
+    localStorage.setItem("total_descargas", total);
+
+    document.getElementById("contador").textContent = total;
+}
+
+// Mostrar contador al cargar
+window.onload = () => {
+    let total = localStorage.getItem("total_descargas");
+    if (!total) total = 0;
+    document.getElementById("contador").textContent = total;
+};
+</script>
+
 </body>
 </html>
+
 
 
 
