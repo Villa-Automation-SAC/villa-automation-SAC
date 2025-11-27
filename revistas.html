@@ -616,23 +616,21 @@
         <h2>Formulario de Compra</h2>
 
         <label>Libro seleccionado</label>
-        <input type="text" id="bookName" readonly>
+        <input type="text" id="book" />
 
-        <input type="text" placeholder="Tu nombre">
-        <input type="email" placeholder="Correo electrónico">
-        
-        <label>Método de pago</label>
-        <select>
-            <option>Tarjeta de Crédito</option>
-            <option>Yape / Plin</option>
-            <option>PayPal</option>
-        </select>
-
-        <textarea rows="3" placeholder="Comentarios opcionales"></textarea>
-
-        <button>Enviar Pedido</button>
+        <button onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
     </div>
 </div>
+
+<script>
+function enviarWhatsApp() {
+    const libro = document.getElementById("book").value;
+    const numero = "51965281663"; // WhatsApp con código de país
+    const mensaje = encodeURIComponent("Hola, quiero comprar el libro: " + libro);
+    window.location.href = `https://wa.me/${numero}?text=${mensaje}`;
+}
+</script>
+
 
 <footer>
     © 2025 Librería Científica — Todos los derechos reservados
@@ -692,6 +690,7 @@ function closeModal() {
 
 </body>
 </html>
+
 
 
 
