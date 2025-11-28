@@ -410,4 +410,16 @@ nav a:hover {
     flex-wrap: wrap;           /* permite que bajen si no entra */
     max-width: 1200px;         /* límite centrado elegante */
 }
+.flag-pe {
+  width: 22px;
+  height: auto;
+  margin-left: 10px;
+  animation: flameo 1.5s infinite ease-in-out;
+}
+
+@keyframes flameo {
+  0% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(3deg) translateY(-1px); }
+  100% { transform: rotate(0deg) translateY(0); }
+}
 
