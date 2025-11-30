@@ -120,37 +120,36 @@
     transform: scale(1.05);
 }
 
- body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #f0f3f7;
-        font-family: Arial, sans-serif;
-    }
+.descarga-contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
 
-    .btn-descargar {
-        padding: 15px 30px;
-        background: linear-gradient(135deg, #0066ff, #00bbff);
-        color: white;
-        font-size: 20px;
-        font-weight: bold;
-        text-decoration: none;
-        border-radius: 50px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        transition: 0.3s ease;
-    }
+/* Botón elegante */
+.btn-descargar {
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #007bff, #00aaff);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 40px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    transition: 0.3s ease;
+    display: inline-block;
+}
 
-    .btn-descargar:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
-    }
+.btn-descargar:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
 
-    .btn-descargar:active {
-        transform: translateY(-2px);
-    }
-   
+.btn-descargar:active {
+    transform: translateY(-2px);
+}
+
 </style>
 
 </head>
@@ -206,7 +205,10 @@
 
 <footer>PROYECTO DE SISTEMA DE PRESION, TEM Y HUMEDAD CON PANTALLA OLED </footer>
 
-<a href="archivo.pdf" download class="btn-descargar">⬇ Descargar Archivo</a>
+<div class="descarga-contenedor">
+    <a href="archivo.pdf" download class="btn-descargar">⬇ Descargar Archivo</a>
+</div>
+
 
     
     
@@ -242,6 +244,7 @@ fetch(urlGet)
 
 </body>
 </html>
+
 
 
 
