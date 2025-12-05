@@ -423,11 +423,14 @@ function loop(now){
             score=Math.max(0,score-20); m.y=H+200;
         }
     });
-    satelites.forEach(s=>{
-        if(rectRectCollision({x:cohete.x,y:cohete.y,w:cohete.w,h:cohete.h},{x:s.x-s.w/2,y:s.y-s.h/2,w:s.w,h:s.h})){
-            life=Math.max(0,life-22);
-            score=Math.max(0,score-40); s.y=H+200;
-        }
+    // --- Satélites: ahora dan vida ---
+satelites.forEach(s=>{
+    if(rectRectCollision({x:cohete.x,y:cohete.y,w:cohete.w,h:cohete.h},
+        {x:s.x-s.w/2,y:s.y-s.h/2,w:s.w,h:s.h})){
+
+        life = Math.min(100, life + 10);  // 💚 sumamos vida
+        s.y = H + 200;
+    }
     });
 
     meteoros = meteoros.filter(m=>m.y<H+150);
@@ -592,6 +595,7 @@ resetAndStart();
 
 </body>
 </html>
+
 
 
 
