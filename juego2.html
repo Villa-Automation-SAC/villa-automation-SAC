@@ -259,6 +259,7 @@ const preguntas = [
 let score = 0;
 let casillasCompletadas = 0;
 let casillasUsadas = [];
+let fallos = 0;
 
 let ruleta = document.getElementById('ruleta');
 let girarBtn = document.getElementById('girar-btn');
@@ -326,6 +327,7 @@ function verificarRespuesta(elegida, correcta) {
         scoreDiv.textContent = `Monedas: ${score} s/`;
         barraProgreso.style.width = `${casillasCompletadas*10}%`;
         preguntaBox.style.display = 'none';
+        fallos = 0; // reinicia fallos si acierta
         if (casillasCompletadas >= 10) {
             coronaDiv.style.display = 'block';
             girarBtn.disabled = true;
@@ -333,9 +335,16 @@ function verificarRespuesta(elegida, correcta) {
             girarBtn.disabled = false;
         }
     } else {
+        fallos++;
         alert("Respuesta incorrecta. Intenta otra vez.");
+
+        if (fallos >= 2) {
+            alert("Fallaste dos veces. Reiniciando el juego...");
+            location.reload(); // reinicia la página
+        }
     }
 }
+
 </script>
     
 <!-- BOTÓN FLOTANTE PROMOCIÓN NAVIDEÑA -->
@@ -382,6 +391,7 @@ function verificarRespuesta(elegida, correcta) {
 </script>
 </body>
 </html>
+
 
 
 
