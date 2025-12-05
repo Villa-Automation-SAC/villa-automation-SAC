@@ -3,221 +3,190 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Mission: Enviar a Marte — Juego</title>
+<title>Misión Marte — Juego</title>
+
 <style>
-  :root{ --accent:#00eaff; --panel:rgba(0,0,0,0.55); }
-  body{ margin:0; background: radial-gradient(ellipse at bottom left,#001020 0%, #000814 60%); font-family:Inter,Arial,sans-serif; color:#e6f6ff; overflow:hidden; }
-  canvas{ display:block; width:100vw; height:100vh; }
-  .hud{ position:fixed; left:14px; top:12px; z-index:999; background:var(--panel); padding:10px 12px; border-radius:10px; color:#bfeaff; box-shadow:0 6px 20px rgba(0,0,0,0.6); }
-  .hud .line{ font-size:14px; margin:4px 0; }
-  .controlsUI{ position:fixed; right:14px; top:12px; z-index:999; background:var(--panel); padding:10px 12px; border-radius:10px; color:#bfeaff; box-shadow:0 6px 20px rgba(0,0,0,0.6); }
-  #centerBox{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:999; background:rgba(0,0,0,0.75); padding:18px; border-radius:12px; text-align:center; display:none; width:320px; }
-  .btn{ display:inline-block; background:var(--accent); color:#042b34; padding:10px 14px; border-radius:10px; font-weight:800; text-decoration:none; margin:8px; cursor:pointer; }
-  /* Mobile touch controls */
-  .touchPad{ position:fixed; left:12px; bottom:18px; z-index:998; display:flex; gap:8px; }
-  .touchBtn{ width:64px; height:64px; border-radius:12px; background:rgba(255,255,255,0.04); display:grid; place-items:center; color:#dff6ff; font-weight:700; box-shadow:0 6px 18px rgba(0,0,0,0.6); }
-  .touchRight{ position:fixed; right:12px; bottom:18px; display:flex; gap:8px; z-index:998; }
-  /* --- Ajustes para móviles --- */
-@media (max-width: 768px) {
-
-  .hud, .controlsUI {
-    transform: scale(0.78);
-    transform-origin: top left;
-    padding: 8px 10px;
-    border-radius: 8px;
-  }
-
-  /* Cuadro central */
-  #centerBox {
-    width: 85vw;
-    max-width: 300px;
-    padding: 14px;
-  }
-
-  #centerBox .btn {
-    font-size: 14px;
-    padding: 8px 12px;
-  }
-
-  /* Botones Reiniciar / Volver */
-  .controlsUI .btn {
-    font-size: 14px;
-    padding: 8px 12px;
-  }
-
-  /* Texto de controles */
-  .controlsUI div {
-    font-size: 12px !important;
-    line-height: 1.25;
-  }
-
-  /* Panel evita chorreo de texto */
-  .controlsUI {
-    width: 72vw;
-    max-width: 250px;
-    word-wrap: break-word;
-  }
-}
-    /* control en movil */
-#touch-control-zone {
-    position: fixed;
-    bottom: 140px;   /* antes 15px → ahora mucho más arriba */
-    left: 50%;       /* centrado */
-    transform: translateX(-50%);
-    width: 200px;
-    display: flex;
-    gap: 20px;
-    z-index: 500;    /* por debajo de las flechas */
-    pointer-events: none;
+:root {
+  --accent:#00eaff;
+  --panel:rgba(0,0,0,0.55);
 }
 
-#touch-joystick,
-#touch-buttons-area {
-    pointer-events: auto;
+body {
+  margin:0;
+  background: radial-gradient(ellipse at bottom left,#001020 0%, #000814 60%);
+  font-family:Inter,Arial,sans-serif;
+  color:#e6f6ff;
+  overflow:hidden;
 }
 
-
-#touch-joystick {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(5px);
-    position: relative;
-    pointer-events: auto;
+canvas {
+  display:block;
+  width:100vw;
+  height:100vh;
 }
 
-#touch-stick {
-    width: 55px;
-    height: 55px;
-    background: rgba(255,255,255,0.8);
-    border-radius: 50%;
-    position: absolute;
-    top: calc(50% - 28px);
-    left: calc(50% - 28px);
-    transition: 0.06s linear;
+/* HUD */
+.hud {
+  position:fixed;
+  left:14px;
+  top:12px;
+  z-index:999;
+  background:var(--panel);
+  padding:10px 12px;
+  border-radius:10px;
+  color:#bfeaff;
+  box-shadow:0 6px 20px rgba(0,0,0,0.6);
+}
+.hud .line {
+  font-size:14px;
+  margin:4px 0;
 }
 
-#touch-buttons-area {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    pointer-events: auto;
+/* Controles PC */
+.controlsUI {
+  position:fixed;
+  right:14px;
+  top:12px;
+  z-index:999;
+  background:var(--panel);
+  padding:10px 12px;
+  border-radius:10px;
+  color:#bfeaff;
+  box-shadow:0 6px 20px rgba(0,0,0,0.6);
 }
 
-.tbtn {
-    padding: 10px 16px;
-    background: white;
-    color: black;
-    border-radius: 10px;
-    font-weight: bold;
-    border: none;
+/* Caja central */
+#centerBox {
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  z-index:999;
+  background:rgba(0,0,0,0.75);
+  padding:18px;
+  border-radius:12px;
+  text-align:center;
+  display:none;
+  width:320px;
+}
+.btn {
+  display:inline-block;
+  background:var(--accent);
+  color:#042b34;
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:800;
+  text-decoration:none;
+  margin:8px;
+  cursor:pointer;
 }
 
-  /* --- SOLO APARECE EN TELEFONO Y TABLET --- */
+/* --- Controles Touch --- */
 @media (max-width: 900px) {
-
-    #touch-control-zone {
-        position: fixed;
-        bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 260px;
-        display: flex;
-        gap: 25px;
-        z-index: 999999;
-        pointer-events: none;
-    }
-
-    #touch-joystick {
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.12);
-        backdrop-filter: blur(3px);
-        position: relative;
-        pointer-events: auto;
-    }
-
-    #touch-stick {
-        width: 55px;
-        height: 55px;
-        background: rgba(255,255,255,0.45);
-        border-radius: 50%;
-        position: absolute;
-        top: calc(50% - 28px);
-        left: calc(50% - 28px);
-        transition: 0.06s linear;
-    }
-
-    #touch-buttons-area {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        pointer-events: auto;
-    }
-
-    .tbtn {
-        padding: 18px 22px;
-        background: rgba(255,255,255,0.25);
-        backdrop-filter: blur(3px);
-        border-radius: 10px;
-        font-size: 18px;
-        border: 2px solid rgba(255,255,255,0.35);
-        color: white;
-        text-shadow: 0 0 5px black;
-    }
+  #touch-control-zone {
+    position:fixed;
+    bottom:80px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:25px;
+    z-index:9999;
+    pointer-events:none;
+  }
+  #touch-joystick {
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(3px);
+    position:relative;
+    pointer-events:auto;
+  }
+  #touch-stick {
+    width:55px;
+    height:55px;
+    background:rgba(255,255,255,0.45);
+    border-radius:50%;
+    position:absolute;
+    top:calc(50% - 28px);
+    left:calc(50% - 28px);
+  }
+  #touch-buttons-area {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    pointer-events:auto;
+  }
+  .tbtn {
+    padding:18px 22px;
+    background:rgba(255,255,255,0.25);
+    border-radius:10px;
+    font-size:18px;
+    border:2px solid rgba(255,255,255,0.35);
+    color:white;
+  }
 }
 
-/* --- EN PC DESAPARECEN --- */
+/* PC oculta touch */
 @media (min-width: 901px) {
-    #touch-control-zone {
-        display: none !important;
-    }
+  #touch-control-zone { display:none!important; }
 }
 
+/* Botón bonos navidad */
+.btn-promo-navidad {
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#e63946;
+  color:white;
+  padding:15px 20px;
+  font-size:16px;
+  font-weight:bold;
+  border-radius:50px;
+  text-decoration:none;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
 </style>
 </head>
-<body>
 
+<body>
 <canvas id="c"></canvas>
 
-<div class="hud" id="hud">
-  <div class="line">🚀 Misión: Enviar a Marte</div>
-  <div class="line">Fuel: <span id="fuel">100</span>%  • Vida: <span id="life">100</span>%</div>
+<!-- HUD -->
+<div class="hud">
+  <div class="line">🚀 Misión a Marte</div>
+  <div class="line">Fuel: <span id="fuel">100</span>% • Vida: <span id="life">100</span>%</div>
   <div class="line">Puntuación: <span id="score">0</span></div>
 </div>
 
+<!-- Controles -->
 <div class="controlsUI">
-  <div style="font-weight:700; margin-bottom:6px">Controles</div>
-  <div style="font-size:13px">W/↑ A/← S/↓ D/→ • SHIFT=Turbo • SPACE=Motor • CTRL=Freno</div>
-  <div style="margin-top:8px"><a class="btn" id="restartBtn">Reiniciar</a> <a class="btn" id="backBtn" href="index.html">Volver</a></div>
-</div>
-
-<div id="centerBox">
-  <div id="centerText" style="font-size:18px; margin-bottom:8px"></div>
-  <div>
-    <a class="btn" id="startBtn">Iniciar Misión</a>
-    <a class="btn" id="resumeBtn" style="display:none">Reanudar</a>
+  <div style="font-weight:700;margin-bottom:6px">Controles</div>
+  <div style="font-size:13px">WASD • SHIFT Turbo • SPACE Motor • CTRL Freno</div>
+  <div style="margin-top:8px">
+    <a class="btn" id="restartBtn">Reiniciar</a>
+    <a class="btn" id="backBtn" href="index.html">Volver</a>
   </div>
 </div>
 
-<!-- Mobile touch controls -->
-<div class="touchPad" id="touchPad">
-  <div class="touchBtn" data-key="ArrowLeft">◀</div>
-  <div class="touchBtn" data-key="ArrowDown">▼</div>
-  <div class="touchBtn" data-key="ArrowUp">▲</div>
-  <div class="touchBtn" data-key="ArrowRight">▶</div>
-</div>
-<div class="touchRight">
-  <div class="touchBtn" data-key=" " title="Motor">⎵</div>
-  <div class="touchBtn" data-key="Shift">⇧</div>
+<!-- Inicio -->
+<div id="centerBox">
+  <div id="centerText" style="font-size:18px;margin-bottom:8px"></div>
+  <a class="btn" id="startBtn">Iniciar Misión</a>
+  <a class="btn" id="resumeBtn" style="display:none">Reanudar</a>
 </div>
 
-<!-- AUDIO DE FONDO -->
+<!-- Botón Navidad -->
+<a href="mailto:villaautomationeirl@gmail.com?subject=Bonos"
+   class="btn-promo-navidad">
+  🎁 Bonos
+</a>
+
+<!-- Audio -->
 <audio id="musica-fondo" loop autoplay>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
+  
 
 <script>
 // --- CONFIGURACIÓN ---
@@ -527,18 +496,6 @@ resetAndStart();
     document.querySelector('.btn-promo-navidad').style.display = 'none';
   }
 </script>
-  
-<!-- === CONTROLES TÁCTILES EXTRA PARA MÓVILES === -->
-<div id="touch-control-zone">
-    <div id="touch-joystick">
-        <div id="touch-stick"></div>
-    </div>
-
-    <div id="touch-buttons-area">
-        <button class="tbtn" id="tbtn-thrust">THRUST</button>
-        <button class="tbtn" id="tbtn-cut">CUT</button>
-    </div>
-</div>
 
 <script>
 (function(){
@@ -621,6 +578,7 @@ resetAndStart();
 
 </body>
 </html>
+
 
 
 
