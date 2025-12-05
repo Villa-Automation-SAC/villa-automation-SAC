@@ -169,17 +169,6 @@ void pararRiego() {
         <div class="small"><label>Umbral (ejemplo): <input id="umbralInput" type="number" value="550" style="width:90px;margin-left:6px"></label></div>
         <div class="small" style="margin-top:8px">Tiempo de riego (s): <input id="tiempoInput" type="number" value="10" style="width:90px;margin-left:6px"></div>
 
-        <script>
-          function downloadHtml(){
-            const html = document.documentElement.outerHTML;
-            const blob = new Blob([html],{type:'text/html'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 'riego-automatico-tutorial.html';
-            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-          }
-        </script>
-
         <hr>
         <h4>Resumen de pines</h4>
         <table class="small" style="width:100%;border-collapse:collapse">
@@ -199,3 +188,4 @@ void pararRiego() {
   </div>
 </body>
 </html>
+
