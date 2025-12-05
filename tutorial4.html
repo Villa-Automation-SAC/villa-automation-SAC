@@ -1,0 +1,201 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Riego Automático con Arduino — Tutorial</title>
+  <style>
+    :root{ --bg:#0f1724; --card:#0b1220; --accent:#00c2a8; --muted:#9aa6b2; }
+    body{font-family:Inter,system-ui,Segoe UI,Arial;background:linear-gradient(180deg,#071021 0%,#07172a 100%);color:#e6f0f2;margin:0;padding:24px}
+    .container{max-width:980px;margin:0 auto}
+    header{display:flex;align-items:center;gap:16px}
+    h1{margin:0;font-size:28px}
+    p.lead{color:var(--muted);margin-top:6px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:12px;margin-top:18px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    ul.clean{padding-left:18px}
+    pre{background:#02111a;padding:12px;border-radius:8px;overflow:auto}
+    code{font-family:monospace;font-size:13px}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .small{font-size:13px;color:var(--muted)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:#041218;text-decoration:none;font-weight:600}
+    footer{margin-top:22px;color:var(--muted);font-size:13px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#001d19"/><path d="M6 12h12M6 8h12M6 16h12" stroke="#00c2a8" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <div>
+        <h1>Riego Automático con Arduino</h1>
+        <p class="lead">Proyecto paso a paso: sensor de humedad de suelo + relé + bomba/valvula. Código listo para Arduino UNO.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div>
+        <section class="card">
+          <h2>Objetivo</h2>
+          <p class="small">Automatizar el riego en macetas o un pequeño huerto usando un sensor de humedad de suelo. Cuando la humedad sea baja, el sistema activa una bomba mediante un relé por un tiempo configurable.</p>
+        </section>
+
+        <section class="card">
+          <h2>Materiales</h2>
+          <ul class="clean small">
+            <li>Arduino UNO (o compatible)</li>
+            <li>Sensor de humedad de suelo (capacitivo recomendado) — por ejemplo FC-28 o sensor capacitivo)</li>
+            <li>Módulo relé 5V (1 canal)</li>
+            <li>Bomba sumergible 5–12V o electroválvula (según tu sistema)</li>
+            <li>Fuente de alimentación para la bomba (separada del Arduino si requiere más corriente)</li>
+            <li>Cables dupont, protoboard, resistencias si deseas referencias</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>Diagrama de conexión (resumen)</h2>
+          <ol class="small">
+            <li>Sensor humedad: VCC -> 5V, GND -> GND, A0 -> pin analógico A0</li>
+            <li>Relé: VCC -> 5V, GND -> GND; IN -> pin digital 7 (ejemplo). El relé conecta la fuente de la bomba con la bomba (usa común y normalmente abierto).</li>
+            <li>Arduino alimentado por USB o 5V; la bomba por su propia fuente (no alimentes la bomba desde 5V del Arduino si consume >500mA).</li>
+            <li>Siempre comparte GND entre Arduino y fuente de la bomba.</li>
+          </ol>
+          <p class="small"><strong>Precaución:</strong> Si trabajas con electroválvulas o fuentes de CA, toma medidas de seguridad y aislamiento. Este tutorial asume DC baja tensión.</p>
+        </section>
+
+        <section class="card">
+          <h2>Calibración rápida del sensor</h2>
+          <p class="small">Antes de usar valores crudos, mide A0 con el sensor en suelo seco y en suelo bien húmedo. Anota los valores (por ejemplo: seco ~700–900, húmedo ~200–400). Usa esos valores para ajustar el umbral en el código.</p>
+        </section>
+
+        <section class="card">
+          <h2>Código Arduino (sube esto al IDE)</h2>
+          <pre><code>// RiegoAutomatico.ino
+// Lectura de sensor de humedad y control de relé (no bloqueante)
+
+const int sensorPin = A0;        // sensor de humedad analógico
+const int relePin   = 7;         // pin de control del rele (LOW/ HIGH según módulo)
+
+// Ajusta según calibración
+const int valorSeco  = 800;      // ejemplo: lectura en suelo seco
+const int valorHumedo = 300;     // ejemplo: lectura en suelo muy húmedo
+int umbral = 550;                // punto medio; si lectura > umbral -> seco
+
+const unsigned long tiempoRiego = 10UL * 1000UL; // 10 segundos de riego por ciclo
+const unsigned long intervaloEntreLecturas = 15UL * 1000UL; // revisar cada 15 segundos
+
+unsigned long ultimoMillisLectura = 0;
+unsigned long riegoInicio = 0;
+bool regando = false;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(relePin, OUTPUT);
+  digitalWrite(relePin, HIGH); // asume relé activo LOW; ajusta según tu módulo
+}
+
+void loop() {
+  unsigned long now = millis();
+
+  // Si estamos regando, ver si ya se cumplió el tiempo
+  if (regando) {
+    if (now - riegoInicio >= tiempoRiego) {
+      pararRiego();
+    }
+    // mientras regando, podemos seguir monitoreando o simplemente retornar
+  }
+
+  // Lecturas periódicas
+  if (now - ultimoMillisLectura >= intervaloEntreLecturas) {
+    ultimoMillisLectura = now;
+    int lectura = analogRead(sensorPin);
+    Serial.print("Lectura humedad: "); Serial.println(lectura);
+
+    // Si lectura indica suelo seco y no estamos regando -> iniciar riego
+    if (lectura > umbral && !regando) {
+      iniciarRiego();
+    }
+  }
+}
+
+void iniciarRiego() {
+  Serial.println("Iniciando riego...");
+  regando = true;
+  riegoInicio = millis();
+  digitalWrite(relePin, LOW); // activa relé (cambia si tu módulo es activo HIGH)
+}
+
+void pararRiego() {
+  Serial.println("Parando riego...");
+  regando = false;
+  digitalWrite(relePin, HIGH); // desactiva relé
+}
+</code></pre>
+          <p class="small">Notas: algunos módulos relé son "active LOW" (se activan escribiendo LOW). Si tu relé tiene LED que se enciende con LOW, ajusta el código en consecuencia.</p>
+        </section>
+
+        <section class="card">
+          <h2>Mejoras sugeridas</h2>
+          <ul class="small">
+            <li>Usar sensor capacitivo en lugar del resistivo para mayor durabilidad.</li>
+            <li>Agregar una pantalla LCD o OLED para ver el valor en tiempo real.</li>
+            <li>Implementar un retardo mínimo entre ciclos para evitar riegos muy frecuentes.</li>
+            <li>Registrar datos en una tarjeta SD o subir lecturas a una plataforma IoT.</li>
+            <li>Agregar protección (diodo flyback) y optoacoplador si controlas cargas inductivas grandes.</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>Resolución de problemas comunes</h2>
+          <ul class="small">
+            <li>La lectura no cambia: revisa conexiones, prueba con voltímetro, o coloca sensor en aire/agua para ver rango.</li>
+            <li>El relé no activa: revisa alimentación del relé, comprobación con LED o multímetro; comprueba que GND esté compartido.</li>
+            <li>La bomba no arranca: verifica la fuente de la bomba y la polaridad; prueba la bomba directamente con la fuente.</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>Licencia y créditos</h2>
+          <p class="small">Contenido: libre para usar y modificar (atribuir al autor si lo compartes). Creado con fines educativos.</p>
+        </section>
+
+      </div>
+
+      <aside class="card">
+        <h3>Descarga / Copiar</h3>
+        <p class="small">Puedes descargar este archivo HTML o copiar el código al editor para editarlo y usarlo como página de guía.</p>
+        <a class="btn" href="#" onclick="downloadHtml()">Descargar HTML</a>
+
+        <h4 style="margin-top:14px">Ajustes rápidos</h4>
+        <div class="small"><label>Umbral (ejemplo): <input id="umbralInput" type="number" value="550" style="width:90px;margin-left:6px"></label></div>
+        <div class="small" style="margin-top:8px">Tiempo de riego (s): <input id="tiempoInput" type="number" value="10" style="width:90px;margin-left:6px"></div>
+
+        <script>
+          function downloadHtml(){
+            const html = document.documentElement.outerHTML;
+            const blob = new Blob([html],{type:'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'riego-automatico-tutorial.html';
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+          }
+        </script>
+
+        <hr>
+        <h4>Resumen de pines</h4>
+        <table class="small" style="width:100%;border-collapse:collapse">
+          <tr><td>Sensor humedad</td><td>A0</td></tr>
+          <tr><td>Relé</td><td>D7</td></tr>
+        </table>
+
+        <hr>
+        <h4>Contacto</h4>
+        <p class="small">¿Quieres que adapte el código a ESP32 / NodeMCU o agregue pantalla y notificaciones? Pídemelo.</p>
+      </aside>
+    </div>
+
+    <footer>
+      <p>Última actualización: 04/12/2025 · Hecho para aprendizaje y prototipos. No olvides revisar seguridad eléctrica si escalas el proyecto.</p>
+    </footer>
+  </div>
+</body>
+</html>

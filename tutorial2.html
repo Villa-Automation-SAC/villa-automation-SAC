@@ -1,0 +1,201 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Agrobot — Humidificador Automático (Tutorial HTML)</title>
+  <style>
+    :root{--accent:#2aa44f;--bg:#071216;--card:#0b1a16;--text:#e6f6ef}
+    body{font-family:Inter, system-ui, Arial, sans-serif; margin:0; color:var(--text); background:linear-gradient(180deg,#041014 0%,#06181a 100%)}
+    header{padding:26px 18px;text-align:center}
+    header h1{margin:0;color:var(--accent);font-size:26px}
+    .container{max-width:980px;margin:20px auto;padding:18px}
+    .card{background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;margin-bottom:14px}
+    h2{color:#cfeee0;margin-top:0}
+    pre{background:#021616;padding:12px;border-radius:8px;overflow:auto}
+    code{font-family:monospace;font-size:13px}
+    ul{line-height:1.6}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#04241a;text-decoration:none;font-weight:700}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:760px){.split{grid-template-columns:1fr}}
+    .wiring{font-family:monospace;background:#021616;padding:10px;border-radius:8px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Agrobot — Humidificador Automático</h1>
+    <p style="opacity:0.9;margin-top:8px">Guía completa: materiales, cableado, código (Arduino y ESP32), control por sensor de humedad y buenas prácticas para ambientes agrícolas.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>1 — Objetivo</h2>
+      <p>Construir un sistema que mantenga la humedad relativa o humedad del sustrato en un rango definido mediante un humidificador (atomizador ultrasónico o bomba de niebla), controlado por una placa (Arduino/ESP32) con sensor DHT22 / SHT30 y protección de nivel de agua.</p>
+    </section>
+
+    <section class="card">
+      <h2>2 — Materiales</h2>
+      <ul>
+        <li>Placa: <strong>Arduino Uno / Nano</strong> o <strong>ESP32</strong> (si quieres control Wi‑Fi)</li>
+        <li>Sensor de humedad y temperatura: <strong>DHT22</strong> o <strong>SHT30</strong></li>
+        <li>Humidificador: atomizador ultrasónico (mist maker) o bomba de agua pequeña</li>
+        <li>Módulo de potencia: relé de 5V (para on/off) o MOSFET/driver para control PWM (si tu atomizador es compatible)</li>
+        <li>Sensor de nivel de agua (float switch) o sensor de conductividad para evitar seco</li>
+        <li>Fuente de alimentación adecuada para el humidificador (separada de la placa de control)</li>
+        <li>Cables, caja impermeable para electrónica, resistencias, protoboard opcional</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>3 — Principio de funcionamiento</h2>
+      <p>El microcontrolador lee la humedad ambiente (HR) y compara con el punto de consigna (setpoint). Si la HR es menor que el setpoint menos la histeresis, activa el humidificador; si es mayor que setpoint + histeresis, lo apaga. El sensor de nivel corta la alimentación al humidificador si hay falta de agua.</p>
+    </section>
+
+    <section class="card">
+      <h2>4 — Conexiones (Arduino UNO ejemplo)</h2>
+      <div class="split">
+        <div>
+          <h3>Conexiones básicas</h3>
+          <ul>
+            <li>DHT22: VCC -> 5V, GND -> GND, DATA -> D4 (usa resistencia pull-up 10k)</li>
+            <li>Relé: IN -> D7, VCC -> 5V, GND -> GND (asegura que la bobina y la placa compartan GND)</li>
+            <li>Float switch (sensor nivel): NC o NO -> D6 (entrada digital)</li>
+            <li>Humidificador -> contacto del relé -> alimentación externa (no alimentar desde Arduino)</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Mapa pines sugerido</h3>
+          <ul>
+            <li>DHT22 DATA -> D4</li>
+            <li>Float sensor -> D6</li>
+            <li>Relé IN -> D7</li>
+            <li>LED indicador -> D13 (opcional)</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4>Esquema ASCII</h4>
+      <div class="wiring"><pre>
+  [DHT22]            [Arduino UNO]         [Relé]            [Humidificador]
+   VCC  -----------> 5V
+   GND  -----------> GND   -----+-----------> GND
+   DATA -----------> D4 (pull-up 10k)
+
+  Float switch -> D6 (INPUT)
+  Relé IN -> D7
+  Relé COM/N.O. -> +V fuente humidificador
+  Relé COM/N.C. -> GND fuente humidificador
+
+  IMPORTANTE: Alimentar el humidificador con su fuente adecuada y aislar la placa de control.
+</pre></div>
+    </section>
+
+    <section class="card">
+      <h2>5 — Código Arduino (control simple con histeresis)</h2>
+      <p>Este sketch utiliza la <code>DHT</code> library. Controla el relé según el setpoint y la histeresis y protege con el sensor de nivel.</p>
+      <pre><code>// Agrobot - Humidificador básico con DHT22
+#include &lt;DHT.h&gt;
+
+#define DHTPIN 4
+#define DHTTYPE DHT22
+#define RELAY_PIN 7
+#define FLOAT_PIN 6
+#define LED_PIN 13
+
+DHT dht(DHTPIN, DHTTYPE);
+
+float setpoint = 70.0; // humedad relativa objetivo (%)
+float hysteresis = 3.0; // margen en %
+
+void setup(){
+  Serial.begin(9600);
+  dht.begin();
+  pinMode(RELAY_PIN, OUTPUT);
+  pinMode(FLOAT_PIN, INPUT_PULLUP); // asume float a GND cuando desciende
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW); // relé apagado por defecto
+}
+
+void loop(){
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  if(isnan(h)){
+    Serial.println("Error leyendo DHT");
+    delay(2000);
+    return;
+  }
+
+  bool hasWater = digitalRead(FLOAT_PIN) == HIGH; // ajustar según cableado
+
+  Serial.print("Humedad: "); Serial.print(h); Serial.print(" %\t");
+  Serial.print("Temp: "); Serial.print(t); Serial.println(" C");
+
+  if(!hasWater){
+    // cortar humidificador si no hay agua
+    digitalWrite(RELAY_PIN, LOW);
+    digitalWrite(LED_PIN, LOW);
+    Serial.println("Sin agua: humidificador apagado");
+  } else {
+    if(h &lt; (setpoint - hysteresis)){
+      digitalWrite(RELAY_PIN, HIGH); // activar
+      digitalWrite(LED_PIN, HIGH);
+      Serial.println("Activando humidificador");
+    } else if(h &gt; (setpoint + hysteresis)){
+      digitalWrite(RELAY_PIN, LOW); // desactivar
+      digitalWrite(LED_PIN, LOW);
+      Serial.println("Apagando humidificador");
+    } // si está dentro del rango, no cambiar
+  }
+
+  delay(3000);
+}
+</code></pre>
+      <p style="font-size:13px;opacity:0.9">Consejo: prueba el sistema con agua en un entorno seguro y comprueba comportamiento antes de instalar en campo.</p>
+    </section>
+
+    <section class="card">
+      <h2>6 — Versión avanzada: ESP32 + Web UI</h2>
+      <p>Si quieres monitorizar y cambiar el setpoint de forma remota, usa un ESP32. A continuación un esquema básico de la idea (no es un firmware completo):</p>
+      <pre><code>// Idea: ESP32 lee SHT30/DHT, expone página web con estado y botones para cambiar setpoint
+// - Leer sensor
+// - Servir web con /status y /control?set=75
+// - Usar relé como antes
+</code></pre>
+      <p>Si quieres, puedo generar el sketch completo para ESP32 con Wi‑Fi, WebServer y endpoints JSON.</p>
+    </section>
+
+    <section class="card">
+      <h2>7 — Buenas prácticas</h2>
+      <ul>
+        <li>Protege la electrónica contra humedad usando cajas IP65 y separa la electrónica del agua.</li>
+        <li>Usa fusibles y fuentes con protección. No alimentes el humidificador desde la placa.</li>
+        <li>Implementa límites y alertas (por ejemplo, aviso por buzzer o envío por Wi‑Fi cuando falta agua).</li>
+        <li>Implementa histeresis y tiempos mínimos de ciclo para evitar encendidos/apagados rápidos.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>8 — Extensiones útiles</h2>
+      <ul>
+        <li>Registro de datos (SD o MQTT) para análisis de humedad en el tiempo</li>
+        <li>Integración con sistema de riego y control por horarios</li>
+        <li>Control por MQTT y dashboard (Node-RED, Home Assistant)</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>9 — ¿Qué quieres que haga ahora?</h2>
+      <p>Puedo:</p>
+      <ul>
+        <li>Generar el firmware completo para <strong>ESP32</strong> con interfaz web y MQTT.</li>
+        <li>Adaptar el tutorial a tu placa/relé/atomizador concreto.</li>
+        <li>Crear el diagrama eléctrico en formato PDF o imagen.</li>
+      </ul>
+      <p style="margin-top:10px"><a class="btn" href="#">Usar este tutorial</a></p>
+    </section>
+
+    <footer style="text-align:center;padding:14px;opacity:0.9">Hecho con ❤️ — dime qué placa usas y te adapto el código.</footer>
+  </main>
+</body>
+</html>

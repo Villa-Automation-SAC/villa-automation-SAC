@@ -1,0 +1,215 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tutorial: Robot móvil con Bluetooth (HC-05/HC-06) — HTML</title>
+  <style>
+    :root{ --accent:#00aaff; --bg:#0f1720; --card:#0b1220; --text:#e6eef6 }
+    body{font-family:Inter, system-ui, Arial; margin:0; background:linear-gradient(180deg,#081025 0%, #071627 100%); color:var(--text);}
+    header{padding:28px 20px; text-align:center}
+    header h1{margin:0;font-size:28px;color:var(--accent)}
+    .container{max-width:900px;margin:24px auto;padding:20px}
+    .card{background:rgba(255,255,255,0.03); padding:18px;border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.6); margin-bottom:16px}
+    h2{color:#cfefff;margin-top:0}
+    pre{background:#021022;padding:12px;border-radius:8px;overflow:auto}
+    code{font-family:monospace; font-size:13px}
+    ul{line-height:1.6}
+    .wiring{font-family:monospace; background:#06121a;padding:12px;border-radius:8px}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#042033;text-decoration:none;font-weight:600}
+    footer{text-align:center;padding:18px;font-size:13px;opacity:0.8}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:720px){ .split{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Robot móvil con Bluetooth (HC-05 / HC-06)</h1>
+    <p style="opacity:0.85;margin-top:8px">Guía práctica: componentes, montaje, cableado y código Arduino. Control mediante app Bluetooth o control remoto por comandos.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>1 — Materiales</h2>
+      <ul>
+        <li>Arduino UNO, Nano o compatible</li>
+        <li>Módulo Bluetooth HC-05 o HC-06 (clásico)</li>
+        <li>Pareja de motores DC 6V (o un chasis con motorreductores)</li>
+        <li>Piloto L298N (o driver motor L293D / TB6612) o controlador de motores similar</li>
+        <li>Batería 7.4V (2S LiPo) o pack de pilas según requerimiento</li>
+        <li>Cables, protoboard (opcional), chasis, ruedas y sensores opcionales</li>
+        <li>Smartphone con app "Bluetooth Serial" o "Bluetooth Terminal"</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2 — Principio de funcionamiento</h2>
+      <p>El módulo HC-05 crea un enlace serial inalámbrico entre el Arduino y un teléfono. El teléfono envía caracteres (por ejemplo: <code>F</code> adelante, <code>B</code> atrás, <code>L</code> izquierda, <code>R</code> derecha, <code>S</code> stop). Arduino lee esos caracteres por <code>Serial</code> (o <code>Serial1</code> en placas con puerto hardware extra) y activa los pines del driver de motor para mover los motores.</p>
+    </section>
+
+    <section class="card">
+      <h2>3 — Diagrama de conexiones (resumen)</h2>
+      <div class="split">
+        <div>
+          <h3>Conexiones básicas</h3>
+          <ul>
+            <li><strong>HC-05</strong>: VCC -> 5V (o 3.3V según módulo), GND -> GND</li>
+            <li>HC-05 TX -> Arduino RX (pin 0) <em>(opcional usar SoftwareSerial)</em></li>
+            <li>HC-05 RX -> Arduino TX (pin 1) (si el módulo usa 3.3V RX, usar divisor de tensión)</li>
+            <li>Driver L298N ENA/ENB y entradas IN1..IN4 -> pines digitales de Arduino</li>
+            <li>Motores -> Salidas del driver; Batería externa -> VIN del driver (no alimentar motores desde 5V del Arduino)</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Mapa de pines ejemplo (Arduino Uno)</h3>
+          <ul>
+            <li>IN1 -> D8</li>
+            <li>IN2 -> D9</li>
+            <li>IN3 -> D10</li>
+            <li>IN4 -> D11</li>
+            <li>HC-05 TX -> Arduino D2 (SoftwareSerial RX)</li>
+            <li>HC-05 RX -> Arduino D3 (SoftwareSerial TX) *</li>
+          </ul>
+          <p style="font-size:13px;opacity:0.9">*Si prefieres usar el puerto serial hardware (Serial) desconecta HC-05 de los pines 0/1 cuando cargues el sketch y vuelve a conectar para la comunicación por Bluetooth.</p>
+        </div>
+      </div>
+
+      <h4 style="margin-top:12px">Esquema ASCII rápido</h4>
+      <div class="wiring">
+<pre>
+  [HC-05]         [Arduino UNO]        [L298N]         [Motor A]   [Motor B]
+  VCC  -------+---> 5V
+  GND  -------+---> GND   -----------------------> GND
+  TX   -----> D2 (RX SoftwareSerial)
+  RX   <----- D3 (TX SoftwareSerial)  (con divisor de tensión)
+
+  Arduino D8 ---> IN1 (L298)
+  Arduino D9 ---> IN2 (L298)
+  Arduino D10 --> IN3 (L298)
+  Arduino D11 --> IN4 (L298)
+
+  L298N OUT1/OUT2 -> Motor A
+  L298N OUT3/OUT4 -> Motor B
+  Batería (7-12V) -> L298N VCC (motores)
+</pre>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4 — Código Arduino (ejemplo simple)</h2>
+      <p>Este sketch usa la librería <code>SoftwareSerial</code> para comunicar con HC-05. Envía comandos simples: <code>F</code>, <code>B</code>, <code>L</code>, <code>R</code>, <code>S</code>. Ajusta pines si usas otro driver o placa.</p>
+
+      <pre><code>// Robot Bluetooth básico - HC-05 (SoftwareSerial)
+#include &lt;SoftwareSerial.h&gt;
+
+// Pines motores (L298N ejemplo)
+const int in1 = 8;
+const int in2 = 9;
+const int in3 = 10;
+const int in4 = 11;
+
+// Pines SoftwareSerial para HC-05
+SoftwareSerial bt(2, 3); // RX, TX
+
+void setup(){
+  Serial.begin(9600);
+  bt.begin(9600); // HC-05 default
+
+  pinMode(in1, OUTPUT); pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT); pinMode(in4, OUTPUT);
+
+  stopMotors();
+}
+
+void loop(){
+  if(bt.available()){
+    char cmd = bt.read();
+    Serial.print("Recibido: "); Serial.println(cmd);
+    handleCommand(cmd);
+  }
+  // opcional: leer sensores, estado batería, etc.
+}
+
+void handleCommand(char c){
+  switch(c){
+    case 'F': forward(); break;
+    case 'B': backward(); break;
+    case 'L': left(); break;
+    case 'R': right(); break;
+    case 'S': stopMotors(); break;
+    default: stopMotors(); break;
+  }
+}
+
+void forward(){
+  digitalWrite(in1, HIGH); digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH); digitalWrite(in4, LOW);
+}
+void backward(){
+  digitalWrite(in1, LOW); digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW); digitalWrite(in4, HIGH);
+}
+void left(){
+  digitalWrite(in1, LOW); digitalWrite(in2, HIGH);
+  digitalWrite(in3, HIGH); digitalWrite(in4, LOW);
+}
+void right(){
+  digitalWrite(in1, HIGH); digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW); digitalWrite(in4, HIGH);
+}
+void stopMotors(){
+  digitalWrite(in1, LOW); digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW); digitalWrite(in4, LOW);
+}
+</code></pre>
+
+      <p style="font-size:13px;opacity:0.9">Nota: si tus motores necesitan control de velocidad, conecta ENA/ENB del L298 a pines PWM y usa <code>analogWrite()</code>.</p>
+    </section>
+
+    <section class="card">
+      <h2>5 — Cómo controlar desde el teléfono</h2>
+      <ol>
+        <li>Instala una app de terminal Bluetooth como "Bluetooth Terminal HC-05" o "Serial Bluetooth Terminal".</li>
+        <li>Empareja el HC-05 desde los ajustes Bluetooth (código por defecto: <code>1234</code> o <code>0000</code>).</li>
+        <li>En la app, conéctate al HC-05 y envía una letra: <code>F</code> para adelante, etc.</li>
+      </ol>
+      <p>Si prefieres botones, muchas apps permiten crear botones que envíen cadenas específicas. También puedes crear tu propia app con MIT App Inventor o un pequeño app Android que envíe comandos por Bluetooth.</p>
+    </section>
+
+    <section class="card">
+      <h2>6 — Buenas prácticas y seguridad</h2>
+      <ul>
+        <li>No alimentes motores desde el pin 5V del Arduino: usa una batería externa a través del driver.</li>
+        <li>Protege el pin RX del HC-05 con un divisor de tensión si lo conectas a TX del Arduino (5V -> 3.3V).</li>
+        <li>Prueba sin ruedas (motores en altura) para comprobar dirección antes de soltar el robot.</li>
+        <li>Ajusta la velocidad con PWM (EN pins) para maniobras más suaves.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>7 — Extensiones recomendadas</h2>
+      <ul>
+        <li>Sensores ultrasónicos HC-SR04 para evitar obstáculos</li>
+        <li>Encoders en ruedas para control de velocidad/posicionamiento</li>
+        <li>Módulo BLE (HM-10) si quieres controlar desde navegador (Web Bluetooth)</li>
+        <li>Agregar cámara o módulo ESP32-CAM para teleoperación</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>8 — Recursos y plantillas</h2>
+      <p>Puedes copiar este archivo como plantilla HTML para documentar tu proyecto o compartirlo con otras personas. Si quieres, puedo:</p>
+      <ul>
+        <li>Generar el esquema en formato PDF o Word</li>
+        <li>Crear la versión con control por navegador (si usas BLE/HM-10 o ESP32)</li>
+        <li>Añadir una sección con código para control por velocidad (PWM)</li>
+      </ul>
+      <p style="margin-top:10px"><a class="btn" href="#">Usar este tutorial</a></p>
+    </section>
+
+    <footer>
+      Hecho con ❤️ — Si quieres que adapte el tutorial a tu chasis o pines, dime qué placa y driver usas.
+    </footer>
+  </main>
+</body>
+</html>

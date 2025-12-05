@@ -1,0 +1,194 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Robot Wall‑E con Arduino — Tutorial</title>
+<style>
+  :root{--accent:#ffcc00;--bg:#0d0d0d;--card:#1a1a1a;--text:#eaeaea}
+  body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+  header{padding:26px 16px;text-align:center}
+  h1{margin:0;color:var(--accent)}
+  .container{max-width:960px;margin:0 auto;padding:18px}
+  .card{background:var(--card);padding:18px;border-radius:12px;margin-bottom:16px}
+  h2{margin-top:0;color:var(--accent)}
+  pre{background:#000;border-radius:8px;padding:12px;overflow:auto}
+  code{font-size:13px}
+  ul{line-height:1.6}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.split{grid-template-columns:1fr}}
+  .btn{background:var(--accent);color:#000;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <h1>Robot Wall‑E con Arduino</h1>
+  <p>Guía paso a paso para construir un Wall‑E móvil con sensores y control remoto.</p>
+</header>
+<main class="container">
+<section class="card">
+  <h2>1 — Objetivo</h2>
+  <p>Construir un robot inspirado en Wall‑E usando Arduino, con tracción por orugas, sensores ultrasónicos y control Bluetooth.</p>
+</section>
+<section class="card">
+  <h2>2 — Materiales</h2>
+  <ul>
+    <li>Arduino Uno o Nano</li>
+    <li>Driver de motores L298N o TB6612FNG</li>
+    <li>2 motores DC con caja reductora + orugas</li>
+    <li>HC‑05 Bluetooth</li>
+    <li>Sensor ultrasónico HC‑SR04</li>
+    <li>Batería 7.4V Li‑Ion + switch</li>
+    <li>Chasis Wall‑E impreso en 3D o artesanal</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>3 — Conexiones</h2>
+  <div class="split">
+    <div>
+      <h3>Motor Driver</h3>
+      <ul>
+        <li>ENA -> D5 (PWM)</li>
+        <li>IN1 -> D8</li>
+        <li>IN2 -> D9</li>
+        <li>ENB -> D6 (PWM)</li>
+        <li>IN3 -> D10</li>
+        <li>IN4 -> D11</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Bluetooth HC‑05</h3>
+      <ul>
+        <li>TX -> D2 (RX)</li>
+        <li>RX -> D3 (TX)</li>
+        <li>VCC -> 5V</li>
+        <li>GND -> GND</li>
+      </ul>
+    </div>
+  </div>
+  <h3>Sensor Ultrasónico</h3>
+  <ul>
+    <li>TRIG -> D12</li>
+    <li>ECHO -> D13</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>4 — Código Arduino</h2>
+  <pre><code>// Wall-E Robot básico
+#include &lt;SoftwareSerial.h&gt;
+SoftwareSerial BT(2,3);
+
+// Pines motores
+int ENA=5, IN1=8, IN2=9;
+int ENB=6, IN3=10, IN4=11;
+
+// Ultrasónico
+int TRIG=12, ECHO=13;
+
+void setup(){
+  Serial.begin(9600);
+  BT.begin(9600);
+  pinMode(ENA,OUTPUT);
+  pinMode(ENB,OUTPUT);
+  pinMode(IN1,OUTPUT);
+  pinMode(IN2,OUTPUT);
+  pinMode(IN3,OUTPUT);
+  pinMode(IN4,OUTPUT);
+  pinMode(TRIG,OUTPUT);
+  pinMode(ECHO,INPUT);
+}
+
+// Funciones movimiento
+void adelante(){
+  digitalWrite(IN1,HIGH);
+  digitalWrite(IN2,LOW);
+  digitalWrite(IN3,HIGH);
+  digitalWrite(IN4,LOW);
+  analogWrite(ENA,200);
+  analogWrite(ENB,200);
+}
+
+void atras(){
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,HIGH);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,HIGH);
+  analogWrite(ENA,200);
+  analogWrite(ENB,200);
+}
+
+void derecha(){
+  digitalWrite(IN1,HIGH);
+  digitalWrite(IN2,LOW);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,HIGH);
+  analogWrite(ENA,200);
+  analogWrite(ENB,200);
+}
+
+void izquierda(){
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,HIGH);
+  digitalWrite(IN3,HIGH);
+  digitalWrite(IN4,LOW);
+  analogWrite(ENA,200);
+  analogWrite(ENB,200);
+}
+
+void stopM(){
+  analogWrite(ENA,0);
+  analogWrite(ENB,0);
+}
+
+long distancia(){
+  digitalWrite(TRIG,LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG,LOW);
+  long d=pulseIn(ECHO,HIGH)*0.034/2;
+  return d;
+}
+
+void loop(){
+  if(BT.available()){
+    char c=BT.read();
+    if(c=='F') adelante();
+    if(c=='B') atras();
+    if(c=='L') izquierda();
+    if(c=='R') derecha();
+    if(c=='S') stopM();
+  }
+
+  long d=distancia();
+  if(d&lt;20){ stopM(); }
+}
+</code></pre>
+</section>
+<section class="card">
+  <h2>5 — Control desde App</h2>
+  <ul>
+    <li>Instala la app "Bluetooth Terminal"</li>
+    <li>Conecta al HC‑05 (PIN: 1234)</li>
+    <li>Envía: F adelante, B atrás, L izquierda, R derecha, S stop</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>6 — Carcasa Wall‑E</h2>
+  <p>Puedes imprimir el diseño en 3D (Thingiverse), o fabricar con cartón, madera o foamboard. Monta los motores en orugas y coloca el Arduino dentro.</p>
+</section>
+<section class="card">
+  <h2>7 — Mejoras</h2>
+  <ul>
+    <li>Ojos con servos</li>
+    <li>Sensores IR anticaída</li>
+    <li>Panel solar decorativo</li>
+    <li>Control por Wi‑Fi (ESP32)</li>
+    <li>Reproducción de sonidos</li>
+  </ul>
+  <a class="btn" href="#">Descargar proyecto</a>
+</section>
+<footer style="text-align:center;opacity:0.8;padding:14px">Hecho con ❤️</footer>
+</main>
+</body>
+</html>

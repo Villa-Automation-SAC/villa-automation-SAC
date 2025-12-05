@@ -1,0 +1,231 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Semáforo Inteligente con Arduino — Tutorial</title>
+  <style>
+    :root{ --bg:#071023; --card:#081426; --accent:#ff6b6b; --muted:#aebfd1 }
+    body{font-family:Inter,system-ui,Segoe UI,Arial;background:linear-gradient(180deg,#031029 0%,#05132a 100%);color:#eef6fb;margin:0;padding:22px}
+    .container{max-width:980px;margin:0 auto}
+    header{display:flex;align-items:center;gap:14px}
+    h1{margin:0;font-size:28px}
+    p.lead{color:var(--muted);margin-top:6px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:16px;border-radius:12px;margin-top:16px;box-shadow:0 6px 22px rgba(2,6,23,0.6)}
+    pre{background:#02111a;padding:12px;border-radius:8px;overflow:auto}
+    code{font-family:monospace;font-size:13px}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+    .small{font-size:13px;color:var(--muted)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:#041218;text-decoration:none;font-weight:600}
+    @media (max-width:920px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#00151f"/><path d="M12 4v16M4 12h16" stroke="#ff6b6b" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <div>
+        <h1>Semáforo Inteligente con Arduino</h1>
+        <p class="lead">Tutorial paso a paso: semáforo para intersección con prioridad peatonal y tiempos adaptativos según sensores.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main>
+        <section class="card">
+          <h2>Descripción</h2>
+          <p class="small">Este proyecto implementa un semáforo para dos calles (N-S y E-W) con control inteligente: tiempos dinámicos controlados por sensores de presencia (por ejemplo sensores IR/ultrasonido) y botón peatonal que solicita cruce. Diseño no bloqueante con <code>millis()</code>.</p>
+        </section>
+
+        <section class="card">
+          <h2>Materiales</h2>
+          <ul class="small">
+            <li>Arduino UNO (o compatible)</li>
+            <li>LEDs: 4 x Rojo/Amarillo/Verde (12 LEDs) o 2 conjuntos para cada dirección</li>
+            <li>Resistencias 220Ω para LEDs</li>
+            <li>Sensores de presencia: 2 x HC-SR04 / sensores IR / sensores de presión</li>
+            <li>Botón peatonal (push button) con resistencia pull-down</li>
+            <li>Cables y protoboard</li>
+            <li>Buzzer (opcional) para señal acústica peatonal</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>Resumen de pines (ejemplo)</h2>
+          <table class="small" style="width:100%;border-collapse:collapse">
+            <tr><td>NS - Rojo</td><td>D2</td></tr>
+            <tr><td>NS - Amarillo</td><td>D3</td></tr>
+            <tr><td>NS - Verde</td><td>D4</td></tr>
+            <tr><td>EW - Rojo</td><td>D5</td></tr>
+            <tr><td>EW - Amarillo</td><td>D6</td></tr>
+            <tr><td>EW - Verde</td><td>D7</td></tr>
+            <tr><td>Sensor NS</td><td>A0</td></tr>
+            <tr><td>Sensor EW</td><td>A1</td></tr>
+            <tr><td>Botón peatonal</td><td>D8</td></tr>
+            <tr><td>Buzzer</td><td>D9</td></tr>
+          </table>
+        </section>
+
+        <section class="card">
+          <h2>Código Arduino (sube al IDE)</h2>
+          <pre><code>// SemaforoInteligente.ino
+// Semáforo N-S / E-W con sensores y botón peatonal (no bloqueante)
+
+// Pines LEDs
+const int NS_ROJO = 2;
+const int NS_AMAR = 3;
+const int NS_VERDE = 4;
+const int EW_ROJO = 5;
+const int EW_AMAR = 6;
+const int EW_VERDE = 7;
+
+// Pines sensores / entrada
+const int SENSOR_NS = A0; // analogico (puede ser digital si usas PIR/IR)
+const int SENSOR_EW = A1;
+const int BOTON_PEATON = 8; // input with pullup or pulldown
+const int BUZZER = 9;
+
+// Umbrales y tiempos (ms)
+int umbralSensor = 300; // ajustar según sensor
+unsigned long verdeMin = 8000; // 8s mínimo verde
+unsigned long verdeMax = 20000; // 20s máximo verde
+unsigned long amarTiempo = 3000; // 3s amarillo
+
+// Estado del semaforo
+enum Fase {NS_VERDE, NS_AMARILLO, EW_VERDE, EW_AMARILLO};
+Fase fase = NS_VERDE;
+
+unsigned long faseInicio = 0;
+unsigned long faseDuracion = 0;
+
+void setup(){
+  Serial.begin(9600);
+  // LEDs
+  pinMode(NS_ROJO, OUTPUT); pinMode(NS_AMAR, OUTPUT); pinMode(NS_VERDE, OUTPUT);
+  pinMode(EW_ROJO, OUTPUT); pinMode(EW_AMAR, OUTPUT); pinMode(EW_VERDE, OUTPUT);
+  // Entradas
+  pinMode(BOTON_PEATON, INPUT_PULLUP); // boton a GND cuando presionado
+  pinMode(BUZZER, OUTPUT);
+
+  // Iniciar estado
+  fase = NS_VERDE;
+  faseInicio = millis();
+  faseDuracion = verdeMin;
+  aplicarFase(fase);
+}
+
+void loop(){
+  unsigned long now = millis();
+
+  // Leer sensores (no bloqueante)
+  int lecturaNS = analogRead(SENSOR_NS);
+  int lecturaEW = analogRead(SENSOR_EW);
+  bool boton = (digitalRead(BOTON_PEATON) == LOW); // activo bajo
+
+  // Ajustar duración de verde según presencia: si hay tráfico en EW y poco en NS, darle más tiempo a EW
+  if(fase == NS_VERDE){
+    unsigned long dur = map(lecturaEW, 0, 1023, (int)verdeMin, (int)verdeMax);
+    // Si botón peatonal apretado, acortar si es necesario para permitir cruce pronto
+    if(boton) dur = min(dur, 10000UL); // cede antes (ejemplo)
+    faseDuracion = constrain(dur, verdeMin, verdeMax);
+  }
+  if(fase == EW_VERDE){
+    unsigned long dur = map(lecturaNS, 0, 1023, (int)verdeMin, (int)verdeMax);
+    if(boton) dur = min(dur, 10000UL);
+    faseDuracion = constrain(dur, verdeMin, verdeMax);
+  }
+
+  // Verificar cambio de fase
+  if(now - faseInicio >= faseDuracion){
+    // avanzar fase
+    if(fase == NS_VERDE) cambiarFase(NS_AMARILLO, amarTiempo);
+    else if(fase == NS_AMARILLO) cambiarFase(EW_VERDE, verdeMin);
+    else if(fase == EW_VERDE) cambiarFase(EW_AMARILLO, amarTiempo);
+    else if(fase == EW_AMARILLO) cambiarFase(NS_VERDE, verdeMin);
+  }
+
+  // Señal acústica cuando está activo el cruce peatonal (opcional)
+  if(boton && (fase == NS_AMARILLO || fase == EW_AMARILLO)){
+    // para indicar que boton fue registrado
+    tone(BUZZER, 1000, 200);
+  }
+}
+
+void cambiarFase(Fase nueva, unsigned long dur){
+  fase = nueva;
+  faseInicio = millis();
+  faseDuracion = dur;
+  aplicarFase(fase);
+}
+
+void aplicarFase(Fase f){
+  // Apagar todo primero
+  digitalWrite(NS_ROJO, LOW); digitalWrite(NS_AMAR, LOW); digitalWrite(NS_VERDE, LOW);
+  digitalWrite(EW_ROJO, LOW); digitalWrite(EW_AMAR, LOW); digitalWrite(EW_VERDE, LOW);
+
+  if(f == NS_VERDE){
+    digitalWrite(NS_VERDE, HIGH);
+    digitalWrite(EW_ROJO, HIGH);
+  } else if(f == NS_AMARILLO){
+    digitalWrite(NS_AMAR, HIGH);
+    digitalWrite(EW_ROJO, HIGH);
+  } else if(f == EW_VERDE){
+    digitalWrite(EW_VERDE, HIGH);
+    digitalWrite(NS_ROJO, HIGH);
+  } else if(f == EW_AMARILLO){
+    digitalWrite(EW_AMAR, HIGH);
+    digitalWrite(NS_ROJO, HIGH);
+  }
+}
+</code></pre>
+          <p class="small">Este sketch es ejemplo. Ajusta <code>umbralSensor</code>, pines y lógica según los sensores que uses (ultrasonido necesita trig/echo).</p>
+        </section>
+
+        <section class="card">
+          <h2>Consejos y mejoras</h2>
+          <ul class="small">
+            <li>Agregar detección de peatones con botón y temporizador específico de cruce con señal sonora y contador.</li>
+            <li>Usar comunicación entre semáforos para coordinar múltiples intersecciones (I2C, RS485 o RF).</li>
+            <li>Agregar pantalla OLED para mostrar estados y cuenta regresiva de cruce peatonal.</li>
+            <li>Implementar prioridad para vehículos de emergencia (botón remoto o sensor).</li>
+            <li>Usar ESP32 + Wi‑Fi para enviar telemetría y ajustar tiempos desde web.</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>Pruebas y calibración</h2>
+          <p class="small">Prueba cada LED por separado, comprueba que los sensores devuelvan valores esperados (usa Serial.println). Ajusta <code>verdeMin/Max</code> y umbrales después de medir tráfico real.</p>
+        </section>
+
+      </main>
+
+      <aside class="card">
+        <h3>Descargar / Copiar</h3>
+        <p class="small">Puedes descargar este HTML o copiar el código para personalizarlo.</p>
+        <a class="btn" href="#" onclick="downloadHtml()">Descargar HTML</a>
+
+        <script>
+          function downloadHtml(){
+            const html = document.documentElement.outerHTML;
+            const blob = new Blob([html],{type:'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'semaforo-inteligente-tutorial.html';
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+          }
+        </script>
+
+        <hr>
+        <h4 class="small">Resumen pines</h4>
+        <p class="small">Modifica los pines al gusto. Si usas sensores HC-SR04, reemplaza A0/A1 por pines digitales para TRIG/ECHO.</p>
+
+        <hr>
+        <h4 class="small">¿Qué quieres ahora?</h4>
+        <p class="small">Puedo adaptar el proyecto a <strong>ESP32</strong>, añadir <strong>OLED</strong>, simular con <em>Tinkercad</em>, o generar un diagrama Fritzing. Dime cuál prefieres.</p>
+      </aside>
+    </div>
+
+    <footer class="small" style="margin-top:16px">Última actualización: 04/12/2025 · Proyecto educativo — revisar seguridad si escalas a control vial real.</footer>
+  </div>
+</body>
+</html>
