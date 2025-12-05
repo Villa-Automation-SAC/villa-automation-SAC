@@ -204,17 +204,6 @@ void aplicarFase(Fase f){
         <p class="small">Puedes descargar este HTML o copiar el código para personalizarlo.</p>
         <a class="btn" href="#" onclick="downloadHtml()">Descargar HTML</a>
 
-        <script>
-          function downloadHtml(){
-            const html = document.documentElement.outerHTML;
-            const blob = new Blob([html],{type:'text/html'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 'semaforo-inteligente-tutorial.html';
-            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-          }
-        </script>
-
         <hr>
         <h4 class="small">Resumen pines</h4>
         <p class="small">Modifica los pines al gusto. Si usas sensores HC-SR04, reemplaza A0/A1 por pines digitales para TRIG/ECHO.</p>
@@ -229,3 +218,4 @@ void aplicarFase(Fase f){
   </div>
 </body>
 </html>
+
