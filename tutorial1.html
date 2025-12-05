@@ -95,6 +95,118 @@
       </div>
     </section>
 
+
+    <title>Galería de Videos - Tarjetas YouTube</title>
+
+
+<script>
+// ---- CONFIG: agrega aquí los videos que quieres mostrar (IDs de YouTube) ----
+const videos = [
+{id: 'dQw4w9WgXcQ', title: 'Ejemplo: Video 1', channel: 'Canal Ejemplo'},
+{id: 'l482T0yNkeo', title: 'Ejemplo: Video 2', channel: 'Canal Ejemplo'},
+{id: '3JZ_D3ELwOQ', title: 'Ejemplo: Video 3', channel: 'Canal Ejemplo'}
+];
+
+
+const grid = document.getElementById('grid');
+const modal = document.getElementById('modal');
+const iframeWrap = document.getElementById('iframeWrap');
+const modalClose = document.getElementById('modalClose');
+const modalBackdrop = document.getElementById('modalBackdrop');
+
+
+function makeThumbUrl(ytid){
+return `https://i.ytimg.com/vi/${ytid}/maxresdefault.jpg`;
+}
+
+
+function createCard(video){
+const card = document.createElement('article');
+card.className = 'card';
+card.tabIndex = 0;
+card.setAttribute('role','button');
+card.setAttribute('aria-label', `Reproducir ${video.title}`);
+
+
+const thumb = document.createElement('div'); thumb.className='thumb';
+const img = document.createElement('img');
+img.loading = 'lazy';
+img.decoding = 'async';
+img.alt = video.title + ' — miniatura';
+img.src = makeThumbUrl(video.id);
+// fallback si no hay maxres: cambiar por default cuando falle
+img.onerror = ()=> { img.src = `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`; };
+
+
+const overlay = document.createElement('div'); overlay.className = 'play-overlay';
+const icon = document.createElement('div'); icon.className = 'play-icon';
+overlay.appendChild(icon);
+
+
+thumb.appendChild(img); thumb.appendChild(overlay);
+
+
+const meta = document.createElement('div'); meta.className='meta';
+const title = document.createElement('div'); title.className='title'; title.textContent = video.title;
+const channel = document.createElement('div'); channel.className='channel'; channel.textContent = video.channel || '';
+const badge = document.createElement('div'); badge.className='badge'; badge.textContent='YouTube';
+
+
+const left = document.createElement('div'); left.appendChild(title); left.appendChild(channel);
+meta.appendChild(left); meta.appendChild(badge);
+
+
+card.appendChild(thumb); card.appendChild(meta);
+
+
+// Open modal on click or Enter
+function open(){
+openModal(video.id);
+}
+card.addEventListener('click', open);
+card.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }});
+
+
+return card;
+}
+
+
+function render(){
+grid.innerHTML = '';
+videos.forEach(v=> grid.appendChild(createCard(v)));
+}
+
+
+function openModal(videoId){
+// insertar iframe (lazy) con autoplay permitido si prefieren
+iframeWrap.innerHTML = `<iframe class='modal-iframe' src='https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0' title='YouTube video' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>`;
+modal.classList.add('visible');
+modal.setAttribute('aria-hidden','false');
+document.body.style.overflow = 'hidden';
+// close on Esc
+document.addEventListener('keydown', escHandler);
+}
+
+
+function closeModal(){
+modal.classList.remove('visible');
+modal.setAttribute('aria-hidden','true');
+iframeWrap.innerHTML = '';
+document.body.style.overflow = '';
+document.removeEventListener('keydown', escHandler);
+}
+
+
+function escHandler(e){ if(e.key === 'Escape') closeModal(); }
+
+
+modalClose.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', closeModal);
+
+// Inicializa
+render();
+</script>
+    
     <section class="card">
       <h2>4 — Código Arduino (ejemplo simple)</h2>
       <p>Este sketch usa la librería <code>SoftwareSerial</code> para comunicar con HC-05. Envía comandos simples: <code>F</code>, <code>B</code>, <code>L</code>, <code>R</code>, <code>S</code>. Ajusta pines si usas otro driver o placa.</p>
@@ -213,3 +325,4 @@ void stopMotors(){
   </main>
 </body>
 </html>
+
