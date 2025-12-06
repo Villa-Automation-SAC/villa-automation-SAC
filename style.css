@@ -529,3 +529,49 @@ button:hover{
     font-size:12px;
     text-align:center;
 }
+/* CONTENEDOR DE TARJETAS */
+.catalogo-grid,
+.catalogo,
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* TARJETA */
+.card,
+.card-catalogo,
+.catalog-card {
+    background: #0f2a3f;
+    border-radius: 14px;
+    overflow: hidden;
+    height: 220px;              /* 🔑 CONTROL DE TAMAÑO */
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+/* IMAGEN */
+.card img {
+    width: 100%;
+    height: 100%;              /* 🔑 OCUPA TODA LA TARJETA */
+    object-fit: cover;         /* 🔑 RECORTE PROFESIONAL */
+    display: block;
+}
+
+/* TEXTO SOBRE IMAGEN */
+.card .titulo,
+.card h3,
+.card-title {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.55);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
