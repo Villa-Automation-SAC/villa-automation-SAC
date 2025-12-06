@@ -427,98 +427,49 @@ nav a:hover {
 /* ------------------------*/
 /* -------------catalogo-----------*/
 
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#0b1c2d;
-    color:#fff;
-}
-
-header{
-    background:#000;
-    padding:20px;
-    text-align:center;
-}
+/* =========================
+   CATÁLOGO (AISLADO)
+   ========================= */
 
 .catalogo{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:22px;
     padding:30px;
 }
 
-.card{
+/* tarjeta del catálogo */
+.catalogo-card{
     background:#122c44;
-    border-radius:12px;
-    padding:15px;
+    border-radius:14px;
+    height:220px;              /* 🔑 evita tarjetas gigantes */
+    overflow:hidden;
     cursor:pointer;
+    position:relative;
     transition:0.3s;
 }
 
-.card:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 20px #00c8ff;
+.catalogo-card:hover{
+    transform:scale(1.04);
+    box-shadow:0 0 18px #00c8ff;
 }
 
-.card img{
+/* imagen */
+.catalogo-card img{
     width:100%;
-    height:160px;
-    object-fit:cover;
-    border-radius:8px;
+    height:100%;               /* 🔑 ocupa toda la tarjeta */
+    object-fit:cover;          /* 🔑 recorte limpio */
 }
 
-.card h3{
-    margin:10px 0 5px;
-}
-
-.modal{
-    display:none;
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background:rgba(0,0,0,0.85);
-}
-
-.modal-content{
-    background:#0f2a3f;
-    width:350px;
-    margin:4% auto;
-    padding:20px;
-    border-radius:12px;
-}
-
-.cerrar{
-    float:right;
-    font-size:24px;
-    cursor:pointer;
-}
-
-.modal-content img{
-    width:100%;
-    border-radius:8px;
-    margin-bottom:10px;
-}
-
-input, textarea, button{
-    width:100%;
-    margin:6px 0;
-    padding:8px;
+/* texto sobre imagen */
+.catalogo-card h3{
+    position:absolute;
+    bottom:12px;
+    left:12px;
+    margin:0;
+    background:rgba(0,0,0,0.55);
+    padding:6px 10px;
     border-radius:6px;
-    border:none;
+    font-size:14px;
 }
 
-button{
-    background:#00c8ff;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#009dc4;
-}
-
-.info{
-    margin-top:8px;
-    font-size:12px;
-    text-align:center;
-}
