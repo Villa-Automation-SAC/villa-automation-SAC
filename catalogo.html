@@ -234,6 +234,21 @@ button:hover{
     z-index:10000;
 }
 
+    .btn-info{
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 14px;
+    background: #1e88e5;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.btn-info:hover{
+    background: #1565c0;
+}
+
 
 </style>
 
@@ -242,41 +257,111 @@ button:hover{
     
 <header>
     <h1>CATÁLOGO TECNOLÓGICO</h1>
-    <p>Villa Automation EIRL</p>
+    <p>Villa Automation SAC</p>
 </header>
 
 <section class="catalogo">
 
     <div class="card" onclick="abrirFormulario(
+        'Sentinel XVA-01',
+        'S/ 12,500',
+        'assets/drone1.jpg'
+    )">
+    
+    <img src="assets/drone1.jpg">
+    <h3>Robot colaborativo Militar (Sentinel XVA-01)</h3>
+    <p>S/ 12,500</p>
+
+    <!-- Botón de más información -->
+    <a 
+        href="IMG_6881.html"
+        class="btn-info"
+        onclick="event.stopPropagation();"
+    >
+        Más información
+    </a>
+</div>
+
+
+     <div class="card" onclick="abrirFormulario(
         'Drone Explorador',
         'S/ 3500',
         'assets/drone1.jpg'
     )">
-        <img src="assets/drone1.jpg">
-        <h3>Drone Explorador</h3>
-        <p>S/ 3500</p>
-    </div>
+    
+    <img src="assets/drone1.jpg">
+    <h3>Drone Explorador</h3>
+    <p>S/ 3500</p>
 
-    <div class="card" onclick="abrirFormulario(
-        'Robot Agrícola',
-        'S/ 7500',
-        'assets/robot_agricola.jpg'
+    <!-- Botón de más información -->
+    <a 
+        href="drone-explorador.html"
+        class="btn-info"
+        onclick="event.stopPropagation();"
+    >
+        Más información
+    </a>
+</div>
+
+  <div class="card" onclick="abrirFormulario(
+        'Drone Explorador',
+        'S/ 3500',
+        'assets/drone1.jpg'
     )">
-        <img src="assets/robot_agricola.jpg">
-        <h3>Robot Agrícola</h3>
-        <p>S/ 7500</p>
-    </div>
+    
+    <img src="assets/drone1.jpg">
+    <h3>Drone Explorador</h3>
+    <p>S/ 3500</p>
 
-    <div class="card" onclick="abrirFormulario(
-        'Sistema Ambiental',
-        'S/ 1200',
-        'assets/sensor_ambiental.jpg'
+    <!-- Botón de más información -->
+    <a 
+        href="drone-explorador.html"
+        class="btn-info"
+        onclick="event.stopPropagation();"
+    >
+        Más información
+    </a>
+</div>
+
+      <div class="card" onclick="abrirFormulario(
+        'Drone Explorador',
+        'S/ 3500',
+        'assets/drone1.jpg'
     )">
-        <img src="assets/sensor_ambiental.jpg">
-        <h3>Sistema Ambiental</h3>
-        <p>S/ 1200</p>
-    </div>
+    
+    <img src="assets/drone1.jpg">
+    <h3>Drone Explorador</h3>
+    <p>S/ 3500</p>
 
+    <!-- Botón de más información -->
+    <a 
+        href="drone-explorador.html"
+        class="btn-info"
+        onclick="event.stopPropagation();"
+    >
+        Más información
+    </a>
+</div>
+
+      <div class="card" onclick="abrirFormulario(
+        'Drone Explorador',
+        'S/ 3500',
+        'assets/drone1.jpg'
+    )">
+    
+    <img src="assets/drone1.jpg">
+    <h3>Drone Explorador</h3>
+    <p>S/ 3500</p>
+
+    <!-- Botón de más información -->
+    <a 
+        href="drone-explorador.html"
+        class="btn-info"
+        onclick="event.stopPropagation();"
+    >
+        Más información
+    </a>
+</div>
 </section>
 
 <!-- MODAL FORMULARIO -->
@@ -301,7 +386,8 @@ button:hover{
         <button onclick="enviarWhatsApp()">📱 Enviar Voucher por WhatsApp</button>
 
         <p class="info">
-            Yape / WhatsApp: <b>965 281 663</b><br>
+            Yape : <b>965 281 663</b><br>
+            cuenta bancaria BN:  <b>04405619763</b><br>
             Correo: <b>villautomationeril@gmail.com</b>
         </p>
     </div>
@@ -310,6 +396,7 @@ button:hover{
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
