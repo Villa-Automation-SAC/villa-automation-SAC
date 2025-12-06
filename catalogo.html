@@ -270,6 +270,25 @@ button:hover{
     margin-top: auto; /* empuja hacia abajo */
 }
 
+.btn-retorno {
+  display: inline-block;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, #00eaff, #0077ff);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 255, 255, 0.25);
+  transition: 0.3s ease;
+}
+
+.btn-retorno:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 255, 255, 0.35);
+  background: linear-gradient(135deg, #00c8ff, #005fcc);
+}
+
 </style>
 
 
@@ -279,7 +298,8 @@ button:hover{
     <h1>CATÁLOGO VILLA AUTOMATION</h1>
     <p>Villa Automation SAC</p>
 </header>
-
+<a href="index.html" class="btn-retorno">⟵ Volver al Inicio</a>
+    
 <section class="catalogo">
     
     <div class="card" onclick="abrirFormulario(
@@ -620,6 +640,7 @@ button:hover{
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
