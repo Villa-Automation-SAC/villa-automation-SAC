@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo | Villa Automation EIRL</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>CATÁLOGO TECNOLÓGICO</h1>
+    <p>Villa Automation EIRL</p>
+</header>
+
+<section class="catalogo">
+
+    <div class="card" onclick="abrirFormulario(
+        'Drone Explorador',
+        'S/ 3500',
+        'assets/drone1.jpg'
+    )">
+        <img src="assets/drone1.jpg">
+        <h3>Drone Explorador</h3>
+        <p>S/ 3500</p>
+    </div>
+
+    <div class="card" onclick="abrirFormulario(
+        'Robot Agrícola',
+        'S/ 7500',
+        'assets/robot_agricola.jpg'
+    )">
+        <img src="assets/robot_agricola.jpg">
+        <h3>Robot Agrícola</h3>
+        <p>S/ 7500</p>
+    </div>
+
+    <div class="card" onclick="abrirFormulario(
+        'Sistema Ambiental',
+        'S/ 1200',
+        'assets/sensor_ambiental.jpg'
+    )">
+        <img src="assets/sensor_ambiental.jpg">
+        <h3>Sistema Ambiental</h3>
+        <p>S/ 1200</p>
+    </div>
+
+</section>
+
+<!-- MODAL FORMULARIO -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="cerrar" onclick="cerrarFormulario()">×</span>
+
+        <img id="imgProducto">
+
+        <h2 id="producto"></h2>
+        <p id="precio"></p>
+
+        <input type="text" id="nombre" placeholder="Tu nombre" required>
+        <input type="email" id="correo" placeholder="Tu correo" required>
+
+        <label>Adjuntar Voucher (Yape / Transferencia)</label>
+        <input type="file" id="voucher">
+
+        <textarea id="mensaje" placeholder="Mensaje adicional (opcional)"></textarea>
+
+        <button onclick="enviarCorreo()">📧 Enviar Voucher por Correo</button>
+        <button onclick="enviarWhatsApp()">📱 Enviar Voucher por WhatsApp</button>
+
+        <p class="info">
+            Yape / WhatsApp: <b>965 281 663</b><br>
+            Correo: <b>villautomationeril@gmail.com</b>
+        </p>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
