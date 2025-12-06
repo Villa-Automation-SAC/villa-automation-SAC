@@ -167,6 +167,48 @@ button:hover{
     border-radius: 6px;
     font-size: 14px;
 }
+    /* =============================
+   BLOQUE INFERIOR TIPO MARKETPLACE
+   ============================= */
+
+.card{
+    display:flex;
+    flex-direction:column;
+    background:#fff;
+}
+
+/* Imagen fija arriba */
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    background:#eaeaea;
+}
+
+/* Contenedor automático para texto */
+.card h3,
+.card p{
+    position:relative;
+    background:#ffffff;
+    z-index:2;
+}
+
+/* Área de información */
+.card h3{
+    margin:12px 12px 4px;
+    font-size:14px;
+    font-weight:600;
+    color:#111;
+}
+
+/* Precio */
+.card p{
+    margin:0 12px 12px;
+    font-size:13px;
+    font-weight:bold;
+    color:#666;
+}
+
 </style>
 
 
@@ -242,4 +284,5 @@ button:hover{
 <script src="script.js"></script>
 </body>
 </html>
+
 
