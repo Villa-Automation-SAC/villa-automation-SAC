@@ -434,33 +434,27 @@ nav a:hover {
 /* =============================
    CATÁLOGO TECNOLÓGICO
    ============================= */
-/* ==========================
-   CATÁLOGO – VILLA AUTOMATION
-   ========================== */
-
-.catalogo-page{
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
     background:#0b1c2d;
     color:#fff;
-    padding-top:90px; /* espacio para menú fijo */
-    font-family:Arial, sans-serif;
 }
 
-/* título */
-.catalogo-page h1{
+header{
+    background:#000;
+    padding:20px;
     text-align:center;
-    margin-bottom:30px;
 }
 
-/* grid catálogo */
 .catalogo{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
     gap:25px;
-    padding:0 30px 40px;
+    padding:30px;
 }
 
-/* tarjeta */
-.catalogo-card{
+.card{
     background:#122c44;
     border-radius:12px;
     padding:15px;
@@ -468,74 +462,51 @@ nav a:hover {
     transition:0.3s;
 }
 
-.catalogo-card:hover{
+.card:hover{
     transform:scale(1.05);
     box-shadow:0 0 20px #00c8ff;
 }
 
-/* imagen */
-.catalogo-card img{
+.card img{
     width:100%;
     height:160px;
     object-fit:cover;
     border-radius:8px;
 }
 
-/* texto */
-.catalogo-card h3{
+.card h3{
     margin:10px 0 5px;
 }
 
-.catalogo-card p{
-    margin:0;
-}
-
-/* ==========================
-   MODAL
-   ========================== */
-
-.catalogo-modal{
+.modal{
     display:none;
     position:fixed;
-    inset:0;
+    top:0; left:0;
+    width:100%; height:100%;
     background:rgba(0,0,0,0.85);
-    z-index:99999;
 }
 
-.catalogo-modal .modal-content{
+.modal-content{
     background:#0f2a3f;
-    width:360px;
-    margin:5% auto;
+    width:350px;
+    margin:4% auto;
     padding:20px;
     border-radius:12px;
-    color:white;
 }
 
-.catalogo-modal img{
-    width:100%;
-    border-radius:8px;
-    margin-bottom:10px;
-}
-
-.catalogo-modal .cerrar{
+.cerrar{
     float:right;
     font-size:24px;
     cursor:pointer;
 }
 
-/* ==========================
-   FORMULARIO
-   ========================== */
-
-.catalogo-form{
-    max-width:720px;
-    margin:40px auto;
-    padding:30px;
+.modal-content img{
+    width:100%;
+    border-radius:8px;
+    margin-bottom:10px;
 }
 
-.catalogo-form input,
-.catalogo-form textarea,
-.catalogo-form button{
+input, textarea, button{
     width:100%;
     margin:6px 0;
     padding:8px;
@@ -543,25 +514,18 @@ nav a:hover {
     border:none;
 }
 
-.catalogo-form button{
+button{
     background:#00c8ff;
     font-weight:bold;
     cursor:pointer;
 }
 
-.catalogo-form button:hover{
+button:hover{
     background:#009dc4;
 }
 
-.catalogo-info{
-    margin-top:10px;
+.info{
+    margin-top:8px;
     font-size:12px;
     text-align:center;
 }
-
-
-.formulario{
-    margin-top:40px;
-    padding:30px;
-}
-
