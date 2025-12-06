@@ -431,45 +431,52 @@ nav a:hover {
    CATÁLOGO (AISLADO)
    ========================= */
 
+/* =============================
+   CATÁLOGO TECNOLÓGICO
+   ============================= */
+
 .catalogo{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:22px;
+    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    gap:24px;
     padding:30px;
 }
 
-/* tarjeta del catálogo */
+/* tarjeta */
 .catalogo-card{
-    background:#122c44;
+    background:#0c2238;
     border-radius:14px;
-    height:220px;              /* 🔑 evita tarjetas gigantes */
     overflow:hidden;
-    cursor:pointer;
+    height:260px;
     position:relative;
-    transition:0.3s;
-}
-
-.catalogo-card:hover{
-    transform:scale(1.04);
-    box-shadow:0 0 18px #00c8ff;
+    box-shadow:0 0 15px rgba(0,0,0,0.4);
 }
 
 /* imagen */
 .catalogo-card img{
     width:100%;
-    height:100%;               /* 🔑 ocupa toda la tarjeta */
-    object-fit:cover;          /* 🔑 recorte limpio */
+    height:100%;
+    object-fit:cover;
+    display:block;
 }
 
-/* texto sobre imagen */
-.catalogo-card h3{
+/* info superpuesta */
+.catalogo-card .info{
     position:absolute;
-    bottom:12px;
-    left:12px;
+    bottom:0;
+    width:100%;
+    background:linear-gradient(transparent, rgba(0,0,0,0.85));
+    padding:12px;
+}
+
+.catalogo-card h3{
     margin:0;
-    background:rgba(0,0,0,0.55);
-    padding:6px 10px;
-    border-radius:6px;
+    font-size:16px;
+}
+
+.catalogo-card p{
+    margin:4px 0 0;
     font-size:14px;
 }
+
 
