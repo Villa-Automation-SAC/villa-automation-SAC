@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -14,32 +14,37 @@
 
 <section class="catalogo">
 
-    <div class="catalogo-card">
-        <img src="assets/catalogo1.jpg" alt="Drone Explorador">
-        <div class="info">
-            <h3>Drone Explorador</h3>
-            <p>S/ 3500</p>
-        </div>
+    <div class="card" onclick="abrirFormulario(
+        'Drone Explorador',
+        'S/ 3500',
+        'assets/drone1.jpg'
+    )">
+        <img src="assets/drone1.jpg">
+        <h3>Drone Explorador</h3>
+        <p>S/ 3500</p>
     </div>
 
-    <div class="catalogo-card">
-        <img src="assets/catalogo2.jpg" alt="Robot Agrícola">
-        <div class="info">
-            <h3>Robot Agrícola</h3>
-            <p>S/ 7500</p>
-        </div>
+    <div class="card" onclick="abrirFormulario(
+        'Robot Agrícola',
+        'S/ 7500',
+        'assets/robot_agricola.jpg'
+    )">
+        <img src="assets/robot_agricola.jpg">
+        <h3>Robot Agrícola</h3>
+        <p>S/ 7500</p>
     </div>
 
-    <div class="catalogo-card">
-        <img src="assets/catalogo3.jpg" alt="Sistema Ambiental">
-        <div class="info">
-            <h3>Sistema Ambiental</h3>
-            <p>S/ 1200</p>
-        </div>
+    <div class="card" onclick="abrirFormulario(
+        'Sistema Ambiental',
+        'S/ 1200',
+        'assets/sensor_ambiental.jpg'
+    )">
+        <img src="assets/sensor_ambiental.jpg">
+        <h3>Sistema Ambiental</h3>
+        <p>S/ 1200</p>
     </div>
 
 </section>
-
 
 <!-- MODAL FORMULARIO -->
 <div class="modal" id="modal">
@@ -72,4 +77,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
